@@ -5,21 +5,28 @@ on:
 
 jobs:
   proxmox:
-    name: Proxmox APT Updates
-    runs-on: runner:self-hosted
-    steps:
-      - name: Play Ansible Playbook
-        uses: arillso/action.playbook@0.0.8
-        with:
-          inventory: 
-          # Name of the playbook in your workspace.
-          playbook: 
-          # Further limit selected hosts to an additional pattern.
-          limit: # optional
-          # Only run plays and tasks whose tags do not match these values.
-          vault_id: # optional
-          # The vault password to use.
-          vault_password: # optional
-          # Use this key to authenticate the connection.
-          private_key: # optional
-              
+    - name: Tailscale
+      uses: tailscale/github-action@v3
+      with:
+        oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+        oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
+        tags: tag:ci
+
+    - name: Proxmox APT Updates
+      runs-on: runner:self-hosted
+      steps:
+        - name: Play Ansible Playbook
+          uses: arillso/action.playbook@0.0.8
+          with:
+            inventory: 
+            # Name of the playbook in your workspace.
+            playbook: 
+            # Further limit selected hosts to an additional pattern.
+            limit: # optional
+            # Only run plays and tasks whose tags do not match these values.
+            #vault_id: # optional
+            # The vault password to use.
+            #vault_password: # optional
+            # Use this key to authenticate the connection.
+            #private_key: # optional
+                
