@@ -1,0 +1,17 @@
+---
+- name: Perform Apt Updates on Debian/Ubuntu Systems
+  hosts: all
+  become: yes
+  tasks:
+    - name: Update apt cache
+      ansible.builtin.apt:
+        update_cache: yes
+        cache_valid_time: 3600
+
+    - name: Upgrade all packages to the latest version
+      ansible.builtin.apt:
+        upgrade: dist
+
+    - name: Remove old packages
+      ansible.builtin.apt:
+        autoremove: yes

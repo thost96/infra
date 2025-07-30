@@ -1,0 +1,22 @@
+---
+all:
+  vars:
+    ansible_user: root
+  hosts:
+    prox-1:
+    prox-2:
+    prox-3:
+    prox-4:
+    quorum-1:
+    quorum-2:
+  children:
+    cluster-1:
+      hosts:
+        prox-1:
+        prox-2:
+        quorum-1:
+    cluster-2:
+      hosts:
+        prox-3:
+        prox-4:
+        quorum-2:

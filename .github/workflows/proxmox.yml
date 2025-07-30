@@ -1,0 +1,22 @@
+---
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 12 * * 0" # Sonntag 12 Uhr
+
+jobs:
+  proxmox:
+    runs-on: runner:self-hosted
+    steps:
+      - name: Tailscale
+        uses: tailscale/github-action@v3
+        with:
+          oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+          oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
+          tags: tag:ci
+
+      - name: Proxmox Host Updates
+        uses: arillso/action.playbook@0.0.8
+        with:
+          inventory: /inventory/proxmox.yaml
+          playbook: /playbooks/os-updates.yaml
