@@ -9,15 +9,20 @@ jobs:
   proxmox:
     runs-on: self-hosted
     steps:
-      - name: Tailscale
+      - name: Tailscale Login
         uses: tailscale/github-action@v3
         with:
           oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
           oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
           tags: tag:ci
 
-      - name: Proxmox Host Updates
+      - uses: actions/checkout@v2
+
+      - name: Ansible Playbook Execution
         uses: arillso/action.playbook@0.2.2
         with:
           inventory: inventory/proxmox.yaml
           playbook: playbooks/os-updates.yaml
+        env:
+          ANSIBLE_HOST_KEY_CHECKING: 'false'
+          ANSIBLE_DEPRECATION_WARNINGS: 'false'
