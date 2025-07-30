@@ -16,7 +16,7 @@ jobs:
           oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
           tags: tag:ci
 
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Ansible Playbook Execution
         uses: arillso/action.playbook@0.2.2
