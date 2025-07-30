@@ -16,7 +16,7 @@ jobs:
           tags: tag:ci
 
       - name: Proxmox Host Updates
-        uses: arillso/action.playbook@0.0.8
+        uses: arillso/action.playbook@0.2.2
         with:
           inventory: /inventory/proxmox.yaml
           playbook: /playbooks/os-updates.yaml
