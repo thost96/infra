@@ -1,0 +1,12 @@
+# Windows temp files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+# MacOS temp files
+.DS_Store
+.AppleDouble
+.LSOverride
+.Trashes
