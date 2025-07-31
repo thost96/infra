@@ -9,6 +9,8 @@ jobs:
   proxmox:
     runs-on: self-hosted #ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
+
       - name: Tailscale Login
         uses: tailscale/github-action@v3
         with:
@@ -16,19 +18,8 @@ jobs:
           oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
           tags: tag:ci
 
-      - uses: actions/checkout@v4
-    
       - name: Perform ansible playbook to deploy
         uses: euclid1990/actions-ansible@v2
         with:
           playbook: playbooks/os-updates.yaml
           inventory: inventory/proxmox.yaml
-
-      - name: Ansible Playbook Execution
-        uses: arillso/action.playbook@0.2.2
-        with:
-          inventory: inventory/proxmox.yaml
-          playbook: playbooks/os-updates.yaml
-        env:
-          ANSIBLE_HOST_KEY_CHECKING: 'false'
-          ANSIBLE_DEPRECATION_WARNINGS: 'false'
