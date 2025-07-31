@@ -11,6 +11,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      - name: Install Ansible
+        run: |
+          python3 -m pip install --upgrade pip
+          pip3 install ansible
+
       - name: Tailscale Login
         uses: tailscale/github-action@v2
         with:
@@ -18,16 +28,6 @@ jobs:
           oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
           tags: tag:ci
 
-      - name: Manual SSH
-        run: |
-          ssh -o "StrictHostKeyChecking no" root@prox-1.hale-gray.ts.net "
-            apt update 
-            apt dist-upgrade -y
-            apt autoremove -y 
-          "
-
-      - name: Perform ansible playbook to deploy
-        uses: euclid1990/actions-ansible@v2
-        with:
-          playbook: playbooks/os-updates.yaml
-          inventory: inventory/proxmox.yaml
+      - name: Run Ansible Playbook
+        run: | 
+          ansible-playbook -i inventory/proxmox.yaml playbooks/os-updates.yaml
