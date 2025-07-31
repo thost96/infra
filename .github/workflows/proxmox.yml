@@ -25,7 +25,7 @@ jobs:
           inventory: inventory/proxmox.yaml
     
       - name: Perform ansible playbook to deploy
-        uses: actions-ansible@v2
+        uses: euclid1990/actions-ansible@v2
         with:
           playbook: playbooks/os-updates.yaml
           inventory: inventory/proxmox.yaml
