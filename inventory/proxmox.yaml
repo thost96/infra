@@ -3,11 +3,12 @@ all:
   vars:
     ansible_user: root
     ansible_ssh_common_args: "-o StrictHostKeyChecking=no"
+    ansible_python_interpreter: /usr/bin/python3
   hosts:
-    prox-1.hale-gray.ts.net:
-    prox-2.hale-gray.ts.net:
-    prox-3.hale-gray.ts.net:
-    prox-4.hale-gray.ts.net:
+    prox-1:
+    prox-2:
+    prox-3:
+    prox-4:
     quorum-1:
     quorum-2:
   children:
