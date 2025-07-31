@@ -6,7 +6,6 @@ all:
     ansible_python_interpreter: /usr/bin/python3
   hosts:
     n8n:
-    beszel-hub:
     pihole:
   children:
     cluster1:
@@ -14,5 +13,4 @@ all:
         n8n:
     cluster2:
       hosts:
-        beszel-hub:
         pihole:

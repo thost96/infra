@@ -1,0 +1,10 @@
+---
+- name: Perform Pihole Update
+  hosts: all
+  become: yes
+  gather_facts: no
+  tasks:
+    - name: Update Pi-hole
+      command: pihole -up
+      register: pihole_update_result
+      changed_when: "'Everything is already up to date' not in pihole_update_result.stdout"

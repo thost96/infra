@@ -28,6 +28,10 @@ jobs:
           oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
           tags: tag:ci
 
-      - name: Run Ansible Playbook
+      - name: Run OS Updates
         run: | 
           ansible-playbook -i inventory/vms.yaml playbooks/os-updates.yaml
+      
+      - name: Run Pihole Update
+        run: | 
+          ansible-playbook -i inventory/vms.yaml -l pihole playbooks/pihole-update.yaml

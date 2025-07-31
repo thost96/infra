@@ -28,6 +28,6 @@ jobs:
           oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
           tags: tag:ci
 
-      - name: Run Ansible Playbook
+      - name: Run OS Updates
         run: | 
           ansible-playbook -i inventory/proxmox.yaml playbooks/os-updates.yaml
