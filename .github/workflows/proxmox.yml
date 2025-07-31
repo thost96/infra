@@ -30,4 +30,4 @@ jobs:
 
       - name: Run Ansible Playbook
         run: | 
-          ansible-playbook -i inventory/proxmox.yaml playbooks/os-updates.yaml
+          ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i inventory/proxmox.yaml playbooks/os-updates.yaml
