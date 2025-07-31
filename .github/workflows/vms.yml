@@ -1,13 +1,13 @@
 ---
-name: Proxmox Host Updates
+name: Virtual Machine Updates
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 12 * * 0" # Sonntag 12 Uhr
+    - cron: "0 14 * * 0" # Sonntag 14 Uhr
 
 jobs:
   proxmox:
-    runs-on: ubuntu-latest #self-hosted #ubuntu-latest
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
@@ -30,4 +30,4 @@ jobs:
 
       - name: Run Ansible Playbook
         run: | 
-          ansible-playbook -i inventory/proxmox.yaml playbooks/os-updates.yaml
+          ansible-playbook -i inventory/vms.yaml playbooks/os-updates.yaml
