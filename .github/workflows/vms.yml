@@ -6,7 +6,7 @@ on:
     - cron: "0 14 * * 0" # Sonntag 14 Uhr
 
 jobs:
-  proxmox:
+  updates:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

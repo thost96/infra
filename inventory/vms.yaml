@@ -9,10 +9,10 @@ all:
     beszel-hub:
     pihole:
   children:
-    cluster-1:
+    cluster1:
       hosts:
-        n8n:        
-    cluster-2:
+        n8n:
+    cluster2:
       hosts:
         beszel-hub:
         pihole:
