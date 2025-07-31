@@ -2,7 +2,7 @@
 all:
   vars:
     ansible_user: root
-    ansible_ssh_common_args="-o StrictHostKeyChecking=no"
+    ansible_ssh_common_args: "-o StrictHostKeyChecking=no"
   hosts:
     prox-1.hale-gray.ts.net:
     prox-2.hale-gray.ts.net:
