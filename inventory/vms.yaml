@@ -1,0 +1,16 @@
+---
+all:
+  vars:
+    ansible_user: root
+  hosts:
+    n8n:
+    beszel-hub:
+    pihole:
+  children:
+    cluster-1:
+      hosts:
+        n8n:        
+    cluster-2:
+      hosts:
+        beszel-hub:
+        pihole:

@@ -10,12 +10,12 @@ all:
     quorum-1:
     quorum-2:
   children:
-    cluster-1:
+    cluster1:
       hosts:
         prox-1:
         prox-2:
         quorum-1:
-    cluster-2:
+    cluster2:
       hosts:
         prox-3:
         prox-4:
