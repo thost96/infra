@@ -4,7 +4,7 @@ networks:
 
 services:
   cloudflared:
-    image: cloudflare/cloudflared:latest-arm64
+    image: cloudflare/cloudflared:2025.7.0-arm64
     command: tunnel run
     environment:
       - TUNNEL_TOKEN
@@ -25,7 +25,7 @@ services:
       mode: replicated
       replicas: 1
   pdf:
-    image: ghcr.io/stirling-tools/stirling-pdf:latest
+    image: ghcr.io/stirling-tools/stirling-pdf:1.1.1
     environment:
       - DOCKER_ENABLE_SECURITY=false
       - SYSTEM_DEFAULTLOCALE=de-DE
@@ -36,7 +36,7 @@ services:
       mode: replicated
       replicas: 1
   convert:
-    image: ghcr.io/danvergara/morphos-server:latest
+    image: ghcr.io/danvergara/morphos-server:0.6.0
     restart: unless-stopped
     networks:
       - cloudflare
@@ -54,7 +54,7 @@ services:
       mode: replicated
       replicas: 1
   omni-tools:
-    image: iib0011/omni-tools:latest
+    image: iib0011/omni-tools:0.5.0
     restart: unless-stopped
     networks:
       - cloudflare
@@ -62,7 +62,7 @@ services:
       mode: replicated
       replicas: 1
   mazanoke:
-    image: ghcr.io/civilblur/mazanoke:latest
+    image: ghcr.io/civilblur/mazanoke:v1.1.5
     restart: unless-stopped
     networks:
       - cloudflare

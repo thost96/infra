@@ -2,7 +2,6 @@
 - name: Deploy Docker Compose Stack
   hosts: compose
   become: yes
-  gather_facts: no
   tasks:
     - name: Ensure git is installed
       ansible.builtin.package:
@@ -28,7 +27,9 @@
     - name: Clone this Git Repository to /tmp of destination machine
       ansible.builtin.git:
         repo: 'https://github.com/thost96/infra.git'
-        dest: /tmp/infra
+        dest: /tmp/infra/
+        clone: yes
+        update: yes
 
     - name: Move docker-compose file to /docker
       ansible.builtin.command:

@@ -6,6 +6,7 @@ on:
     paths:
       - 'compose/**'
       - '.github/workflows/compose.yml'
+      - 'playbooks/deploy-compose.yaml'
     branches:
       - main
 
