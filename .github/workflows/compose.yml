@@ -15,10 +15,6 @@ jobs:
       runs-on: ubuntu-latest
       steps:
         - uses: actions/checkout@v4
-          with:
-            fetch-depth: 0
-            sparse-checkout: |
-              compose
         
         - name: Tailscale Login
           uses: tailscale/github-action@v3
