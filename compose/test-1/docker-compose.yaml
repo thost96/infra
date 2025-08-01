@@ -1,0 +1,71 @@
+---
+networks:
+  cloudflare:
+
+services:
+  cloudflared:
+    image: cloudflare/cloudflared:latest-arm64
+    command: tunnel run
+    environment:
+      - TUNNEL_TOKEN
+    networks:
+      - cloudflare
+    restart: unless-stopped
+    deploy:
+      mode: replicated
+      replicas: 1
+  tools:
+    image: ghcr.io/corentinth/it-tools:latest
+    environment:
+      - TZ=Europe/Berlin
+    restart: unless-stopped
+    networks:
+      - cloudflare
+    deploy:
+      mode: replicated
+      replicas: 1
+  pdf:
+    image: ghcr.io/stirling-tools/stirling-pdf:latest
+    environment:
+      - DOCKER_ENABLE_SECURITY=false
+      - SYSTEM_DEFAULTLOCALE=de-DE
+    restart: unless-stopped
+    networks:
+      - cloudflare
+    deploy:
+      mode: replicated
+      replicas: 1
+  convert:
+    image: ghcr.io/danvergara/morphos-server:latest
+    restart: unless-stopped
+    networks:
+      - cloudflare
+    deploy:
+      mode: replicated
+      replicas: 1
+  vert:
+    image: ghcr.io/vert-sh/vert:latest
+    environment:
+      - PUB_ENV=production
+    restart: unless-stopped
+    networks:
+      - cloudflare
+    deploy:
+      mode: replicated
+      replicas: 1
+  omni-tools:
+    image: iib0011/omni-tools:latest
+    restart: unless-stopped
+    networks:
+      - cloudflare
+    deploy:
+      mode: replicated
+      replicas: 1
+  mazanoke:
+    image: ghcr.io/civilblur/mazanoke:latest
+    restart: unless-stopped
+    networks:
+      - cloudflare
+    deploy:
+      mode: replicated
+      replicas: 1
