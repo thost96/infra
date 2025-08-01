@@ -35,19 +35,3 @@ jobs:
       - name: Run Pihole Update
         run: | 
           ansible-playbook -i inventory/vms.yaml -l pihole playbooks/pihole-update.yaml
-
-  compose:
-      runs-on: ubuntu-latest
-      steps:
-        - uses: actions/checkout@v4
-        
-        - name: Tailscale Login
-          uses: tailscale/github-action@v2
-          with:
-            oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
-            oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
-            tags: tag:ci
-
-        - name: Deploy Docker Compose Stack
-          run: | 
-            ansible-playbook -i inventory/vms.yaml playbooks/deploy-compose.yaml
