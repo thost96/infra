@@ -1,6 +1,16 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "config:recommended"
-  ]
+  "extends": ["config:recommended"],
+  "docker-compose": {
+    "fileMatch": ["^.*\\.ya?ml$"],
+    "ignorePaths": ["**/.github/**", "**/inventory/**", "**/playbooks/**"]
+  },
+  "packageRules": [
+    {
+      "matchUpdateTypes": ["major", "minor", "patch", "pin", "digest"],
+      "automerge": true
+    },
+    { "matchDepTypes": ["devDependencies"], "automerge": true }
+  ],
+  "platformAutomerge": true
 }
