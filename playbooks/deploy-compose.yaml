@@ -28,7 +28,7 @@
     - name: Clone this Git Repository to /tmp of destination machine
       ansible.builtin.git:
         repo: 'https://github.com/thost96/infra.git'
-        dest: /tmp/
+        dest: /tmp/infra
 
     - name: Move docker-compose file to /docker
       ansible.builtin.command:

@@ -5,6 +5,7 @@ on:
   push:
     paths:
       - 'compose/**'
+      - '.github/workflows/compose.yml'
     branches:
       - main
 
