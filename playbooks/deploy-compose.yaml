@@ -38,12 +38,21 @@
         remote_src: yes
 
     - name: Deploy Docker Compose Stack
-      ansible.builtin.command:
-        cmd: docker compose -f /docker/docker-compose.yaml up -d
+      community.docker.docker_compose_v2:
+        project_src: /docker
+      register: output
+
+    - name: Show results
+      ansible.builtin.debug:
+        var: output
 
     - name: Cleanup old Docker Images and Containers
-      ansible.builtin.command:
-        cmd: docker system prune -f
+      community.docker.docker_prune:
+        containers: true
+        images: true
+        networks: true
+        volumes: true
+        builder_cache: true
 
     - name: Remove /tmp/compose folder
       ansible.builtin.file:
