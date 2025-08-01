@@ -32,8 +32,10 @@
         update: yes
 
     - name: Copy Files to /docker
-      ansible.builtin.command:
-        cmd: cp /tmp/infra/compose/{{ ansible_hostname }}/* /docker/
+      ansible.builtin.copy:
+        src: /tmp/infra/compose/{{ ansible_hostname }}/
+        dest: /docker/
+        remote_src: yes
 
     - name: Deploy Docker Compose Stack
       ansible.builtin.command:

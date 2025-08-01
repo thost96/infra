@@ -4,3 +4,4 @@
 
 [![Virtual Machine Updates](https://github.com/thost96/infra/actions/workflows/vms.yml/badge.svg)](https://github.com/thost96/infra/actions/workflows/vms.yml)
 
+[![Docker Compose Updates](https://github.com/thost96/infra/actions/workflows/compose.yml/badge.svg)](https://github.com/thost96/infra/actions/workflows/compose.yml)
