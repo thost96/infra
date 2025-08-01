@@ -15,7 +15,7 @@ all:
     cluster2:
       hosts:
         pihole:
-        test-1:
+        test:
     compose:
       hosts:
         test:
