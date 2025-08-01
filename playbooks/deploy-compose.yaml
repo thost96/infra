@@ -40,6 +40,8 @@
     - name: Deploy Docker Compose Stack
       community.docker.docker_compose_v2:
         project_src: /docker
+        remove_orphans: true
+        pull: always
       register: output
 
     - name: Show results
