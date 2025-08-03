@@ -1,0 +1,14 @@
+---
+all:
+  vars:
+    ansible_user: root
+    ansible_ssh_common_args: "-o StrictHostKeyChecking=no"
+    ansible_python_interpreter: /usr/bin/python3
+  hosts:
+    nuc:
+    hm90:
+    #prox-1:
+    #prox-2:
+    #prox-3:
+    immich:
+    netbox:
