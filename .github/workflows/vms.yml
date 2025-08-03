@@ -16,7 +16,7 @@ permissions:
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 14 * * 0" # Sonntag 14 Uhr
+    - cron: "0 14 * * 0"    # Sonntag 14 Uhr
 
 jobs:
   updates:
