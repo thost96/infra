@@ -7,12 +7,12 @@
       ansible.builtin.package:
         name: git
         state: present
-    
+
     - name: Ensure docker is installed
       ansible.builtin.package:
-        name: docker-ce 
+        name: docker-ce
         state: present
-    
+
     - name: Ensure docker compose is installed
       ansible.builtin.package:
         name: docker-compose-plugin

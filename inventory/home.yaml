@@ -7,8 +7,8 @@ all:
   hosts:
     nuc:
     hm90:
-    #prox-1:
-    #prox-2:
-    #prox-3:
+    # prox-1:
+    # prox-2:
+    # prox-3:
     immich:
     netbox:

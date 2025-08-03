@@ -28,7 +28,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Tailscale Login
         uses: tailscale/github-action@v3
         with:
@@ -37,5 +37,5 @@ jobs:
           tags: tag:ci
 
       - name: Deploy Docker Compose Stack
-        run: | 
+        run: |
           ansible-playbook -i inventory/vms.yaml playbooks/deploy-compose.yaml

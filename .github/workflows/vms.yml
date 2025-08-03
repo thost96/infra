@@ -42,9 +42,9 @@ jobs:
           tags: tag:ci
 
       - name: Run OS Updates
-        run: | 
+        run: |
           ansible-playbook -i inventory/vms.yaml playbooks/os-updates.yaml
-      
+
       - name: Run Pihole Update
-        run: | 
+        run: |
           ansible-playbook -i inventory/vms.yaml -l pihole playbooks/pihole-update.yaml
