@@ -16,3 +16,4 @@
     - name: Remove old packages
       ansible.builtin.apt:
         autoremove: yes
+        autoclean: yes

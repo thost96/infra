@@ -1,0 +1,10 @@
+---
+- name: Update Nextcloud
+  hosts: all
+  gather_facts: false
+  become: true
+  tasks:
+    - name: Run Nextcloud Updater
+      ansible.builtin.command: sudo -u www-data php /var/www/nextcloud/updater/updater.phar --no-interaction
+      register: result
+      changed_when: not "'No update available.' in result.stdout | default('')"

@@ -19,7 +19,7 @@ on:
     - cron: "0 14 * * 0"    # Sonntag 14 Uhr
 
 jobs:
-  updates:
+  os-updates:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -45,6 +45,32 @@ jobs:
         run: |
           ansible-playbook -i inventory/vms.yaml playbooks/os-updates.yaml
 
+  app-updates:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install Ansible
+        run: |
+          python3 -m pip install --upgrade pip
+          pip3 install ansible
+
+      - name: Tailscale Login
+        uses: tailscale/github-action@v3
+        with:
+          oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+          oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
+          tags: tag:ci
+
       - name: Run Pihole Update
         run: |
           ansible-playbook -i inventory/vms.yaml -l pihole playbooks/pihole-update.yaml
+
+      - name: Run Nextcloud Update
+        run: |
+          ansible-playbook -i inventory/vms.yaml -l nextcloud playbooks/nextcloud-update.yaml
