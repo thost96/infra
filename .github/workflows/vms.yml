@@ -74,3 +74,29 @@ jobs:
       - name: Run Nextcloud Update
         run: |
           ansible-playbook -i inventory/vms.yaml -l nextcloud playbooks/nextcloud-update.yaml
+
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install Ansible
+        run: |
+          python3 -m pip install --upgrade pip
+          pip3 install ansible
+
+      - name: Tailscale Login
+        uses: tailscale/github-action@v3
+        with:
+          oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+          oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
+          tags: tag:ci
+
+      - name: Run Docker Prune
+        run: |
+          ansible-playbook -i inventory/vms.yaml -l compose playbooks/docker-prune.yaml

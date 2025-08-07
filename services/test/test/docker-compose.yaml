@@ -7,7 +7,7 @@ services:
     image: cloudflare/cloudflared:2025.7.0-arm64
     command: tunnel run
     environment:
-      - TUNNEL_TOKEN
+      - TUNNEL_TOKEN={{ cloudflare_tunnel_token_1}}
     networks:
       - cloudflare
     restart: unless-stopped

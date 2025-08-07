@@ -2,7 +2,7 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["config:recommended"],
   "docker-compose": {
-    "fileMatch": ["^.*\\.ya?ml$"],
+    "managerFilePatterns": ["/^.*\\.ya?ml$/"],
     "ignorePaths": ["**/.github/**", "**/inventory/**", "**/playbooks/**"]
   },
   "packageRules": [

@@ -1,0 +1,14 @@
+---
+# general settings
+ansible_user: root
+ansible_ssh_common_args: "-o StrictHostKeyChecking=no"
+ansible_python_interpreter: /usr/bin/python3
+
+# ironicbadger.tailscale-routes-fix
+tailscale_routes_table: main
+tailscale_routes_fix_lan_subnet: "{{ ts_lan_subnet }}"
+
+# ironicbadger.docker-compose-generator
+host_timezone: "Europe/Berlin"
+disabled_compose_files: []
+# appdata_path: "/opt/appdata"

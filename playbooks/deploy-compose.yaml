@@ -1,13 +1,8 @@
 ---
-- name: Deploy Docker Compose Stack
+- name: Deploy Docker Pre-Requisites
   hosts: compose
   become: yes
   tasks:
-    - name: Ensure git is installed
-      ansible.builtin.package:
-        name: git
-        state: present
-
     - name: Ensure docker is installed
       ansible.builtin.package:
         name: docker-ce
@@ -23,40 +18,3 @@
         state: directory
         path: /docker
         mode: '0755'
-
-    - name: Clone this Git Repository to /tmp of destination machine
-      ansible.builtin.git:
-        repo: 'https://github.com/thost96/infra.git'
-        dest: /tmp/infra/
-        clone: yes
-        update: yes
-
-    - name: Copy Files to /docker
-      ansible.builtin.copy:
-        src: /tmp/infra/compose/{{ ansible_hostname }}/
-        dest: /docker/
-        remote_src: yes
-
-    - name: Deploy Docker Compose Stack
-      community.docker.docker_compose_v2:
-        project_src: /docker
-        remove_orphans: true
-        pull: always
-      register: output
-
-    - name: Show results
-      ansible.builtin.debug:
-        var: output
-
-    - name: Cleanup old Docker Images and Containers
-      community.docker.docker_prune:
-        containers: true
-        images: true
-        networks: true
-        volumes: true
-        builder_cache: true
-
-    - name: Remove /tmp/compose folder
-      ansible.builtin.file:
-        state: absent
-        path: /tmp/infra

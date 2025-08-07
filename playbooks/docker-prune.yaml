@@ -1,0 +1,12 @@
+---
+- name: Prune Docker Ressources
+  hosts: all
+  become: yes
+  tasks:
+    - name: Cleanup old Docker Images and Containers
+      community.docker.docker_prune:
+        containers: true
+        images: true
+        networks: true
+        volumes: true
+        builder_cache: true

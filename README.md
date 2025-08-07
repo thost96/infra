@@ -14,6 +14,8 @@
 - [https://github.com/ironicbadger/infra/](https://github.com/ironicbadger/infra/)
 - [https://github.com/ironicbadger/tailscale-routes-fix/](https://github.com/ironicbadger/tailscale-routes-fix/)
 - [https://github.com/ironicbadger/ansible-role-docker-compose-generator/](https://github.com/ironicbadger/ansible-role-docker-compose-generator/)
+- Add Job Host Backup with PBS-Client for Proxmox
+- Add Monitoring using CheckMK Ansible for Services
 
 ## TEST
 - [https://docs.karakeep.app/Installation/docker/](https://docs.karakeep.app/Installation/docker/)

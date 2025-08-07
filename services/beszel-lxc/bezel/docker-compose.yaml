@@ -4,7 +4,7 @@ services:
     image: tailscale/tailscale:latest
     hostname: beszel-hub
     environment:
-      - TS_AUTHKEY
+      - TS_AUTHKEY={{ ts_authkey_1}}
       - TS_STATE_DIR=/var/lib/tailscale
     volumes:
       - tailscale-data:/var/lib/tailscale
@@ -32,6 +32,6 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     environment:
       LISTEN: /beszel_socket/beszel.sock
-      KEY: ""
+      KEY: "{{ beszel_agent_key }}"
 volumes:
   tailscale-data:

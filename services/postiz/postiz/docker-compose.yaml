@@ -5,11 +5,11 @@ services:
     container_name: postiz
     restart: always
     environment:
-      MAIN_URL: ""
-      FRONTEND_URL: ""
-      NEXT_PUBLIC_BACKEND_URL: ""
-      JWT_SECRET: ""
-      DATABASE_URL: "postgresql://postiz-user:postiz-password@postiz-postgres:5432/postiz-db-local"
+      MAIN_URL: "{{ vault_postiz_url }}"
+      FRONTEND_URL: "{{ vault_postiz_url }}"
+      NEXT_PUBLIC_BACKEND_URL: "{{ vault_postiz_url }}/api"
+      JWT_SECRET: "{{ vault_postiz_jwt_secret }}"
+      DATABASE_URL: "postgresql://{{ vault_postiz_db_user }}:{{ vault_postiz_db_pass }}@postiz-postgres:5432/postiz-db-local"
       REDIS_URL: "redis://postiz-redis:6379"
       BACKEND_INTERNAL_URL: "http://localhost:3000"
       IS_GENERAL: "true"
@@ -34,8 +34,8 @@ services:
     container_name: postiz-postgres
     restart: always
     environment:
-      POSTGRES_PASSWORD: postiz-password
-      POSTGRES_USER: postiz-user
+      POSTGRES_PASSWORD: "{{ vault_postiz_db_pass }}"
+      POSTGRES_USER: "{{ vault_postiz_db_user }}"
       POSTGRES_DB: postiz-db-local
     volumes:
       - postgres-volume:/var/lib/postgresql/data
@@ -47,7 +47,7 @@ services:
       timeout: 3s
       retries: 3
   postiz-redis:
-    image: redis:8.2
+    image: redis:8.0
     container_name: postiz-redis
     restart: always
     healthcheck:
