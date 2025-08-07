@@ -38,11 +38,8 @@ jobs:
         uses: tj-actions/changed-files@v46
         with:
           dir_names: "true"
-          files_ignore: |
-            renovate.json
-            .editorconfig
-            **.md
-            .github/**
+          files: |
+            services/**
 
       - name: List all changed files (Debug only)
         if: steps.changed-files.outputs.any_changed == 'true'
@@ -52,7 +49,7 @@ jobs:
           # shellcheck disable=2086
           for file in ${ALL_CHANGED_FILES}; do
             echo "$file was changed"
-          done      
+          done
 
       - name: Validate docker-compose.yaml
         if: steps.changed-files.outputs.any_changed == 'true'
