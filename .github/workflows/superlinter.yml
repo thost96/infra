@@ -33,6 +33,7 @@ jobs:
         uses: creyD/prettier_action@v4.6
         with:
           prettier_options: --write **/*.{json,md,yaml,yml}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Run Super Linter
         uses: super-linter/super-linter@v8.0.0
