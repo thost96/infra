@@ -47,7 +47,7 @@ services:
       timeout: 3s
       retries: 3
   postiz-redis:
-    image: redis:8.0
+    image: redis:8.2
     container_name: postiz-redis
     restart: always
     healthcheck:
