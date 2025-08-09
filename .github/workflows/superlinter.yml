@@ -2,7 +2,7 @@
 name: Linter
 
 permissions:
-  actions: none
+  actions: write
   checks: none              # add custom pass/fail checks to the PR
   contents: write           # git permissions to repo pull/push and write
   deployments: none
