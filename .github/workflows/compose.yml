@@ -84,7 +84,7 @@ jobs:
 
       - name: Install Ansible-Galaxy Requirements
         run: |
-          ansible-galaxy install -r requirements.yml
+          ansible-galaxy install -r requirements.yaml
 
       - name: Get changed files
         id: changed-files
