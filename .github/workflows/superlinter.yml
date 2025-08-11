@@ -1,17 +1,17 @@
 ---
 name: Linter
 
-# permissions:
-#   actions: write
-#   checks: none              # add custom pass/fail checks to the PR
-#   contents: write           # git permissions to repo pull/push and write
-#   deployments: none
-#   issues: none              # read/write to repo Issues
-#   packages: none            # read/write to repo Packages (ghcr, gems, npm)
-#   pull-requests: none       # read/write to repo PRs
-#   repository-projects: none
-#   security-events: none     # read/write to repo Security tab API
-#   statuses: write           # read/write to repo custom statuses and checks
+permissions:
+  actions: write
+  checks: none              # add custom pass/fail checks to the PR
+  contents: write           # git permissions to repo pull/push and write
+  deployments: none
+  issues: none              # read/write to repo Issues
+  packages: none            # read/write to repo Packages (ghcr, gems, npm)
+  pull-requests: none       # read/write to repo PRs
+  repository-projects: none
+  security-events: none     # read/write to repo Security tab API
+  statuses: write           # read/write to repo custom statuses and checks
 
 on:
   push:
