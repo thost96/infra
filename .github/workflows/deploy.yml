@@ -28,7 +28,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Validate Docker Compose Files
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Set up Docker
         uses: docker/setup-buildx-action@v3
@@ -70,7 +70,7 @@ jobs:
     name: Deploy Docker Compose Files
     needs: validate
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Set up Python
         uses: actions/setup-python@v5
