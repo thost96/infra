@@ -4,7 +4,6 @@ collections:
     version: 11.1.2
 roles:
   - src: https://github.com/ironicbadger/tailscale-routes-fix.git
-    name: ironicbadger.tailscale-routes-fix
     type: git
   - src: IronicBadger.docker_compose_generator
     version: 2.0.1
