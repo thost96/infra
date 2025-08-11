@@ -1,0 +1,12 @@
+---
+- name: Tailscale Host Setup
+  hosts: all
+  become: true
+  gather_facts: true
+  tasks:
+    - name: Install and Configure Tailscale
+      ansible.builtin.include_role:
+        name: artis3n.tailscale
+      vars:
+        tailscale_authkey: "{{ tailscale_key }}"
+        tailscale_args: "--ssh --accept-routes"
