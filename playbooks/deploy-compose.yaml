@@ -17,4 +17,4 @@
       ansible.builtin.file:
         state: directory
         path: /docker
-        mode: '0755'
+        mode: "0755"

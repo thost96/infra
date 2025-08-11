@@ -3,4 +3,4 @@ extends: default
 rules:
   line-length: disable
   truthy:
-    allowed-values: ['true', 'false', 'yes', 'no', 'on']
+    allowed-values: ["true", "false", "yes", "no", "on"]

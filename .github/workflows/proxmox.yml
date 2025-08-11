@@ -3,31 +3,31 @@ name: Proxmox Host Updates
 
 permissions:
   actions: none
-  checks: none              # add custom pass/fail checks to the PR
-  contents: read            # git permissions to repo pull/push
+  checks: none # add custom pass/fail checks to the PR
+  contents: read # git permissions to repo pull/push
   deployments: none
-  issues: none              # read/write to repo Issues
-  packages: none            # read/write to repo Packages (ghcr, gems, npm)
-  pull-requests: read       # read/write to repo PRs
+  issues: none # read/write to repo Issues
+  packages: none # read/write to repo Packages (ghcr, gems, npm)
+  pull-requests: read # read/write to repo PRs
   repository-projects: none
-  security-events: none     # read/write to repo Security tab API
-  statuses: write           # read/write to repo custom statuses and checks
+  security-events: none # read/write to repo Security tab API
+  statuses: write # read/write to repo custom statuses and checks
 
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 12 * * 0"    # Sonntag 12 Uhr
+    - cron: "0 12 * * 0" # Sonntag 12 Uhr
 
 jobs:
   os-updates:
-    runs-on: ubuntu-latest  # self-hosted #ubuntu-latest
+    runs-on: ubuntu-latest # self-hosted #ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.x'
+          python-version: "3.x"
 
       - name: Install Ansible
         run: |
