@@ -8,6 +8,8 @@
 
 [![Docker Compose Updates](https://github.com/thost96/infra/actions/workflows/compose.yml/badge.svg)](https://github.com/thost96/infra/actions/workflows/compose.yml)
 
+[![Home Updates](https://github.com/thost96/infra/actions/workflows/home.yml/badge.svg)](https://github.com/thost96/infra/actions/workflows/home.yml)
+
 ## TODO
 
 - [https://github.com/jtdowney/tsbridge](https://github.com/jtdowney/tsbridge)
