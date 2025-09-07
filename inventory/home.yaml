@@ -10,6 +10,4 @@ all:
     pve-3:
     immich:
     netbox:
-    pdm:
-      ansible_host: 10.1.5.35
     check-1:
