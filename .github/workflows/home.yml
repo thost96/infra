@@ -69,4 +69,4 @@ jobs:
 
       - name: Run Docker Prune
         run: |
-          ansible-playbook -i inventory/vms.yaml -l compose playbooks/docker-prune.yaml
+          ansible-playbook -i inventory/home.yaml -l compose playbooks/docker-prune.yaml
