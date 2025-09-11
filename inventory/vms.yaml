@@ -7,10 +7,8 @@ all:
   hosts:
     n8n:
     pihole:
-    test:
     checkle:
     postiz:
-    beszel-lxc:
   children:
     cluster1:
       hosts:
@@ -18,12 +16,9 @@ all:
     cluster2:
       hosts:
         pihole:
-        test:
         checkle:
         postiz:
-        beszel-lxc:
     compose:
       hosts:
-        test:
         checkle:
         postiz:
