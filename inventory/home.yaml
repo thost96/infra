@@ -11,3 +11,10 @@ all:
     immich:
     netbox:
     check-1:
+    nut:
+    owfs:
+  children:
+    compose:
+      nut:
+      immich:
+      netbox:

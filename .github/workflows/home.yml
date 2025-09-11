@@ -16,7 +16,7 @@ permissions:
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 12 * * 0" # Sonntag 12 Uhr
+    - cron: "0 12 * * *" # At 12:00 every day
 
 jobs:
   os-updates:
@@ -44,3 +44,29 @@ jobs:
       - name: Run OS Updates
         run: |
           ansible-playbook -i inventory/home.yaml playbooks/os-updates.yaml
+
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Install Ansible
+        run: |
+          python3 -m pip install --upgrade pip
+          pip3 install ansible
+
+      - name: Tailscale Login
+        uses: tailscale/github-action@v3
+        with:
+          oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+          oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
+          tags: tag:ci
+
+      - name: Run Docker Prune
+        run: |
+          ansible-playbook -i inventory/vms.yaml -l compose playbooks/docker-prune.yaml
