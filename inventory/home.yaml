@@ -13,9 +13,11 @@ all:
     check-1:
     nut:
     owfs:
+    pass:
   children:
     compose:
       hosts:
         nut:
         immich:
         netbox:
+        pass:

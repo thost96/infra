@@ -17,6 +17,10 @@ on:
   workflow_dispatch:
   schedule:
     - cron: "0 12 * * *" # At 12:00 every day
+  push:
+    paths:
+      - "inventory/home.yaml"
+      - ".github/workflows/home.yml"
 
 jobs:
   os-updates:
