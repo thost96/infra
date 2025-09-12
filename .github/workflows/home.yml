@@ -27,6 +27,8 @@ jobs:
     runs-on: ubuntu-latest # self-hosted #ubuntu-latest
     steps:
       - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
 
       - name: Set up Python
         uses: actions/setup-python@v6
@@ -52,7 +54,9 @@ jobs:
   compose-setup:
     runs-on: ubuntu-latest # self-hosted #ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
 
       - name: Set up Python
         uses: actions/setup-python@v6
@@ -80,6 +84,8 @@ jobs:
     needs: compose-setup
     steps:
       - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
 
       - name: Set up Python
         uses: actions/setup-python@v5
