@@ -15,6 +15,7 @@ all:
     owfs:
   children:
     compose:
-      nut:
-      immich:
-      netbox:
+      hosts:
+        nut:
+        immich:
+        netbox:
