@@ -13,11 +13,6 @@
         name: docker-compose-plugin
         state: present
 
-    - name: Ensure python-docker for ansible use is installed
-      ansible.builtin.package:
-        name: python-docker
-        state: present
-
     - name: Create Folder /docker if it does not exist
       ansible.builtin.file:
         state: directory
