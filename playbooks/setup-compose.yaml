@@ -12,7 +12,7 @@
       ansible.builtin.package:
         name: docker-compose-plugin
         state: present
-    
+
     - name: Ensure python-docker for ansible use is installed
       ansible.builtin.package:
         name: python-docker
