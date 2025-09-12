@@ -8,4 +8,4 @@ roles:
   - src: IronicBadger.docker_compose_generator
     version: 2.0.1
   - name: artis3n.tailscale
-    version: v4.2.2
+    version: v4.6.0
