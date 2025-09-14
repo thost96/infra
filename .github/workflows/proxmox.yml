@@ -22,12 +22,12 @@ jobs:
   os-updates:
     runs-on: ubuntu-latest # self-hosted #ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
         with:
           persist-credentials: false
 
       - name: Set up Python
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@e797f83bcb11b83ae66e0230d6156d7c80228e7c
         with:
           python-version: "3.x"
 
@@ -37,7 +37,7 @@ jobs:
           pip3 install ansible
 
       - name: Tailscale Login
-        uses: tailscale/github-action@v3
+        uses: tailscale/github-action@84a3f23bb4d843bcf4da6cf824ec1be473daf4de
         with:
           oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
           oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
