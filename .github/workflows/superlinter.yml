@@ -38,9 +38,10 @@ jobs:
           github_token: ${{ secrets.GH_TOKEN }}
 
       - name: Run Super Linter
-        uses: super-linter/super-linter@v8.1.0
+        uses: super-linter/super-linter/slim@v8.1.0
         env:
           VALIDATE_ALL_CODEBASE: true
+          FIX_GITHUB_ACTIONS_ZIZMOR: true
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
       - name: Commit and push linting fixes
