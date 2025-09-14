@@ -94,7 +94,7 @@ jobs:
       - name: Install Ansible
         run: |
           python3 -m pip install --upgrade pip
-          pip3 install ansible
+          pip3 install ansible requests
 
       - name: Tailscale Login
         uses: tailscale/github-action@84a3f23bb4d843bcf4da6cf824ec1be473daf4de
