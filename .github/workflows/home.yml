@@ -20,7 +20,6 @@ on:
   push:
     paths:
       - "inventory/home.yaml"
-      - ".github/workflows/home.yml"
 
 jobs:
   os-updates:

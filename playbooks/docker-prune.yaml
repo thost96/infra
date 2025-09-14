@@ -1,7 +1,7 @@
 ---
 - name: Prune Docker Ressources
   hosts: all
-  become: yes
+  become: false
   tasks:
     - name: Cleanup old Docker Images and Containers
       community.docker.docker_prune:
