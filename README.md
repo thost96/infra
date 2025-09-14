@@ -2,13 +2,15 @@
 
 ## CI / CD Status
 
+[![Docker Compose Updates](https://github.com/thost96/infra/actions/workflows/deploy.yml/badge.svg)](https://github.com/thost96/infra/actions/workflows/deploy.yml)
+
+[![Home Updates](https://github.com/thost96/infra/actions/workflows/home.yml/badge.svg)](https://github.com/thost96/infra/actions/workflows/home.yml)
+
+[![Linter](https://github.com/thost96/infra/actions/workflows/superlinter.yml/badge.svg)](https://github.com/thost96/infra/actions/workflows/superlinter.yml)
+
 [![Proxmox Host Updates](https://github.com/thost96/infra/actions/workflows/proxmox.yml/badge.svg)](https://github.com/thost96/infra/actions/workflows/proxmox.yml)
 
 [![Virtual Machine Updates](https://github.com/thost96/infra/actions/workflows/vms.yml/badge.svg)](https://github.com/thost96/infra/actions/workflows/vms.yml)
-
-[![Docker Compose Updates](https://github.com/thost96/infra/actions/workflows/compose.yml/badge.svg)](https://github.com/thost96/infra/actions/workflows/compose.yml)
-
-[![Home Updates](https://github.com/thost96/infra/actions/workflows/home.yml/badge.svg)](https://github.com/thost96/infra/actions/workflows/home.yml)
 
 ## TODO
 
