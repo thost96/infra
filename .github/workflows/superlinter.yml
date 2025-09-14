@@ -11,7 +11,7 @@ permissions:
   pull-requests: none # read/write to repo PRs
   repository-projects: none
   security-events: none # read/write to repo Security tab API
-  statuses: write # read/write to repo custom statuses and checks
+  statuses: read # read/write to repo custom statuses and checks
 
 on:
   push:
@@ -32,13 +32,13 @@ jobs:
           fetch-depth: 0
 
       - name: Prettify code
-        uses: creyD/prettier_action@v4.6
+        uses: creyD/prettier_action@8c18391fdc98ed0d884c6345f03975edac71b8f0
         with:
           prettier_options: --write **/*.{json,md,yaml,yml}
           github_token: ${{ secrets.GH_TOKEN }}
 
       - name: Run Super Linter
-        uses: super-linter/super-linter/slim@v8.1.0
+        uses: super-linter/super-linter/slim@ffde3b2b33b745cb612d787f669ef9442b1339a6
         env:
           VALIDATE_ALL_CODEBASE: true
           FIX_GITHUB_ACTIONS_ZIZMOR: true
@@ -51,7 +51,7 @@ jobs:
         if: >
           github.event_name == 'pull_request' &&
           github.ref_name != github.event.repository.default_branch
-        uses: stefanzweifel/git-auto-commit-action@v5
+        uses: stefanzweifel/git-auto-commit-action@778341af668090896ca464160c2def5d1d1a3eb0
         with:
           branch: ${{ github.event.pull_request.head.ref || github.head_ref || github.ref }}
           commit_message: "chore: fix linting issues"

@@ -11,7 +11,7 @@ permissions:
   pull-requests: read # read/write to repo PRs
   repository-projects: none
   security-events: none # read/write to repo Security tab API
-  statuses: write # read/write to repo custom statuses and checks
+  statuses: read # read/write to repo custom statuses and checks
 
 on:
   workflow_dispatch:

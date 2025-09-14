@@ -11,7 +11,7 @@ permissions:
   pull-requests: read # read/write to repo PRs
   repository-projects: none
   security-events: none # read/write to repo Security tab API
-  statuses: write # read/write to repo custom statuses and checks
+  statuses: read # read/write to repo custom statuses and checks
 
 on:
   workflow_dispatch: {}
@@ -92,7 +92,7 @@ jobs:
 
       - name: Get changed files
         id: changed-files
-        uses: tj-actions/changed-files@v46
+        uses: tj-actions/changed-files@24d32ffd492484c1d75e0c0b894501ddb9d30d62
         with:
           dir_names: "true"
           files: |
