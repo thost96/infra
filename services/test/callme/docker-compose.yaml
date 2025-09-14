@@ -6,8 +6,8 @@ services:
     hostname: callme
     restart: unless-stopped
     ports:
-        - '${PORT}:${PORT}'
+      - "${PORT}:${PORT}"
     volumes:
-        - .env:/src/.env:ro
-        - ./app/:/src/app/:ro
-        - ./public/:/src/public/:ro
+      - .env:/src/.env:ro
+      - ./app/:/src/app/:ro
+      - ./public/:/src/public/:ro

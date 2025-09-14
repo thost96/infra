@@ -7,7 +7,7 @@ services:
     volumes:
       - ./container-data:/data
     ports:
-      - '3001:3001'
+      - "3001:3001"
     environment:
       - ORIGIN=http://localhost:3001
       - MAIL_PROVIDER=smtp

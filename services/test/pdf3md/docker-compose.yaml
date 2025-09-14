@@ -1,6 +1,6 @@
 services:
   backend:
-    image: docker.io/learnedmachine/pdf3md-backend:latest 
+    image: docker.io/learnedmachine/pdf3md-backend:latest
     container_name: pdf3md-backend
     ports:
       - "6201:6201"
@@ -19,7 +19,7 @@ services:
       start_period: 40s
 
   frontend:
-    image: docker.io/learnedmachine/pdf3md-frontend:latest 
+    image: docker.io/learnedmachine/pdf3md-frontend:latest
     container_name: pdf3md-frontend
     ports:
       - "3000:3000"
@@ -28,7 +28,15 @@ services:
       - backend
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/"]
+      test:
+        [
+          "CMD",
+          "wget",
+          "--no-verbose",
+          "--tries=1",
+          "--spider",
+          "http://localhost:3000/",
+        ]
       interval: 30s
       timeout: 10s
       retries: 3
