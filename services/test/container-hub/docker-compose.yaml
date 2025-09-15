@@ -1,5 +1,4 @@
-version: "3.9"
-
+---
 services:
   dashboard:
     image: python:3.11

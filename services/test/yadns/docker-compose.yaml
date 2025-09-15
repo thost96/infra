@@ -1,3 +1,4 @@
+---
 services:
   yadnsb:
     image: ghcr.io/altendorfme/yadnsb:latest

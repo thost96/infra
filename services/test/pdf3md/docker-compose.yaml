@@ -1,3 +1,4 @@
+---
 services:
   backend:
     image: docker.io/learnedmachine/pdf3md-backend:latest
