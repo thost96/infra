@@ -7,8 +7,8 @@ permissions:
   contents: write # git permissions to repo pull/push and write
   deployments: none
   issues: none # read/write to repo Issues
-  packages: read # read/write to repo Packages (ghcr, gems, npm)
-  pull-requests: none # read/write to repo PRs
+  packages: write # read/write to repo Packages (ghcr, gems, npm)
+  pull-requests: write # read/write to repo PRs
   repository-projects: none
   security-events: none # read/write to repo Security tab API
   statuses: read # read/write to repo custom statuses and checks
@@ -35,7 +35,7 @@ jobs:
         uses: creyD/prettier_action@8c18391fdc98ed0d884c6345f03975edac71b8f0
         with:
           prettier_options: --write **/*.{json,md,yaml,yml}
-          github_token: ${{ secrets.GH_TOKEN }}
+          only_changed: True
 
       - name: Run Super Linter
         uses: super-linter/super-linter/slim@ffde3b2b33b745cb612d787f669ef9442b1339a6
