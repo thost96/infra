@@ -9,7 +9,7 @@
 | GIT_MERGE_CONFLICT_MARKERS | Pass ✅           |
 | JSCPD                      | Pass ✅           |
 | JSON                       | Pass ✅           |
-| JSON_PRETTIER              | Pass ✅           |
+| JSON_PRETTIER              | Fail ❌           |
 | MARKDOWN                   | Pass ✅           |
 | MARKDOWN_PRETTIER          | Pass ✅           |
 | NATURAL_LANGUAGE           | Pass ✅           |
@@ -18,4 +18,4 @@
 | YAML                       | Pass ✅           |
 | YAML_PRETTIER              | Pass ✅           |
 
-All files and directories linted successfully
+Super-linter detected linting errors
