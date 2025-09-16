@@ -19,7 +19,7 @@ on:
     paths:
       - "services/**"
       - ".github/workflows/compose.yml"
-      - "playbooks/run.yaml"
+      - "run.yaml"
     branches:
       - main
 
@@ -107,4 +107,4 @@ jobs:
 
       - name: Ansible Deploy Playbook
         run: |
-          ansible-playbook -i inventory/vms.yaml playbooks/run.yaml
+          ansible-playbook -i inventory/vms.yaml run.yaml
