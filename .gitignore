@@ -13,3 +13,6 @@ $RECYCLE.BIN/
 
 # Ansible
 .vaultpassword
+
+# Packer
+**/*.pkrvars.hcl
