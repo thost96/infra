@@ -29,6 +29,7 @@ jobs:
         with:
           # ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
           fetch-depth: 0
+          persist-credentials: false
 
       - name: Prettify code
         uses: creyD/prettier_action@8c18391fdc98ed0d884c6345f03975edac71b8f0
@@ -56,3 +57,4 @@ jobs:
           commit_message: "chore: fix linting issues"
           commit_user_name: super-linter
           commit_user_email: super-linter@super-linter.dev
+          token: ${{ secrets.GH_TOKEN }}
