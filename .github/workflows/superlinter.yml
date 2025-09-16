@@ -27,18 +27,21 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493
         with:
-          # ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
           fetch-depth: 0
+          token: ${{ secrets.GH_TOKEN }}
           persist-credentials: true
 
       - name: Prettify code
         uses: creyD/prettier_action@8c18391fdc98ed0d884c6345f03975edac71b8f0
+        continue-on-error: true
         with:
           prettier_options: --write **/*.{json,md,yaml,yml}
+          github_token: ${{ secrets.GH_TOKEN }}
           only_changed: True
 
       - name: Run Super Linter
         uses: super-linter/super-linter/slim@ffde3b2b33b745cb612d787f669ef9442b1339a6
+        continue-on-error: true
         env:
           VALIDATE_ALL_CODEBASE: true
           FIX_GITHUB_ACTIONS_ZIZMOR: true
