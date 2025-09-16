@@ -6,5 +6,5 @@
 - hosts: checkle, n8n, postiz
   roles:
     - role: ironicbadger.tailscale-routes-fix
-    - role: ironicbadger.docker-compose-generator
+    - role: ironicbadger.docker_compose_generator
       tags: compose
