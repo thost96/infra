@@ -45,6 +45,7 @@ jobs:
         env:
           VALIDATE_ALL_CODEBASE: true
           FIX_GITHUB_ACTIONS_ZIZMOR: true
+          FIX_JSON_PRETTIER: true
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
       - name: Commit and push linting fixes
