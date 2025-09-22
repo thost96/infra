@@ -13,6 +13,11 @@
         name: docker-compose-plugin
         state: present
 
+    - name: Install Python requests
+      ansible.builtin.pip:
+        name: requests
+        state: present
+
     - name: Create Folder /docker if it does not exist
       ansible.builtin.file:
         state: directory
