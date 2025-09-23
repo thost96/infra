@@ -78,9 +78,9 @@ jobs:
       # - name: Run Nextcloud Update
       #   run: |
       #     ansible-playbook -i inventory/vms.yaml -l nextcloud playbooks/nextcloud-update.yaml
-    
+
       - name: Run Mailcow Update
-        run: | 
+        run: |
           ansible-playbook -i inventory/vms.yaml -l prox-1-mail playbooks/mailcow-update.yaml
 
   cleanup:
