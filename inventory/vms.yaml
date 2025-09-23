@@ -7,6 +7,7 @@ all:
     pihole:
     checkle:
     postiz:
+    prox-1-mail:
   children:
     cluster1:
       hosts:
