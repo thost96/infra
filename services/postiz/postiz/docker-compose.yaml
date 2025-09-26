@@ -30,7 +30,7 @@ services:
       postiz-redis:
         condition: service_healthy
   postiz-postgres:
-    image: postgres:17-alpine
+    image: postgres:18-alpine
     container_name: postiz-postgres
     restart: always
     environment:
