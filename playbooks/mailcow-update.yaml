@@ -1,0 +1,9 @@
+---
+- name: Aktuelles mailcow Update ausführen
+  hosts: mailcow
+  become: yes
+  tasks:
+    - name: mailcow update script ausführen
+      command: ./update.sh --gc --force
+      args:
+        chdir: /opt/mailcow-dockerized
