@@ -13,6 +13,7 @@ all:
     owfs:
     pass:
     packer:
+    n8n:
   children:
     compose:
       hosts:

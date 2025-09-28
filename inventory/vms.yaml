@@ -3,15 +3,15 @@ all:
   vars:
     ansible_user: root
   hosts:
-    n8n:
     pihole:
     checkle:
     postiz:
-    prox-1-mail:
   children:
     cluster1:
       hosts:
-        n8n:
+        lb-1:
+        lb-2:
+        prox-1-mail:
     cluster2:
       hosts:
         pihole:
