@@ -37,7 +37,7 @@ jobs:
           pip3 install ansible
 
       - name: Tailscale Login
-        uses: tailscale/github-action@1db1f8e300a02b4173a6958cbd906c1df3392850
+        uses: tailscale/github-action@7bdbdbb51995cb7a885cd660b5af1bb686fdd2ce
         with:
           oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
           oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
