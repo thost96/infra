@@ -54,7 +54,7 @@ services:
       mode: replicated
       replicas: 1
   omni-tools:
-    image: iib0011/omni-tools:0.5.0
+    image: iib0011/omni-tools:0.6.0
     restart: unless-stopped
     networks:
       - cloudflare
