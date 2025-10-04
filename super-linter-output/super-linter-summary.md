@@ -2,6 +2,8 @@
 
 | Language                   | Validation result |
 | -------------------------- | ----------------- |
+| BIOME_FORMAT               | Fail ❌           |
+| BIOME_LINT                 | Pass ✅           |
 | CHECKOV                    | Pass ✅           |
 | ENV                        | Pass ✅           |
 | GITHUB_ACTIONS             | Pass ✅           |
@@ -14,9 +16,10 @@
 | MARKDOWN                   | Pass ✅           |
 | MARKDOWN_PRETTIER          | Pass ✅           |
 | NATURAL_LANGUAGE           | Pass ✅           |
+| PRE_COMMIT                 | Pass ✅           |
 | RENOVATE                   | Pass ✅           |
 | TRIVY                      | Pass ✅           |
 | YAML                       | Pass ✅           |
 | YAML_PRETTIER              | Pass ✅           |
 
-All files and directories linted successfully
+Super-linter detected linting errors
