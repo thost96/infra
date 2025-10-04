@@ -1,5 +1,5 @@
 ---
-name: Docker Compose Updates
+name: Docker Service Deployment
 
 permissions:
   actions: none
@@ -104,7 +104,3 @@ jobs:
           oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
           oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
           tags: tag:ci
-
-      - name: Home - Ansible Deploy Services
-        run: |
-          ansible-playbook -i inventory/home.yaml run.yaml

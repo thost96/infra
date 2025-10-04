@@ -8,7 +8,11 @@ ansible_python_interpreter: /usr/bin/python3
 tailscale_routes_table: main
 tailscale_routes_fix_lan_subnet: "{{ ts_lan_subnet }}"
 
-# ironicbadger.docker-compose-generator
 host_timezone: "Europe/Berlin"
+
+# ironicbadger.docker-compose-generator
+docker_compose_generator_output_path: "/docker/"
+docker_compose_generator_uid: "1000"
+docker_compose_generator_gid: "1000"
+services_directory: "/docker/"
 disabled_compose_files: []
-# appdata_path: "/opt/appdata"
