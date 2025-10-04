@@ -1,19 +1,19 @@
 {
-    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-    "extends": ["config:recommended"],
-    "docker-compose": {
-      "managerFilePatterns": ["/^.*\\.ya?ml$/"],
-      "ignorePaths": ["**/.github/**", "**/inventory/**", "**/playbooks/**"]
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended"],
+  "docker-compose": {
+    "managerFilePatterns": ["/^.*\\.ya?ml$/"],
+    "ignorePaths": ["**/.github/**", "**/inventory/**", "**/playbooks/**"]
+  },
+  "packageRules": [
+    {
+      "matchUpdateTypes": ["major", "minor", "patch", "pin", "digest"],
+      "automerge": true
     },
-    "packageRules": [
-      {
-        "matchUpdateTypes": ["major", "minor", "patch", "pin", "digest"],
-        "automerge": true
-      },
-      { 
-        "matchDepTypes": ["devDependencies"],
-        "automerge": true 
-      }
-    ],
-    "platformAutomerge": true
+    {
+      "matchDepTypes": ["devDependencies"],
+      "automerge": true
+    }
+  ],
+  "platformAutomerge": true
 }
