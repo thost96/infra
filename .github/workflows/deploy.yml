@@ -18,7 +18,7 @@ on:
   push:
     paths:
       - "services/**"
-      - ".github/workflows/compose.yml"
+      - ".github/workflows/deploy.yml"
       - "run.yaml"
     branches:
       - main
@@ -105,6 +105,6 @@ jobs:
           oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
           tags: tag:ci
 
-      - name: Ansible Deploy Playbook
+      - name: Home - Ansible Deploy Services
         run: |
-          ansible-playbook -i inventory/vms.yaml run.yaml
+          ansible-playbook -i inventory/home.yaml run.yaml

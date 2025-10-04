@@ -8,3 +8,9 @@
     - role: ironicbadger.tailscale-routes-fix
     - role: ironicbadger.docker_compose_generator
       tags: compose
+
+- hosts:  compose-1, compose-2
+  roles:
+    - role: ironicbadger.tailscale-routes-fix
+    - role: ironicbadger.docker_compose_generator
+      tags: compose
