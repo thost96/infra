@@ -46,6 +46,8 @@ jobs:
           VALIDATE_ALL_CODEBASE: true
           FIX_GITHUB_ACTIONS_ZIZMOR: true
           FIX_JSON_PRETTIER: true
+          FIX_BIOME_FORMAT: true
+          FIX_BIOME_LINT: true
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
       - name: Commit and push linting fixes
