@@ -2,7 +2,7 @@
 
 | Language                   | Validation result |
 | -------------------------- | ----------------- |
-| BIOME_FORMAT               | Fail ❌           |
+| BIOME_FORMAT               | Pass ✅           |
 | BIOME_LINT                 | Pass ✅           |
 | CHECKOV                    | Pass ✅           |
 | ENV                        | Pass ✅           |
@@ -22,4 +22,4 @@
 | YAML                       | Pass ✅           |
 | YAML_PRETTIER              | Pass ✅           |
 
-Super-linter detected linting errors
+All files and directories linted successfully
