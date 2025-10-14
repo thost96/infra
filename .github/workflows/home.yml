@@ -3,27 +3,27 @@ name: Home Updates
 
 permissions:
   actions: none
-  checks: none # add custom pass/fail checks to the PR
-  contents: read # git permissions to repo pull/push
+  checks: none
+  contents: read
   deployments: none
-  issues: none # read/write to repo Issues
-  packages: none # read/write to repo Packages (ghcr, gems, npm)
-  pull-requests: read # read/write to repo PRs
+  issues: none
+  packages: none
+  pull-requests: read
   repository-projects: none
-  security-events: none # read/write to repo Security tab API
-  statuses: read # read/write to repo custom statuses and checks
+  security-events: none
+  statuses: read
 
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 12 * * *" # At 12:00 every day
+    - cron: "0 12 * * *"
   push:
     paths:
       - "inventory/home.yaml"
 
 jobs:
   os-updates:
-    runs-on: ubuntu-latest # self-hosted #ubuntu-latest
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493
         with:
@@ -46,12 +46,15 @@ jobs:
           oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
           tags: tag:ci
 
-      - name: Run OS Updates
-        run: |
-          ansible-playbook -i inventory/home.yaml playbooks/os-updates.yaml
+      - name: Run OS Updates with Retry
+        uses: nick-fields/retry@v3
+        with:
+          timeout_seconds: 600
+          max_attempts: 3
+          command: ansible-playbook -i inventory/home.yaml playbooks/os-updates.yaml
 
   compose-setup:
-    runs-on: ubuntu-latest # self-hosted #ubuntu-latest
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493
         with:
@@ -74,9 +77,12 @@ jobs:
           oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
           tags: tag:ci
 
-      - name: Run Compose Setup
-        run: |
-          ansible-playbook -i inventory/home.yaml playbooks/setup-compose.yaml
+      - name: Run Compose Setup with Retry
+        uses: nick-fields/retry@v3
+        with:
+          timeout_seconds: 600
+          max_attempts: 3
+          command: ansible-playbook -i inventory/home.yaml playbooks/setup-compose.yaml
 
   cleanup:
     runs-on: ubuntu-latest
@@ -103,6 +109,9 @@ jobs:
           oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
           tags: tag:ci
 
-      - name: Run Docker Prune
-        run: |
-          ansible-playbook -i inventory/home.yaml -l compose playbooks/docker-prune.yaml
+      - name: Run Docker Prune with Retry
+        uses: nick-fields/retry@v3
+        with:
+          timeout_seconds: 600
+          max_attempts: 3
+          command: ansible-playbook -i inventory/home.yaml -l compose playbooks/docker-prune.yaml
