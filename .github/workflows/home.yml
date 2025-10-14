@@ -47,7 +47,7 @@ jobs:
           tags: tag:ci
 
       - name: Run OS Updates with Retry
-        uses: nick-fields/retry@v3
+        uses: nick-fields/retry@ce71cc2ab81d554ebbe88c79ab5975992d79ba08
         with:
           timeout_seconds: 600
           max_attempts: 3
@@ -78,7 +78,7 @@ jobs:
           tags: tag:ci
 
       - name: Run Compose Setup with Retry
-        uses: nick-fields/retry@v3
+        uses: nick-fields/retry@ce71cc2ab81d554ebbe88c79ab5975992d79ba08
         with:
           timeout_seconds: 600
           max_attempts: 3
@@ -110,7 +110,7 @@ jobs:
           tags: tag:ci
 
       - name: Run Docker Prune with Retry
-        uses: nick-fields/retry@v3
+        uses: nick-fields/retry@ce71cc2ab81d554ebbe88c79ab5975992d79ba08
         with:
           timeout_seconds: 600
           max_attempts: 3
