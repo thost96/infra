@@ -21,3 +21,11 @@ all:
       hosts:
         checkle:
         postiz:
+        prox-1-mail:
+    mailcow:
+      hosts:
+        prox-1-mail:
+    haproxy:
+      hosts:
+        lb-1:
+        lb-2:

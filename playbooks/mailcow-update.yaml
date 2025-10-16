@@ -3,7 +3,7 @@
   hosts: mailcow
   become: yes
   tasks:
-    - name: mailcow update script ausführen
+    - name: mailcow Update Script
       command: ./update.sh --gc --force
       args:
         chdir: /opt/mailcow-dockerized
