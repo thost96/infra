@@ -63,3 +63,23 @@ jobs:
           commit_message: "chore: fix linting issues"
           commit_user_name: super-linter
           commit_user_email: super-linter@super-linter.dev
+
+  packer-validate:
+    name: Validate Packer Templates
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493
+
+      - name: Setup Packer
+        uses: hashicorp/setup-packer@1aa358be5cf73883762b302a3a03abd66e75b232
+        with:
+          version: "latest"
+
+      - name: Validate Packer Templates
+        run: |
+          # Find all packer template files and validate them
+          find ./packer -name "*.pkr.hcl" | while read -r template; do
+            echo "Validating $template"
+            packer validate "$template"
+          done
