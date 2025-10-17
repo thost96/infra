@@ -70,6 +70,10 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GH_TOKEN }}
+          persist-credentials: true
 
       - name: Setup Packer
         uses: hashicorp/setup-packer@1aa358be5cf73883762b302a3a03abd66e75b232
