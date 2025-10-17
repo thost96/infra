@@ -81,5 +81,6 @@ jobs:
           # Find all packer template files and validate them
           find ./packer -name "*.pkr.hcl" | while read -r template; do
             echo "Validating $template"
+            packer init "$template"
             packer validate "$template"
           done
