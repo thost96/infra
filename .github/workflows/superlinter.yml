@@ -11,9 +11,6 @@ jobs:
   super-lint:
     name: Run Super Linter
     runs-on: ubuntu-latest
-    permissions:
-      contents: write # git permissions to repo pull/push and write
-      pull-requests: write # read/write to repo PRs
     steps:
       - name: Checkout code
         uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493
