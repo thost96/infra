@@ -1,6 +1,6 @@
 ---
 - name: Update Nextcloud
-  hosts: all
+  hosts: nextcloud
   gather_facts: false
   become: true
   tasks:

@@ -1,6 +1,6 @@
 ---
 - name: Perform Pihole Update
-  hosts: all
+  hosts: pihole
   become: yes
   gather_facts: no
   tasks:

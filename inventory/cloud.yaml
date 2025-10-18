@@ -3,17 +3,21 @@ all:
   vars:
     ansible_user: root
   hosts:
-    pihole:
-    checkle:
-    postiz:
+    old-prox-1:
   children:
     cluster1:
       hosts:
+        prox-1:
+        prox-2:
+        quorum-1:
         lb-1:
         lb-2:
         mail:
     cluster2:
       hosts:
+        prox-3:
+        prox-4:
+        quorum-2:
         pihole:
         checkle:
         postiz:
@@ -22,6 +26,7 @@ all:
         checkle:
         postiz:
         mail:
+        test:
     mailcow:
       hosts:
         mail:
@@ -29,3 +34,13 @@ all:
       hosts:
         lb-1:
         lb-2:
+    pve:
+      hosts:
+        prox-1:
+        prox-2:
+        prox-3:
+        prox-4:
+    quorum:
+      hosts:
+        quorum-1:
+        quorum-2:

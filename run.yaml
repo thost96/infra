@@ -3,7 +3,7 @@
   roles:
     - role: ironicbadger.tailscale-routes-fix
 
-- hosts: checkle, n8n, postiz
+- hosts: checkle, n8n, postiz, test
   roles:
     - role: ironicbadger.tailscale-routes-fix
     - role: ironicbadger.docker_compose_generator

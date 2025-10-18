@@ -1,6 +1,6 @@
 ---
 - name: Prune Docker Ressources
-  hosts: all
+  hosts: compose
   become: false
   tasks:
     - name: Cleanup old Docker Images and Containers

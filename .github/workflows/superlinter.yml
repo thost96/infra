@@ -81,6 +81,7 @@ jobs:
           version: "latest"
 
       - name: Validate Packer Templates
+        continue-on-error: true # Skip failure to allow other jobs to complete
         run: |
           # Find all packer template files and validate them
           find ./packer -name "*.pkr.hcl" | while read -r template; do

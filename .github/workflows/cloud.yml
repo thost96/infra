@@ -1,5 +1,5 @@
 ---
-name: Virtual Machine Updates
+name: Cloud Infrastructure Updates
 
 permissions:
   actions: none
@@ -16,7 +16,7 @@ permissions:
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 14 * * 0" # Sonntag 14 Uhr
+    - cron: "0 12 * * 0" # Sonntag 14 Uhr
 
 jobs:
   os-updates:
@@ -43,9 +43,13 @@ jobs:
           oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
           tags: tag:ci
 
-      - name: Run OS Updates
+      - name: Run Proxmox VE and Quorum Updates
         run: |
-          ansible-playbook -i inventory/vms.yaml playbooks/os-updates.yaml
+          ansible-playbook -i inventory/cloud.yaml -l pve:quorum playbooks/os-updates.yaml
+
+      - name: Run VM and LXC OS Updates
+        run: |
+          ansible-playbook -i inventory/cloud.yaml -l !pve playbooks/os-updates.yaml
 
   app-updates:
     runs-on: ubuntu-latest
@@ -73,15 +77,15 @@ jobs:
 
       - name: Run Pihole Update
         run: |
-          ansible-playbook -i inventory/vms.yaml -l pihole playbooks/pihole-update.yaml
+          ansible-playbook -i inventory/cloud.yaml playbooks/pihole-update.yaml
 
       # - name: Run Nextcloud Update
       #   run: |
-      #     ansible-playbook -i inventory/vms.yaml -l nextcloud playbooks/nextcloud-update.yaml
+      #     ansible-playbook -i inventory/cloud.yaml playbooks/nextcloud-update.yaml
 
       - name: Run Mailcow Update
         run: |
-          ansible-playbook -i inventory/vms.yaml playbooks/mailcow-update.yaml
+          ansible-playbook -i inventory/cloud.yaml playbooks/mailcow-update.yaml
 
   cleanup:
     runs-on: ubuntu-latest
@@ -109,4 +113,4 @@ jobs:
 
       - name: Run Docker Prune
         run: |
-          ansible-playbook -i inventory/vms.yaml -l compose:mailcow playbooks/docker-prune.yaml
+          ansible-playbook -i inventory/cloud.yaml -l compose:mailcow playbooks/docker-prune.yaml
