@@ -11,7 +11,7 @@ all:
       hosts:
         lb-1:
         lb-2:
-        prox-1-mail:
+        mail:
     cluster2:
       hosts:
         pihole:
@@ -21,10 +21,10 @@ all:
       hosts:
         checkle:
         postiz:
-        prox-1-mail:
+        mail:
     mailcow:
       hosts:
-        prox-1-mail:
+        mail:
     haproxy:
       hosts:
         lb-1:
