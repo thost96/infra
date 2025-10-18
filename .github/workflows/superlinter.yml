@@ -1,18 +1,6 @@
 ---
 name: Linter
 
-permissions:
-  actions: write
-  checks: none # add custom pass/fail checks to the PR
-  contents: write # git permissions to repo pull/push and write
-  deployments: none
-  issues: none # read/write to repo Issues
-  packages: write # read/write to repo Packages (ghcr, gems, npm)
-  pull-requests: write # read/write to repo PRs
-  repository-projects: none
-  security-events: none # read/write to repo Security tab API
-  statuses: read # read/write to repo custom statuses and checks
-
 on:
   push:
     branches: [main]
@@ -23,6 +11,9 @@ jobs:
   super-lint:
     name: Run Super Linter
     runs-on: ubuntu-latest
+    permissions:
+      contents: write # git permissions to repo pull/push and write
+      pull-requests: write # read/write to repo PRs
     steps:
       - name: Checkout code
         uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493
@@ -67,6 +58,8 @@ jobs:
   packer-validate:
     name: Validate Packer Templates
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: Checkout code
         uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493
