@@ -4,10 +4,10 @@
 | -------------------------- | ----------------- |
 | BIOME_FORMAT               | Pass ✅           |
 | BIOME_LINT                 | Pass ✅           |
-| CHECKOV                    | Pass ✅           |
+| CHECKOV                    | Fail ❌           |
 | ENV                        | Pass ✅           |
 | GITHUB_ACTIONS             | Pass ✅           |
-| GITHUB_ACTIONS_ZIZMOR      | Pass ✅           |
+| GITHUB_ACTIONS_ZIZMOR      | Fail ❌           |
 | GITLEAKS                   | Pass ✅           |
 | GIT_MERGE_CONFLICT_MARKERS | Pass ✅           |
 | JSCPD                      | Pass ✅           |
@@ -22,4 +22,4 @@
 | YAML                       | Pass ✅           |
 | YAML_PRETTIER              | Pass ✅           |
 
-All files and directories linted successfully
+Super-linter detected linting errors
