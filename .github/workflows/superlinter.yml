@@ -55,8 +55,6 @@ jobs:
   packer-validate:
     name: Validate Packer Templates
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
     steps:
       - name: Checkout code
         uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493

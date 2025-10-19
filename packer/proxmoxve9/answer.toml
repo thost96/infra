@@ -1,0 +1,14 @@
+[global]
+keyboard = "de"
+country = "de"
+timezone = "Europe/Berlin"
+fqdn = "pve.example.com"
+mailto = "pve@example.com"
+root_password = "Install123!"
+
+[network]
+source = "from-dhcp"
+
+[disk-setup]
+disk_list = ["vda"]
+filesystem = "ext4"

@@ -16,3 +16,4 @@ $RECYCLE.BIN/
 
 # Packer
 **/*.pkrvars.hcl
+**/downloaded_iso_path/**
