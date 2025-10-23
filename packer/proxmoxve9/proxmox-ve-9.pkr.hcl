@@ -11,42 +11,54 @@ packer {
     }
   }
 }
-
+# Proxmox
 variable "proxmox_api_url" {
   type = string
   default = ""
 }
-
 variable "proxmox_api_token_id" {
   type = string
   default = ""
 }
-
 variable "proxmox_api_token_secret" {
   type = string
   default = ""
   sensitive = true
 }
-
-variable "proxmox_node" {
+variable "proxmox_nodename" {
+  type = string
+  default = ""
+}
+variable "proxmox_vm_store" {
+  type = string
+  default = "local-lvm"
+}
+variable "proxmox_vm_bridge" {
+  type = string
+  default = "vmbr0"
+}
+variable "proxmox_vm_vlan" {
   type = string
   default = ""
 }
 
-variable "proxmox_storage" {
-  type = string
-  default = "local-lvm"
+# General
+variable "cpu_nums" {
+    type = string
+    default = "1"
 }
-
-# variable "ssh_username" {
-#   type = string
-#   default = "ubuntu"
-# }
-
-# variable "ssh_password" {
-#   type = string
-#   default = "ubuntu"
-# }
+variable "mem_size" {
+    type = string
+    default = "1024"
+}
+variable "ssh_username" {
+  type = string
+  default = "ubuntu"
+}
+variable "ssh_password" {
+  type = string
+  default = "ubuntu"
+}
 
 source "proxmox-iso" "proxmox-ve-9" {
  
@@ -58,7 +70,7 @@ source "proxmox-iso" "proxmox-ve-9" {
     insecure_skip_tls_verify = true
     
     # VM General Settings
-    node = "${var.proxmox_node}"
+    node = "${var.proxmox_nodename}"
     vm_name = "proxmox-ve-9"
     template_description = "Proxmox VE 9 (Nested)"
 
@@ -75,25 +87,25 @@ source "proxmox-iso" "proxmox-ve-9" {
     machine               = "q35"
     bios                  = "ovmf"
     efi_config {
-        efi_storage_pool = "${var.proxmox_storage}"
+        efi_storage_pool = "${var.proxmox_vm_store}"
     }
-    qemu_agent = false
+    qemu_agent = true
 
     # VM Hard Disk Settings
     scsi_controller = "virtio-scsi-pci"
     disks {
         disk_size = "10G"
         format = "raw"
-        storage_pool = "${var.proxmox_storage}"
+        storage_pool = "${var.proxmox_vm_store}"
         type = "virtio"
     }
 
     # VM CPU Settings
     cpu_type = "host"
-    cores = "2"
+    cores = "${var.cpu_nums}"
     
     # VM Memory Settings
-    memory = "2048" 
+    memory = "${var.mem_size}"
 
     vga {
         type   = "qxl"
@@ -103,8 +115,8 @@ source "proxmox-iso" "proxmox-ve-9" {
     # VM Network Settings
     network_adapters {
         model = "virtio"
-        bridge = "ovs"
-        vlan_tag = "105"
+        bridge = "${var.proxmox_vm_bridge}"
+        vlan_tag = "${var.proxmox_vm_vlan}"
         firewall = "false"
     } 
 
@@ -121,15 +133,15 @@ source "proxmox-iso" "proxmox-ve-9" {
         # "proxmox-fetch-answer partition proxmox-ais >/run/automatic-installer-answers<enter><wait>exit<enter>",
         "proxmox-fetch-answer http http://{{ .HTTPIP }}:{{ .HTTPPort }}/answer.toml >/run/automatic-installer-answers<enter><wait>exit<enter>",
         # wait for the installation to finish.
-        "<wait4m>"
+        "<wait4m>",
         # login.
-        # "root<enter><wait5s>Install123!<enter><wait5s>",
-        # update (de keyboard layout error)
-        # "rm -f /etc/apt/sources.list.d/{pve-enterprise,ceph}.sources<enter>",
-        # "apt-get update<enter><wait1m>",
-        # "apt-get dist-upgrade -y<enter><wait60s>"
+        "root<enter><wait5s>Install123!<enter><wait5s>",
+        # install and start qemu agent
+        "rm -f /etc/apt/sources.list.d/{pve-enterprise,ceph}.sources<enter>",
+        "apt-get update<enter><wait1m>",
+        "apt-get install qemu-guest-agent -y<enter><wait60s>",
+        "/etc/init.d/qemu-guest-agent start<enter><wait60s>"
     ]
-    shutdown_command = "poweroff"
 
     # PACKER Autoinstall Settings
     http_directory = "." 
@@ -137,12 +149,10 @@ source "proxmox-iso" "proxmox-ve-9" {
     # (Optional) Bind IP Address and Port
     # http_port_min = 8802
     # http_port_max = 8802
-    communicator = "none"
-    # ssh_username = "root"
-    # ssh_password = "${var.ssh_password}"
-    # ssh_private_key_file = "~/.ssh/id_rsa"
-    # Raise the timeout, when installation takes longer
-    # ssh_timeout = "30m"
+    communicator = "ssh"
+    ssh_username = "${var.ssh_username}"
+    ssh_password = "${var.ssh_password}"
+    ssh_timeout = "30m"
 }
 
 # Build Definition to create the VM Template
@@ -151,4 +161,19 @@ build {
     sources = [
       "proxmox-iso.proxmox-ve-9"
     ]
+
+    # Provisioning the VM Template in Proxmox #1
+    provisioner "shell" {
+        inline = [
+            "rm /etc/ssh/ssh_host_*",
+            "truncate -s 0 /etc/machine-id",
+            "apt-get update",
+            "apt-get dist-upgrade -y",
+            "apt-get -y autoremove --purge",
+            "apt-get -y clean",
+            "apt-get -y autoclean",
+            "echo keyboard-configuration keyboard-configuration/variant select German | debconf-set-selections && echo keyboard-configuration keyboard-configuration/layout select de | debconf-set-selections && dpkg-reconfigure -f noninteractive keyboard-configuration",
+            "sync"
+        ]
+    }
 }

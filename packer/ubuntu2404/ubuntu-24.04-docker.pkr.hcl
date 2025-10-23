@@ -11,37 +11,50 @@ packer {
   }
 }
 
+# Proxmox
 variable "proxmox_api_url" {
   type = string
   default = ""
 }
-
 variable "proxmox_api_token_id" {
   type = string
   default = ""
 }
-
 variable "proxmox_api_token_secret" {
   type = string
   default = ""
   sensitive = true
 }
-
-variable "proxmox_node" {
+variable "proxmox_nodename" {
+  type = string
+  default = ""
+}
+variable "proxmox_vm_store" {
+  type = string
+  default = "local-lvm"
+}
+variable "proxmox_vm_bridge" {
+  type = string
+  default = "vmbr0"
+}
+variable "proxmox_vm_vlan" {
   type = string
   default = ""
 }
 
-variable "proxmox_storage" {
-  type = string
-  default = "local-lvm"
+# General
+variable "cpu_nums" {
+    type = string
+    default = "1"
 }
-
+variable "mem_size" {
+    type = string
+    default = "1024"
+}
 variable "ssh_username" {
   type = string
   default = "ubuntu"
 }
-
 variable "ssh_password" {
   type = string
   default = "ubuntu"
@@ -57,7 +70,7 @@ source "proxmox-iso" "ubuntu-server-noble-docker" {
     insecure_skip_tls_verify = true
     
     # VM General Settings
-    node = "${var.proxmox_node}"
+    node = "${var.proxmox_nodename}"
     vm_name = "ubuntu-server-noble-docker"
     template_description = "Ubuntu 24.04. Noble Docker"
 
@@ -80,27 +93,27 @@ source "proxmox-iso" "ubuntu-server-noble-docker" {
     disks {
         disk_size = "10G"
         format = "raw"
-        storage_pool = "${var.proxmox_storage}"
+        storage_pool = "${var.proxmox_vm_store}"
         type = "virtio"
     }
 
     # VM CPU Settings
-    cores = "2"
+    cores = "${var.cpu_nums}"
     
     # VM Memory Settings
-    memory = "2048" 
+    memory = "${var.mem_size}"
 
     # VM Network Settings
     network_adapters {
         model = "virtio"
-        bridge = "ovs"
-        vlan_tag = "105"
+        bridge = "${var.proxmox_vm_bridge}"
+        vlan_tag = "${var.proxmox_vm_vlan}"
         firewall = "false"
     } 
 
     # VM Cloud-Init Settings
     cloud_init = true
-    cloud_init_storage_pool = "${var.proxmox_storage}"
+    cloud_init_storage_pool = "${var.proxmox_vm_store}"
 
     # PACKER Boot Commands
     boot_command = [
@@ -132,7 +145,9 @@ source "proxmox-iso" "ubuntu-server-noble-docker" {
 build {
 
     name = "ubuntu-server-noble-docker"
-    sources = ["proxmox-iso.ubuntu-server-noble-docker"]
+    sources = [
+      "proxmox-iso.ubuntu-server-noble-docker"
+    ]
 
     # Provisioning the VM Template for Cloud-Init Integration in Proxmox #1
     provisioner "shell" {

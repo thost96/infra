@@ -1,6 +1,6 @@
-# Ubuntu Server Noble
+# Ubuntu Server Noble Docker
 # ---
-# Packer Template to create an Ubuntu Server 24.04 LTS (Noble) on Proxmox
+# Packer Template to create an Ubuntu Server 24.04 LTS (Noble) with Docker on Proxmox
 
 packer {
   required_plugins {
@@ -60,7 +60,7 @@ variable "ssh_password" {
   default = "ubuntu"
 }
 
-source "proxmox-iso" "ubuntu-server-noble" {
+source "proxmox-iso" "ubuntu-server-noble-docker" {
  
     # Proxmox Connection Settings
     proxmox_url = "${var.proxmox_api_url}"
@@ -71,8 +71,8 @@ source "proxmox-iso" "ubuntu-server-noble" {
     
     # VM General Settings
     node = "${var.proxmox_nodename}"
-    vm_name = "ubuntu-server-noble"
-    template_description = "Ubuntu 24.04. Noble"
+    vm_name = "ubuntu-server-noble-docker"
+    template_description = "Ubuntu 24.04. Noble Docker"
 
     boot_iso {
          type             = "scsi"
@@ -82,7 +82,7 @@ source "proxmox-iso" "ubuntu-server-noble" {
          iso_checksum     = "file:https://releases.ubuntu.com/noble/SHA256SUMS"
     }
 
-    template_name        = "2404"
+    template_name        = "2404-docker"
 
     # VM System Settings
     qemu_agent = true
@@ -109,7 +109,7 @@ source "proxmox-iso" "ubuntu-server-noble" {
         bridge = "${var.proxmox_vm_bridge}"
         vlan_tag = "${var.proxmox_vm_vlan}"
         firewall = "false"
-    }  
+    } 
 
     # VM Cloud-Init Settings
     cloud_init = true
@@ -127,7 +127,6 @@ source "proxmox-iso" "ubuntu-server-noble" {
     boot = "c"
     boot_wait = "5s"
 
-    # PACKER Autoinstall Settings
     http_directory = "./http" 
     #http_bind_address = "10.1.149.166"
     # (Optional) Bind IP Address and Port
@@ -145,15 +144,16 @@ source "proxmox-iso" "ubuntu-server-noble" {
 # Build Definition to create the VM Template
 build {
 
-    name = "ubuntu-server-noble"
+    name = "ubuntu-server-noble-docker"
     sources = [
-      "proxmox-iso.ubuntu-server-noble"
+      "proxmox-iso.ubuntu-server-noble-docker"
     ]
 
     # Provisioning the VM Template for Cloud-Init Integration in Proxmox #1
     provisioner "shell" {
         inline = [
             "while [ ! -f /var/lib/cloud/instance/boot-finished ]; do echo 'Waiting for cloud-init...'; sleep 1; done",
+            "echo 'debconf debconf/frontend select Noninteractive' | sudo debconf-set-selections",
             "sudo rm /etc/ssh/ssh_host_*",
             "sudo truncate -s 0 /etc/machine-id",
             "sudo apt-get -y autoremove --purge",
@@ -175,6 +175,30 @@ build {
     # Provisioning the VM Template for Cloud-Init Integration in Proxmox #3
     provisioner "shell" {
         inline = [ "sudo cp /tmp/99-pve.cfg /etc/cloud/cloud.cfg.d/99-pve.cfg" ]
+    }
+
+    # Provisioning the VM Template with Docker Installation #4
+    provisioner "shell" {
+        inline = [
+            "echo 'debconf debconf/frontend select Noninteractive' | sudo debconf-set-selections",
+            "sudo apt-get install -y ca-certificates curl gnupg lsb-release",
+            "curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg",
+            "echo \"deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable\" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null",
+            "sudo apt-get update",
+            "sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin"
+        ]
+    }
+
+    # Provisioning the VM Template with Tailscale Installation #5
+    # Alternative: https://tailscale.com/kb/1293/cloud-init
+    provisioner "shell" {
+        inline = [
+            "echo 'debconf debconf/frontend select Noninteractive' | sudo debconf-set-selections",
+            "curl -fsSL https://pkgs.tailscale.com/stable/ubuntu/noble.noarmor.gpg | sudo tee /usr/share/keyrings/tailscale-archive-keyring.gpg >/dev/null",
+            "curl -fsSL https://pkgs.tailscale.com/stable/ubuntu/noble.tailscale-keyring.list | sudo tee /etc/apt/sources.list.d/tailscale.list",
+            "sudo apt-get update",
+            "sudo apt-get install -y tailscale"
+        ]
     }
 
 }

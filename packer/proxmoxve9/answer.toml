@@ -1,5 +1,5 @@
 [global]
-keyboard = "de"
+keyboard = "en-us"
 country = "de"
 timezone = "Europe/Berlin"
 fqdn = "pve.example.com"
