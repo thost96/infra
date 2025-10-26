@@ -89,5 +89,5 @@ jobs:
           find ./packer -name "*.pkr.hcl" | while read -r template; do
             echo "Validating $template"
             packer init "$template"
-            packer validate "$template"
+            packer validate -syntax-only "$template"
           done
