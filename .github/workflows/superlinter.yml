@@ -7,10 +7,24 @@ on:
   pull_request:
     branches: [main]
 
+permissions:
+  actions: none
+  checks: none
+  contents: read
+  deployments: none
+  issues: none
+  packages: none
+  pull-requests: read
+  repository-projects: none
+  security-events: none
+  statuses: read
+
 jobs:
   super-lint:
     name: Run Super Linter
     runs-on: ubuntu-latest
+    permissions: 
+      contents: write
     steps:
       - name: Checkout code
         uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493
@@ -55,6 +69,8 @@ jobs:
   packer-validate:
     name: Validate Packer Templates
     runs-on: ubuntu-latest
+    permissions:
+
     steps:
       - name: Checkout code
         uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493
