@@ -34,3 +34,4 @@ all:
         netbox:
         check-1:
         pdm:
+        immich-ml:
