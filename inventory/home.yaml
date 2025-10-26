@@ -17,6 +17,8 @@ all:
     n8n:
     compose-1:
     compose-2:
+    patchmon:
+    open-archiver:
   children:
     compose:
       hosts:
