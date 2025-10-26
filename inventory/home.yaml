@@ -18,7 +18,7 @@ all:
         pve-3:
     vms:
       hosts:
-        compsoe-1:
+        compose-1:
         compose-2:
         nut:
         owfs:
@@ -33,3 +33,4 @@ all:
         immich:
         netbox:
         check-1:
+        pdm:

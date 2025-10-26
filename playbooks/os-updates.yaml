@@ -4,6 +4,10 @@
   become: yes
   gather_facts: no
   tasks:
+    - name: Modify any HTTP apt repos to use HTTPS
+      ansible.builtin.include_role:
+        name: apt_over_https
+
     - name: Update apt cache
       ansible.builtin.apt:
         update_cache: yes
