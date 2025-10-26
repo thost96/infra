@@ -2,23 +2,6 @@
 all:
   vars:
     ansible_user: root
-  hosts:
-    pve-1:
-    pve-2:
-    pve-3:
-    pbs-1:
-    immich:
-    netbox:
-    check-1:
-    nut:
-    owfs:
-    pass:
-    packer:
-    n8n:
-    compose-1:
-    compose-2:
-    patchmon:
-    open-archiver:
   children:
     compose:
       hosts:
@@ -29,11 +12,24 @@ all:
         compose-1:
         compose-2:
     pve:
-      pve-1:
-      pve-2:
-      pve-3:
+      hosts:
+        pve-1:
+        pve-2:
+        pve-3:
     vms:
-      compsoe-1:
-      compose-2:
-      nut:
-      owfs:
+      hosts:
+        compsoe-1:
+        compose-2:
+        nut:
+        owfs:
+    lxc:
+      hosts:
+        patchmon:
+        open-archiver:
+        pass:
+        packer:
+        n8n:
+        pbs-1:
+        immich:
+        netbox:
+        check-1:
