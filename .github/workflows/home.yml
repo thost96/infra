@@ -53,6 +53,37 @@ jobs:
           max_attempts: 3
           command: ansible-playbook -i inventory/home.yaml playbooks/os-updates.yaml
 
+  filesystem:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@cfd55ca82492758d853442341ad4d8010466803a
+        with:
+          python-version: "3.x"
+
+      - name: Install Ansible
+        run: |
+          python3 -m pip install --upgrade pip
+          pip3 install ansible
+
+      - name: Tailscale Login
+        uses: tailscale/github-action@aa604318b61e5b25107287e0d07db6a08b3e72c0
+        with:
+          oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+          oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
+          tags: tag:ci
+
+      - name: Run Filesystem Trim with Retry
+        uses: nick-fields/retry@9417ab499314dfe692edb043ded2ff9b3f5f0a68
+        with:
+          timeout_seconds: 600
+          max_attempts: 3
+          command: ansible-playbook -i inventory/home.yaml -l pve:vms playbooks/filesystem-trim.yaml
+
   compose-setup:
     runs-on: ubuntu-latest
     steps:

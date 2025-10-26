@@ -28,3 +28,12 @@ all:
         pass:
         compose-1:
         compose-2:
+    pve:
+      pve-1:
+      pve-2:
+      pve-3:
+    vms:
+      compsoe-1:
+      compose-2:
+      nut:
+      owfs:
