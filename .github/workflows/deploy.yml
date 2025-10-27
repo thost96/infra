@@ -99,7 +99,7 @@ jobs:
             services/**
 
       - name: Tailscale Login
-        uses: tailscale/github-action@bd97ec6ea8b7715f77e3ca9fe692aae066680448
+        uses: tailscale/github-action@c8de7faf7a1a26c6af0848c3a6a544de2960859a
         with:
           oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
           oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
