@@ -1,0 +1,13 @@
+---
+- name: Test SSH Service Connection
+  hosts: all
+  become: yes
+  gather_facts: no
+  tasks:
+    - name: Check if ssh is accessible
+      wait_for:
+        host: '{{ inventory_hostname }}'
+        port: 22
+        state: started
+        delay: 10
+        timeout: 30
