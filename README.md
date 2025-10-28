@@ -4,6 +4,8 @@
 
 [![Linter](https://github.com/thost96/infra/actions/workflows/superlinter.yml/badge.svg)](https://github.com/thost96/infra/actions/workflows/superlinter.yml)
 
+[![Test Connection](https://github.com/thost96/infra/actions/workflows/test.yml/badge.svg)](https://github.com/thost96/infra/actions/workflows/test.yml)
+
 [![Home Updates](https://github.com/thost96/infra/actions/workflows/home.yml/badge.svg)](https://github.com/thost96/infra/actions/workflows/home.yml)
 
 [![Cloud Infrastructure Updates](https://github.com/thost96/infra/actions/workflows/cloud.yml/badge.svg)](https://github.com/thost96/infra/actions/workflows/cloud.yml)
