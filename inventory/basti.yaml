@@ -8,11 +8,17 @@ all:
       ansible_host: basti-1
       proxmox_vmid: 1102
       ansible_connection: community.proxmox.proxmox_pct_remote
+      ansible_private_key_file: "~/.ssh/id_ed25519"
+      ansible_user: root
     pihole:
       ansible_host: basti-1
       proxmox_vmid: 1104
       ansible_connection: community.proxmox.proxmox_pct_remote
+      ansible_private_key_file: "~/.ssh/id_ed25519"
+      ansible_user: root
     bookstack:
       ansible_host: basti-1
       proxmox_vmid: 1105
       ansible_connection: community.proxmox.proxmox_pct_remote
+      ansible_private_key_file: "~/.ssh/id_ed25519"
+      ansible_user: root
