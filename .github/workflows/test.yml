@@ -16,7 +16,13 @@ permissions:
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 * * * *"
+    - cron: "0 */6 * * *"
+  push:
+    paths:
+      - "inventory/home.yaml"
+      - "inventory/cloud.yaml"
+      - "inventory/basti.yaml"
+      - "playbooks/test-connection.yaml"
 
 jobs:
   test-connection:
@@ -50,3 +56,7 @@ jobs:
       - name: Test Connection for Home Hosts
         run: |
           ansible-playbook -i inventory/home.yaml playbooks/test-connection.yaml
+
+      - name: Test Connection for Basti Hosts
+        run: |
+          ansible-playbook -i inventory/basti.yaml playbooks/test-connection.yaml

@@ -16,7 +16,14 @@ permissions:
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 12 * * 0" # Sonntag 14 Uhr
+    - cron: "0 12 * * 0"
+  push:
+    paths:
+      - "inventory/cloud.yaml"
+      - "playbooks/os-updates.yaml"
+      - "playbooks/pihole-update.yaml"
+      - "playbooks/mailcow-update.yaml"
+      - "playbooks/docker-prune.yaml"
 
 jobs:
   os-updates:

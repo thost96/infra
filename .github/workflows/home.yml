@@ -20,6 +20,10 @@ on:
   push:
     paths:
       - "inventory/home.yaml"
+      - "playbooks/os-updates.yaml"
+      - "playbooks/filesystem-trim.yaml"
+      - "playbooks/setup-compose.yaml"
+      - "playbooks/docker-prune.yaml"
 
 jobs:
   os-updates:
