@@ -5,14 +5,14 @@ all:
   hosts:
     basti-1:
     unifi:
-      ansible_host: 192.168.178.250
+      ansible_host: basti-1
       proxmox_vmid: 1102
       ansible_connection: community.proxmox.proxmox_pct_remote
     pihole:
-      ansible_host: 192.168.178.250
+      ansible_host: basti-1
       proxmox_vmid: 1104
       ansible_connection: community.proxmox.proxmox_pct_remote
     bookstack:
-      ansible_host: 192.168.178.250
+      ansible_host: basti-1
       proxmox_vmid: 1105
       ansible_connection: community.proxmox.proxmox_pct_remote

@@ -22,6 +22,7 @@ on:
       - "inventory/cloud.yaml"
       - "playbooks/os-updates.yaml"
       - "playbooks/pihole-update.yaml"
+      - "playbooks/nextcloud-update.yaml"
       - "playbooks/mailcow-update.yaml"
       - "playbooks/docker-prune.yaml"
 
@@ -41,7 +42,7 @@ jobs:
       - name: Install Ansible
         run: |
           python3 -m pip install --upgrade pip
-          pip3 install ansible
+          pip3 install ansible paramiko
 
       - name: Tailscale Login
         uses: tailscale/github-action@c8de7faf7a1a26c6af0848c3a6a544de2960859a
@@ -73,7 +74,7 @@ jobs:
       - name: Install Ansible
         run: |
           python3 -m pip install --upgrade pip
-          pip3 install ansible
+          pip3 install ansible paramiko
 
       - name: Tailscale Login
         uses: tailscale/github-action@c8de7faf7a1a26c6af0848c3a6a544de2960859a
@@ -86,9 +87,9 @@ jobs:
         run: |
           ansible-playbook -i inventory/cloud.yaml playbooks/pihole-update.yaml
 
-      # - name: Run Nextcloud Update
-      #   run: |
-      #     ansible-playbook -i inventory/cloud.yaml playbooks/nextcloud-update.yaml
+      - name: Run Nextcloud Update
+        run: |
+          ansible-playbook -i inventory/cloud.yaml playbooks/nextcloud-update.yaml
 
       - name: Run Mailcow Update
         run: |
@@ -109,7 +110,7 @@ jobs:
       - name: Install Ansible
         run: |
           python3 -m pip install --upgrade pip
-          pip3 install ansible docker
+          pip3 install ansible docker paramiko
 
       - name: Tailscale Login
         uses: tailscale/github-action@c8de7faf7a1a26c6af0848c3a6a544de2960859a
