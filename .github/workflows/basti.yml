@@ -70,7 +70,7 @@ jobs:
       - name: Install Ansible
         run: |
           python3 -m pip install --upgrade pip
-          pip3 install ansible paramiko 
+          pip3 install ansible paramiko
 
       - name: Tailscale Login
         uses: tailscale/github-action@c8de7faf7a1a26c6af0848c3a6a544de2960859a
