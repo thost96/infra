@@ -1,0 +1,18 @@
+---
+all:
+  vars:
+    ansible_user: root
+  hosts:
+    basti-1:
+    unifi:
+      ansible_host: basti-1
+      proxmox_vmid: 1102
+      ansible_connection: community.proxmox.proxmox_pct_remote
+    pihole:
+      ansible_host: basti-1
+      proxmox_vmid: 1104
+      ansible_connection: community.proxmox.proxmox_pct_remote
+    bookstack:
+      ansible_host: basti-1
+      proxmox_vmid: 1105
+      ansible_connection: community.proxmox.proxmox_pct_remote

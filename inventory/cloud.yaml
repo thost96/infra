@@ -10,8 +10,6 @@ all:
         prox-1:
         prox-2:
         quorum-1:
-        lb-1:
-        lb-2:
         mail:
     cluster2:
       hosts:
@@ -30,10 +28,6 @@ all:
     mailcow:
       hosts:
         mail:
-    haproxy:
-      hosts:
-        lb-1:
-        lb-2:
     pve:
       hosts:
         prox-1:

@@ -1,0 +1,82 @@
+---
+name: Basti Infrastructure Updates
+
+permissions:
+  actions: none
+  checks: none
+  contents: read
+  deployments: none
+  issues: none
+  packages: none
+  pull-requests: read
+  repository-projects: none
+  security-events: none
+  statuses: read
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 12 * * *"
+  push:
+    paths:
+      - "inventory/basti.yaml"
+
+jobs:
+  os-updates:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@cfd55ca82492758d853442341ad4d8010466803a
+        with:
+          python-version: "3.x"
+
+      - name: Install Ansible
+        run: |
+          python3 -m pip install --upgrade pip
+          pip3 install ansible
+
+      - name: Tailscale Login
+        uses: tailscale/github-action@c8de7faf7a1a26c6af0848c3a6a544de2960859a
+        with:
+          oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+          oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
+          tags: tag:ci
+
+      - name: Run OS Updates with Retry
+        uses: nick-fields/retry@9417ab499314dfe692edb043ded2ff9b3f5f0a68
+        with:
+          timeout_seconds: 600
+          max_attempts: 3
+          command: ansible-playbook -i inventory/basti.yaml playbooks/os-updates.yaml
+
+app-updates:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@cfd55ca82492758d853442341ad4d8010466803a
+        with:
+          python-version: "3.x"
+
+      - name: Install Ansible
+        run: |
+          python3 -m pip install --upgrade pip
+          pip3 install ansible
+
+      - name: Tailscale Login
+        uses: tailscale/github-action@c8de7faf7a1a26c6af0848c3a6a544de2960859a
+        with:
+          oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+          oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
+          tags: tag:ci
+
+      - name: Run Pihole Update
+        run: |
+          ansible-playbook -i inventory/basti.yaml playbooks/pihole-update.yaml
