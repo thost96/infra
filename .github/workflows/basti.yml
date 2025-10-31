@@ -54,29 +54,29 @@ jobs:
           command: ansible-playbook -i inventory/basti.yaml playbooks/os-updates.yaml
 
 app-updates:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493
-        with:
-          persist-credentials: false
+  runs-on: ubuntu-latest
+  steps:
+    - uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493
+      with:
+        persist-credentials: false
 
-      - name: Set up Python
-        uses: actions/setup-python@cfd55ca82492758d853442341ad4d8010466803a
-        with:
-          python-version: "3.x"
+    - name: Set up Python
+      uses: actions/setup-python@cfd55ca82492758d853442341ad4d8010466803a
+      with:
+        python-version: "3.x"
 
-      - name: Install Ansible
-        run: |
-          python3 -m pip install --upgrade pip
-          pip3 install ansible
+    - name: Install Ansible
+      run: |
+        python3 -m pip install --upgrade pip
+        pip3 install ansible
 
-      - name: Tailscale Login
-        uses: tailscale/github-action@c8de7faf7a1a26c6af0848c3a6a544de2960859a
-        with:
-          oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
-          oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
-          tags: tag:ci
+    - name: Tailscale Login
+      uses: tailscale/github-action@c8de7faf7a1a26c6af0848c3a6a544de2960859a
+      with:
+        oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+        oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
+        tags: tag:ci
 
-      - name: Run Pihole Update
-        run: |
-          ansible-playbook -i inventory/basti.yaml playbooks/pihole-update.yaml
+    - name: Run Pihole Update
+      run: |
+        ansible-playbook -i inventory/basti.yaml playbooks/pihole-update.yaml
