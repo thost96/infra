@@ -35,3 +35,4 @@ all:
         check-1:
         pdm:
         immich-ml:
+        pulse:

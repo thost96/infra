@@ -2,6 +2,8 @@
 collections:
   - name: community.general
     version: 11.4.0
+  - name: community.proxmox
+    version: 1.4.0
 roles:
   - src: ironicbadger.docker_compose_generator
     version: 2.0.1
