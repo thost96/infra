@@ -21,7 +21,7 @@ services:
       - TZ=Europe/Berlin
       - RCLONE_CONFIG_NEXTCLOUD_TYPE=webdav
       - RCLONE_CONFIG_NEXTCLOUD_VENDOR=nextcloud
-      - RCLONE_CONFIG_NEXTCLOUD_URL=      
+      - RCLONE_CONFIG_NEXTCLOUD_URL=
       - RCLONE_CONFIG_NEXTCLOUD_USER=
       - RCLONE_CONFIG_NEXTCLOUD_PASS=
     volumes:
