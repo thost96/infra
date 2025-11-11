@@ -42,7 +42,7 @@ jobs:
           pip3 install ansible paramiko
 
       - name: Tailscale Login
-        uses: tailscale/github-action@a392da0a182bba0e9613b6243ebd69529b1878aa
+        uses: tailscale/github-action@dea278bd44bcef18a8d421f079a1f1f50171ed63
         with:
           oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
           oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
@@ -73,7 +73,7 @@ jobs:
           pip3 install ansible paramiko
 
       - name: Tailscale Login
-        uses: tailscale/github-action@a392da0a182bba0e9613b6243ebd69529b1878aa
+        uses: tailscale/github-action@dea278bd44bcef18a8d421f079a1f1f50171ed63
         with:
           oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
           oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
