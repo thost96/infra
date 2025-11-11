@@ -1,0 +1,34 @@
+---
+volumes:
+  scans:
+
+services:
+  samba:
+    image: dockurr/samba:4.21
+    environment:
+      - NAME=scans
+      - USER=scanner
+      - PASS=scanner
+    ports:
+      - "445:445"
+    volumes:
+      - scans:/storage
+    restart: always
+  rclone:
+    image: rclone/rclone:latest
+    restart: always
+    environment:
+      - TZ=Europe/Berlin
+      - RCLONE_CONFIG_NEXTCLOUD_TYPE=webdav
+      - RCLONE_CONFIG_NEXTCLOUD_VENDOR=nextcloud
+      - RCLONE_CONFIG_NEXTCLOUD_URL=      
+      - RCLONE_CONFIG_NEXTCLOUD_USER=
+      - RCLONE_CONFIG_NEXTCLOUD_PASS=
+    volumes:
+      - scans:/data
+    entrypoint: ["/bin/sh", "-c"]
+    command: >
+      "while :; do
+        rclone sync /data nextcloud:/RemotePfad --progress;
+        sleep 300;
+      done"
