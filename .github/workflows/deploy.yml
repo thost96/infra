@@ -77,7 +77,7 @@ jobs:
           persist-credentials: false
 
       - name: Set up Python
-        uses: actions/setup-python@443da59188462e2402e2942686db5aa6723f4bed
+        uses: actions/setup-python@97aeb3efb8a852c559869050c7fb175b4efcc8cf
         with:
           python-version: "3.x"
 
