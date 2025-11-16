@@ -86,7 +86,7 @@ jobs:
         with:
           timeout_seconds: 600
           max_attempts: 3
-          command: ansible-playbook -i inventory/home.yaml -l pve:vms playbooks/filesystem-trim.yaml
+          command: ansible-playbook -i inventory/home.yaml -l vms playbooks/filesystem-trim.yaml
 
   compose-setup:
     runs-on: ubuntu-latest

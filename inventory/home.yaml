@@ -25,7 +25,6 @@ all:
     lxc:
       hosts:
         patchmon:
-        open-archiver:
         pass:
         packer:
         n8n:

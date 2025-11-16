@@ -15,8 +15,8 @@ permissions:
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: "0 */6 * * *"
+  #schedule:
+  #  - cron: "0 */6 * * *"
   push:
     paths:
       - "inventory/home.yaml"
