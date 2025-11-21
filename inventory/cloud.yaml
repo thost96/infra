@@ -12,8 +12,8 @@ all:
         quorum-1:
         mail:
         ticket:
-         ansible_host: pve-1
-         ansible_connection: pct_ssh
+          ansible_host: pve-1
+          ansible_connection: pct_ssh
         #nextcloud:
         #  ansible_host: pve-1
         #  proxmox_vmid: 301
