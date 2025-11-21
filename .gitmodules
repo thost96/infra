@@ -1,3 +1,7 @@
 [submodule "roles/ironicbadger.tailscale-routes-fix"]
 	path = roles/ironicbadger.tailscale-routes-fix
 	url = https://github.com/ironicbadger/tailscale-routes-fix.git
+
+[submodule "plugins/ansible-pct-ssh"]
+	path = plugins/ansible-pct-ssh
+	url = https://github.com/jbrubake/ansible-pct-ssh.git
