@@ -37,7 +37,7 @@ jobs:
 
       - name: Get changed files
         id: changed-files
-        uses: tj-actions/changed-files@2d752abc95ba0255af33a2b4d5de03df3954cdf2
+        uses: tj-actions/changed-files@6da3c88b60ebf09464ada9b06fba5b6f2d34bb94
         with:
           dir_names: "true"
           files: |
@@ -92,7 +92,7 @@ jobs:
 
       - name: Get changed files
         id: changed-files
-        uses: tj-actions/changed-files@2d752abc95ba0255af33a2b4d5de03df3954cdf2
+        uses: tj-actions/changed-files@6da3c88b60ebf09464ada9b06fba5b6f2d34bb94
         with:
           dir_names: "true"
           files: |
