@@ -25,11 +25,9 @@ all:
         prox-4:
         quorum-2:
         pihole:
-        checkle:
         postiz:
     compose:
       hosts:
-        checkle:
         postiz:
         mail:
         test:
