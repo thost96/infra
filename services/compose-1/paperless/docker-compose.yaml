@@ -4,7 +4,7 @@ volumes:
 
 services:
   samba:
-    image: dockurr/samba:4.21
+    image: dockurr/samba:4.22
     environment:
       - NAME=scans
       - USER=scanner
