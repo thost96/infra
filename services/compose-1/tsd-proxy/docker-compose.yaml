@@ -1,4 +1,6 @@
 ---
+volumes:
+  tsidp-data:
 services:
   tsdproxy:
     image: almeidapaulopt/tsdproxy:2
@@ -9,3 +11,14 @@ services:
     restart: unless-stopped
     ports:
       - "80:8080"
+
+  tsidp:
+    image: ghcr.io/tailscale/tsidp:latest
+    volumes:
+      - tsidp-data:/data
+    environment:
+      - TAILSCALE_USE_WIP_CODE=1
+      - TS_STATE_DIR=/data
+      - TS_HOSTNAME=idp
+      - TSIDP_ENABLE_STS=1
+      - TS_AUTHKEY={{ vault_ts_authkey }}

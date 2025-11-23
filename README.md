@@ -27,4 +27,3 @@
 - [https://github.com/ajnart/dcm](https://github.com/ajnart/dcm)
 - [https://github.com/Tutorialwork/kleinanzeigen-ads-renewer](https://github.com/Tutorialwork/kleinanzeigen-ads-renewer)
 - [https://github.com/papra-hq/papra](https://github.com/papra-hq/papra)
-- [https://github.com/composecraft/composecraft](https://github.com/composecraft/composecraft)
