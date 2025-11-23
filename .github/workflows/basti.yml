@@ -22,6 +22,7 @@ on:
       - "inventory/basti.yaml"
       - "playbooks/os-updates.yaml"
       - "playbooks/pihole-update.yaml"
+      - "playbooks/docker-prune.yaml"
 
 jobs:
   os-updates:
@@ -47,6 +48,13 @@ jobs:
           oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
           oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
           tags: tag:ci
+
+      - name: Run PVE Pre-Requisites Install with Retry
+        uses: nick-fields/retry@9417ab499314dfe692edb043ded2ff9b3f5f0a68
+        with:
+          timeout_seconds: 600
+          max_attempts: 3
+          command: ansible-playbook -i inventory/basti.yaml playbooks/setup-proxmox.yaml
 
       - name: Run OS Updates with Retry
         uses: nick-fields/retry@9417ab499314dfe692edb043ded2ff9b3f5f0a68
