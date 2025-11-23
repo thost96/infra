@@ -6,13 +6,13 @@ all:
     basti-1:
     unifi:
       ansible_host: basti-1
-      proxmox_vmid: 1102
-      ansible_connection: community.proxmox.proxmox_pct_remote
+      ansible_connection: pct_ssh
+      ct_id: 1102
     pihole:
       ansible_host: basti-1
-      proxmox_vmid: 1104
-      ansible_connection: community.proxmox.proxmox_pct_remote
+      ansible_connection: pct_ssh
+      ct_id: 1104
     bookstack:
       ansible_host: basti-1
-      proxmox_vmid: 1105
-      ansible_connection: community.proxmox.proxmox_pct_remote
+      ansible_connection: pct_ssh
+      ct_id: 1105

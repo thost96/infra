@@ -1,0 +1,14 @@
+---
+- name: Deploy Proxmox VE Pre-Requisites
+  hosts: pve
+  become: yes
+  tasks:
+    - name: Ensure sudo is installed for pct_ssh to work
+      ansible.builtin.package:
+        name: sudo
+        state: present
+
+    - name: Ensure curl is installed
+      ansible.builtin.package:
+        name: curl
+        state: present

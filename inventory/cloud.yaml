@@ -12,12 +12,13 @@ all:
         quorum-1:
         mail:
         ticket:
-          ansible_host: pve-1
+          ansible_host: prox-2
           ansible_connection: pct_ssh
-        #nextcloud:
-        #  ansible_host: pve-1
-        #  proxmox_vmid: 301
-        #  ansible_connection: community.proxmox.proxmox_pct_remote
+          ct_id: 301
+        nextcloud:
+          ansible_host: prox-1
+          ct_id: 302
+          ansible_connection: pct_ssh
     cluster2:
       hosts:
         prox-3:
