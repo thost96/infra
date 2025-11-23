@@ -56,13 +56,13 @@ jobs:
         run: |
           ansible-playbook -i inventory/cloud.yaml -l pve:quorum playbooks/os-updates.yaml
 
-      - name:  Run PVE Pre-Requisites Install with Retry
+      - name: Run PVE Pre-Requisites Install with Retry
         uses: nick-fields/retry@9417ab499314dfe692edb043ded2ff9b3f5f0a68
         with:
           timeout_seconds: 600
           max_attempts: 3
           command: ansible-playbook -i inventory/cloud.yaml -l pve playbooks/setup-proxmox.yaml
-      - name:  Run LXC Pre-Requisites Install with Retry
+      - name: Run LXC Pre-Requisites Install with Retry
         uses: nick-fields/retry@9417ab499314dfe692edb043ded2ff9b3f5f0a68
         with:
           timeout_seconds: 600
