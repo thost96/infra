@@ -26,6 +26,7 @@ on:
       - "playbooks/mailcow-update.yaml"
       - "playbooks/docker-prune.yaml"
       - "playbooks/setup-proxmox.yaml"
+      - "playbooks/setup-compose.yaml"
 
 jobs:
   os-updates:
@@ -53,8 +54,11 @@ jobs:
           tags: tag:ci
 
       - name: Run Proxmox VE and Quorum Updates
-        run: |
-          ansible-playbook -i inventory/cloud.yaml -l pve:quorum playbooks/os-updates.yaml
+        uses: nick-fields/retry@9417ab499314dfe692edb043ded2ff9b3f5f0a68
+        with:
+          timeout_seconds: 600
+          max_attempts: 3
+          command: ansible-playbook -i inventory/cloud.yaml -l pve:quorum playbooks/os-updates.yaml
 
       - name: Run PVE Pre-Requisites Install with Retry
         uses: nick-fields/retry@9417ab499314dfe692edb043ded2ff9b3f5f0a68
@@ -62,6 +66,7 @@ jobs:
           timeout_seconds: 600
           max_attempts: 3
           command: ansible-playbook -i inventory/cloud.yaml -l pve playbooks/setup-proxmox.yaml
+
       - name: Run LXC Pre-Requisites Install with Retry
         uses: nick-fields/retry@9417ab499314dfe692edb043ded2ff9b3f5f0a68
         with:
@@ -70,8 +75,11 @@ jobs:
           command: ansible-playbook -i inventory/cloud.yaml -l compose playbooks/setup-compose.yaml
 
       - name: Run VM and LXC OS Updates
-        run: |
-          ansible-playbook -i inventory/cloud.yaml -l !pve playbooks/os-updates.yaml
+        uses: nick-fields/retry@9417ab499314dfe692edb043ded2ff9b3f5f0a68
+        with:
+          timeout_seconds: 600
+          max_attempts: 3
+          command: ansible-playbook -i inventory/cloud.yaml -l !pve playbooks/os-updates.yaml
 
   app-updates:
     runs-on: ubuntu-latest
@@ -98,16 +106,25 @@ jobs:
           tags: tag:ci
 
       - name: Run Pihole Update
-        run: |
-          ansible-playbook -i inventory/cloud.yaml playbooks/pihole-update.yaml
+        uses: nick-fields/retry@9417ab499314dfe692edb043ded2ff9b3f5f0a68
+        with:
+          timeout_seconds: 600
+          max_attempts: 1
+          command: ansible-playbook -i inventory/cloud.yaml playbooks/pihole-update.yaml
 
       - name: Run Nextcloud Update
-        run: |
-          ansible-playbook -i inventory/cloud.yaml playbooks/nextcloud-update.yaml
+        uses: nick-fields/retry@9417ab499314dfe692edb043ded2ff9b3f5f0a68
+        with:
+          timeout_seconds: 600
+          max_attempts: 1
+          command: ansible-playbook -i inventory/cloud.yaml playbooks/nextcloud-update.yaml
 
       - name: Run Mailcow Update
-        run: |
-          ansible-playbook -i inventory/cloud.yaml playbooks/mailcow-update.yaml
+        uses: nick-fields/retry@9417ab499314dfe692edb043ded2ff9b3f5f0a68
+        with:
+          timeout_seconds: 600
+          max_attempts: 1
+          command: ansible-playbook -i inventory/cloud.yaml playbooks/mailcow-update.yaml
 
   cleanup:
     runs-on: ubuntu-latest
@@ -134,5 +151,8 @@ jobs:
           tags: tag:ci
 
       - name: Run Docker Prune
-        run: |
-          ansible-playbook -i inventory/cloud.yaml -l compose:mailcow playbooks/docker-prune.yaml
+        uses: nick-fields/retry@9417ab499314dfe692edb043ded2ff9b3f5f0a68
+        with:
+          timeout_seconds: 600
+          max_attempts: 3
+          command: ansible-playbook -i inventory/cloud.yaml -l compose:mailcow playbooks/docker-prune.yaml

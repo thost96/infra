@@ -50,13 +50,22 @@ jobs:
           tags: tag:ci
 
       - name: Test Connection for Cloud Hosts
-        run: |
-          ansible-playbook -i inventory/cloud.yaml playbooks/test-connection.yaml
+        uses: nick-fields/retry@9417ab499314dfe692edb043ded2ff9b3f5f0a68
+        with:
+          timeout_seconds: 600
+          max_attempts: 1
+          command: ansible-playbook -i inventory/cloud.yaml playbooks/test-connection.yaml
 
       - name: Test Connection for Home Hosts
-        run: |
-          ansible-playbook -i inventory/home.yaml playbooks/test-connection.yaml
+        uses: nick-fields/retry@9417ab499314dfe692edb043ded2ff9b3f5f0a68
+        with:
+          timeout_seconds: 600
+          max_attempts: 1
+          command: ansible-playbook -i inventory/home.yaml playbooks/test-connection.yaml
 
       - name: Test Connection for Basti Hosts
-        run: |
-          ansible-playbook -i inventory/basti.yaml playbooks/test-connection.yaml
+        uses: nick-fields/retry@9417ab499314dfe692edb043ded2ff9b3f5f0a68
+        with:
+          timeout_seconds: 600
+          max_attempts: 1
+          command: ansible-playbook -i inventory/basti.yaml playbooks/test-connection.yaml

@@ -16,3 +16,6 @@ all:
     #   ansible_host: basti-1
     #   ansible_connection: pct_ssh
     #   ct_id: 1105
+    pve:
+      hosts:
+        basti-1:

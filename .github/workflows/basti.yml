@@ -22,7 +22,7 @@ on:
       - "inventory/basti.yaml"
       - "playbooks/os-updates.yaml"
       - "playbooks/pihole-update.yaml"
-      - "playbooks/docker-prune.yaml"
+      - "playbooks/setup-proxmox.yaml"
 
 jobs:
   os-updates:
@@ -88,5 +88,8 @@ jobs:
           tags: tag:ci
 
       - name: Run Pihole Update
-        run: |
-          ansible-playbook -i inventory/basti.yaml playbooks/pihole-update.yaml
+        uses: nick-fields/retry@9417ab499314dfe692edb043ded2ff9b3f5f0a68
+        with:
+          timeout_seconds: 600
+          max_attempts: 3
+          command: ansible-playbook -i inventory/basti.yaml playbooks/pihole-update.yaml
