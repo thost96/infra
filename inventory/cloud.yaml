@@ -11,14 +11,14 @@ all:
         prox-2:
         quorum-1:
         mail:
-        ticket:
-          ansible_host: prox-2
-          ansible_connection: pct_ssh
-          ct_id: 301
-        cloud:
-          ansible_host: prox-1
-          ct_id: 302
-          ansible_connection: pct_ssh
+        # ticket:
+        #   ansible_host: prox-2
+        #   ansible_connection: pct_ssh
+        #   ct_id: 301
+        # cloud:
+        #   ansible_host: prox-1
+        #   ct_id: 302
+        #   ansible_connection: pct_ssh
     cluster2:
       hosts:
         prox-3:
@@ -26,22 +26,22 @@ all:
         quorum-2:
         pihole:
         postiz:
-        svbakede-1:
-          ansible_host: prox-4
-          ct_id: 401
-          ansible_connection: pct_ssh
-        feuerwehr-1:
-          ansible_host: prox-4
-          ct_id: 402
-          ansible_connection: pct_ssh
-        feuerwehr-2:
-          ansible_host: prox-4
-          ct_id: 404
-          ansible_connection: pct_ssh
-        thorsten-1:
-          ansible_host: prox-4
-          ct_id: 403
-          ansible_connection: pct_ssh
+        # svbakede-1:
+        #   ansible_host: prox-4
+        #   ct_id: 401
+        #   ansible_connection: pct_ssh
+        # feuerwehr-1:
+        #   ansible_host: prox-4
+        #   ct_id: 402
+        #   ansible_connection: pct_ssh
+        # feuerwehr-2:
+        #   ansible_host: prox-4
+        #   ct_id: 404
+        #   ansible_connection: pct_ssh
+        # thorsten-1:
+        #   ansible_host: prox-4
+        #   ct_id: 403
+        #   ansible_connection: pct_ssh
     compose:
       hosts:
         postiz:
