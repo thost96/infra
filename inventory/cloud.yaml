@@ -11,14 +11,16 @@ all:
         prox-2:
         quorum-1:
         mail:
-        # ticket:
-        #   ansible_host: prox-2
-        #   ansible_connection: pct_ssh
-        #   ct_id: 301
-        # cloud:
-        #   ansible_host: prox-1
-        #   ct_id: 302
-        #   ansible_connection: pct_ssh
+        ticket:
+          ansible_host: prox-2
+          ansible_connection: community.proxmox.proxmox_pct_remote
+          proxmox_vmid: 301
+          ansible_user: ansible
+        cloud:
+          ansible_host: prox-1
+          proxmox_vmid: 302
+          ansible_connection: community.proxmox.proxmox_pct_remote
+          ansible_user: ansible
     cluster2:
       hosts:
         prox-3:

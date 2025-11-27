@@ -4,6 +4,8 @@ collections:
     version: 12.0.1
   - name: community.proxmox
     version: 1.4.0
+  - name: community.crypto
+    version: 3.0.5
 roles:
   - src: ironicbadger.docker_compose_generator
     version: 2.0.1

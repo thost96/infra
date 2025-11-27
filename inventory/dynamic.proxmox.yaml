@@ -1,0 +1,19 @@
+# ---------------------------------------------
+# Dynamic inventory file: dynamic.proxmox.yml
+# ---------------------------------------------
+plugin: community.proxmox.proxmox
+url: https://prox-1:8006
+validate_certs: false
+user: root@pam
+token_id: ansible
+token_secret: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+want_facts: true
+exclude_nodes: true
+filters:
+  - proxmox_vmtype == "lxc"
+want_proxmox_nodes_ansible_host: false
+compose:
+  ansible_host: "'prox-1'"
+  ansible_connection: "'community.proxmox.proxmox_pct_remote'"
+  ansible_user: "'ansible'"
