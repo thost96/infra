@@ -46,6 +46,7 @@ jobs:
         continue-on-error: true
         env:
           VALIDATE_ALL_CODEBASE: true
+          FIX_SHELL_SHFMT: true
           FIX_GITHUB_ACTIONS_ZIZMOR: true
           FIX_JSON_PRETTIER: true
           FIX_BIOME_FORMAT: true
