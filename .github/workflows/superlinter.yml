@@ -67,7 +67,6 @@ jobs:
           commit_user_name: super-linter
           commit_user_email: super-linter@super-linter.dev
 
-
   packer-validate:
     name: Validate Packer Templates
     runs-on: ubuntu-latest
