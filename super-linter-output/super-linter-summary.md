@@ -2,6 +2,8 @@
 
 | Language                   | Validation result |
 | -------------------------- | ----------------- |
+| BASH                       | Pass ✅           |
+| BASH_EXEC                  | Pass ✅           |
 | BIOME_FORMAT               | Pass ✅           |
 | BIOME_LINT                 | Pass ✅           |
 | CHECKOV                    | Pass ✅           |
@@ -18,6 +20,7 @@
 | NATURAL_LANGUAGE           | Pass ✅           |
 | PRE_COMMIT                 | Pass ✅           |
 | RENOVATE                   | Pass ✅           |
+| SHELL_SHFMT                | Pass ✅           |
 | TRIVY                      | Pass ✅           |
 | YAML                       | Pass ✅           |
 | YAML_PRETTIER              | Pass ✅           |
