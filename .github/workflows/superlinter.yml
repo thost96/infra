@@ -50,7 +50,7 @@ jobs:
           FIX_JSON_PRETTIER: true
           FIX_BIOME_FORMAT: true
           FIX_BIOME_LINT: true
-          FILTER_REGEX_EXCLUDE: ^roles/|^plugins/
+          FILTER_REGEX_EXCLUDE: ^roles\/.*|^plugins\/.*
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
       - name: Commit and push linting fixes
