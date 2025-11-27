@@ -23,6 +23,6 @@
 | SHELL_SHFMT                | Pass ✅           |
 | TRIVY                      | Pass ✅           |
 | YAML                       | Pass ✅           |
-| YAML_PRETTIER              | Fail ❌           |
+| YAML_PRETTIER              | Pass ✅           |
 
-Super-linter detected linting errors
+All files and directories linted successfully
