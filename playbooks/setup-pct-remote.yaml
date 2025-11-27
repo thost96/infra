@@ -19,15 +19,15 @@
         state: directory
         owner: ansible
         group: ansible
-        mode: '0700'
+        mode: "0700"
 
     - name: Generate SSH key for ansible user
       community.crypto.openssh_keypair:
         path: /opt/ansible-pct/.ssh/ansible
         type: ed25519
-        comment: 'ansible'
+        comment: "ansible"
         force: true
-        mode: '0600'
+        mode: "0600"
         owner: ansible
         group: ansible
 
@@ -38,12 +38,12 @@
         remote_src: yes
         owner: ansible
         group: ansible
-        mode: '0600'
+        mode: "0600"
 
     - name: Add sudoers entry for ansible user
       ansible.builtin.copy:
-        content: 'ansible ALL = (root) NOPASSWD: /usr/sbin/pct'
+        content: "ansible ALL = (root) NOPASSWD: /usr/sbin/pct"
         dest: /etc/sudoers.d/ansible_pct
         owner: root
         group: root
-        mode: '0440'
+        mode: "0440"

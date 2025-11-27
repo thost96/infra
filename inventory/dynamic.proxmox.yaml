@@ -7,7 +7,7 @@ validate_certs: false
 user: root@pam
 token_id: ansible
 token_secret: !vault |
-          $ANSIBLE_VAULT;1.1;AES256
+  $ANSIBLE_VAULT;1.1;AES256
 want_facts: true
 exclude_nodes: true
 filters:
