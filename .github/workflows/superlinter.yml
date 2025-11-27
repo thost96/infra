@@ -42,7 +42,7 @@ jobs:
           only_changed: True
 
       - name: Run Super Linter
-        uses: super-linter/super-linter/slim@c15ee6dd7d559940b734579617c3637b9c007f6f
+        uses: super-linter/super-linter/slim@5aa81e2b92d9cec28bdd7183b8197383aace3203
         continue-on-error: true
         env:
           VALIDATE_ALL_CODEBASE: true
