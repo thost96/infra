@@ -2,35 +2,35 @@ name: "Setup Ansible (composite)"
 description: "Common setup for Ansible-based workflows: checkout, python setup, pip install, optional ansible-galaxy and tailscale login"
 inputs:
   python-version:
-    description: 'Python version to setup'
+    description: "Python version to setup"
     required: false
-    default: '3.x'
+    default: "3.x"
   requirements-file:
-    description: 'Path to pip requirements file'
+    description: "Path to pip requirements file"
     required: false
-    default: 'requirements.txt'
+    default: "requirements.txt"
   extra-packages:
-    description: 'Additional pip packages to install (space-separated)'
+    description: "Additional pip packages to install (space-separated)"
     required: false
-    default: ''
+    default: ""
   galaxy-requirements:
-    description: 'Path to ansible-galaxy requirements file (optional)'
+    description: "Path to ansible-galaxy requirements file (optional)"
     required: false
-    default: 'requirements.yaml'
+    default: "requirements.yaml"
   ts-oauth-client-id:
-    description: 'Tailscale OAuth client id (pass as secret)'
+    description: "Tailscale OAuth client id (pass as secret)"
     required: false
-    default: ''
+    default: ""
   ts-oauth-secret:
-    description: 'Tailscale OAuth secret (pass as secret)'
+    description: "Tailscale OAuth secret (pass as secret)"
     required: false
-    default: ''
+    default: ""
   tailscale-tags:
-    description: 'Tags to pass to tailscale login action'
+    description: "Tags to pass to tailscale login action"
     required: false
-    default: 'tag:ci'
+    default: "tag:ci"
 runs:
-  using: 'composite'
+  using: "composite"
   steps:
     - name: Checkout repository
       uses: actions/checkout@c2d88d3ecc89a9ef08eebf45d9637801dcee7eb5
