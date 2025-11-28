@@ -1,3 +1,4 @@
+---
 services:
   arcane:
     image: ghcr.io/ofkm/arcane:latest

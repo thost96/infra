@@ -1,6 +1,7 @@
 # ---------------------------------------------
 # Dynamic inventory file: dynamic.proxmox.yml
 # ---------------------------------------------
+---
 plugin: community.proxmox.proxmox
 url: https://prox-1:8006
 validate_certs: false
