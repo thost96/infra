@@ -1,7 +1,7 @@
 ---
 - name: Deploy Proxmox VE Pre-Requisites
   hosts: pve
-  become: yes
+  become: true
   tasks:
     - name: Ensure sudo is installed for pct_ssh to work
       ansible.builtin.package:
@@ -44,7 +44,7 @@
       ansible.builtin.copy:
         src: /opt/ansible-pct/.ssh/ansible.pub
         dest: /opt/ansible-pct/.ssh/authorized-keys
-        remote_src: yes
+        remote_src: true
         owner: ansible
         group: ansible
         mode: '0600'
