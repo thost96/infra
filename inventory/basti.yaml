@@ -10,16 +10,19 @@ all:
           ansible_connection: community.proxmox.proxmox_pct_remote
           proxmox_vmid: 1102
           ansible_user: ansible
+          ansible_ssh_private_key_file: /opt/ansible-pct/.ssh/ansible
         pihole:
           ansible_host: basti-1
           ansible_connection: community.proxmox.proxmox_pct_remote
           proxmox_vmid: 1104
           ansible_user: ansible
+          ansible_ssh_private_key_file: /opt/ansible-pct/.ssh/ansible
         bookstack:
           ansible_host: basti-1
           ansible_connection: community.proxmox.proxmox_pct_remote
           proxmox_vmid: 1105
           ansible_user: ansible
+          ansible_ssh_private_key_file: /opt/ansible-pct/.ssh/ansible          
     pve:
       hosts:
         basti-1:
