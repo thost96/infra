@@ -31,7 +31,6 @@ all:
         pbs-1:
         immich:
         netbox:
-        check-1:
         pdm:
         immich-ml:
         pulse:
