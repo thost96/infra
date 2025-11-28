@@ -28,7 +28,7 @@ jobs:
     runs-on: ubuntu-latest
     concurrency:
       group: test-connection-${{ github.ref }}
-      cancel-in-progress: true
+      cancel-in-progress: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@c2d88d3ecc89a9ef08eebf45d9637801dcee7eb5

@@ -28,7 +28,7 @@ jobs:
     runs-on: ubuntu-latest
     concurrency:
       group: deploy-validate-${{ github.ref }}
-      cancel-in-progress: true
+      cancel-in-progress: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
     timeout-minutes: 60
     name: Validate Docker Compose Files
     steps:
@@ -75,7 +75,7 @@ jobs:
     runs-on: ubuntu-latest
     concurrency:
       group: deploy-compose-${{ github.ref }}
-      cancel-in-progress: true
+      cancel-in-progress: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
     timeout-minutes: 60
     name: Deploy Docker Compose Files
     needs: validate

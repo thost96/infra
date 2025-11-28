@@ -30,8 +30,8 @@ jobs:
   os-updates:
     runs-on: ubuntu-latest
     concurrency:
-      group: home-infra-${{ github.ref }}
-      cancel-in-progress: true
+      group: home-infra-os-updates-${{ github.ref }}
+      cancel-in-progress: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@c2d88d3ecc89a9ef08eebf45d9637801dcee7eb5
@@ -54,8 +54,8 @@ jobs:
   filesystem:
     runs-on: ubuntu-latest
     concurrency:
-      group: home-filesystem-${{ github.ref }}
-      cancel-in-progress: true
+      group: home-infra-filesystem-${{ github.ref }}
+      cancel-in-progress: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@c2d88d3ecc89a9ef08eebf45d9637801dcee7eb5
@@ -78,8 +78,8 @@ jobs:
   compose-setup:
     runs-on: ubuntu-latest
     concurrency:
-      group: home-compose-${{ github.ref }}
-      cancel-in-progress: true
+      group: home-infra-compose-${{ github.ref }}
+      cancel-in-progress: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@c2d88d3ecc89a9ef08eebf45d9637801dcee7eb5
@@ -103,8 +103,8 @@ jobs:
   cleanup:
     runs-on: ubuntu-latest
     concurrency:
-      group: home-cleanup-${{ github.ref }}
-      cancel-in-progress: true
+      group: home-infra-cleanup-${{ github.ref }}
+      cancel-in-progress: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
     timeout-minutes: 60
     needs: compose-setup
     steps:

@@ -29,8 +29,8 @@ jobs:
   os-updates:
     runs-on: ubuntu-latest
     concurrency:
-      group: basti-infra-${{ github.ref }}
-      cancel-in-progress: true
+      group: basti-infra-os-updates-${{ github.ref }}
+      cancel-in-progress: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@c2d88d3ecc89a9ef08eebf45d9637801dcee7eb5
@@ -60,8 +60,8 @@ jobs:
   app-updates:
     runs-on: ubuntu-latest
     concurrency:
-      group: basti-infra-${{ github.ref }}
-      cancel-in-progress: true
+      group: basti-infra-app-updates-${{ github.ref }}
+      cancel-in-progress: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
     timeout-minutes: 60
     steps:
       - name: Setup Ansible
