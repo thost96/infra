@@ -19,6 +19,7 @@ on:
     - cron: "0 12 * * *"
   push:
     paths:
+      - ".github/workflows/basti.yml"
       - "inventory/basti.yaml"
       - "playbooks/os-updates.yaml"
       - "playbooks/pihole-update.yaml"
@@ -32,6 +33,10 @@ jobs:
       cancel-in-progress: true
     timeout-minutes: 60
     steps:
+      - uses: actions/checkout@c2d88d3ecc89a9ef08eebf45d9637801dcee7eb5
+        with:
+          persist-credentials: false
+
       - name: Setup Ansible
         uses: ./.github/actions/setup-ansible
         with:

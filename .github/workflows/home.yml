@@ -19,6 +19,7 @@ on:
     - cron: "0 12 * * *"
   push:
     paths:
+      - ".github/workflows/home.yml"
       - "inventory/home.yaml"
       - "playbooks/os-updates.yaml"
       - "playbooks/filesystem-trim.yaml"
@@ -33,6 +34,10 @@ jobs:
       cancel-in-progress: true
     timeout-minutes: 60
     steps:
+      - uses: actions/checkout@c2d88d3ecc89a9ef08eebf45d9637801dcee7eb5
+        with:
+          persist-credentials: false
+
       - name: Setup Ansible
         uses: ./.github/actions/setup-ansible
         with:
@@ -53,6 +58,10 @@ jobs:
       cancel-in-progress: true
     timeout-minutes: 60
     steps:
+      - uses: actions/checkout@c2d88d3ecc89a9ef08eebf45d9637801dcee7eb5
+        with:
+          persist-credentials: false
+
       - name: Setup Ansible
         uses: ./.github/actions/setup-ansible
         with:
@@ -73,6 +82,10 @@ jobs:
       cancel-in-progress: true
     timeout-minutes: 60
     steps:
+      - uses: actions/checkout@c2d88d3ecc89a9ef08eebf45d9637801dcee7eb5
+        with:
+          persist-credentials: false
+
       - name: Setup Ansible
         uses: ./.github/actions/setup-ansible
         with:
@@ -95,6 +108,10 @@ jobs:
     timeout-minutes: 60
     needs: compose-setup
     steps:
+      - uses: actions/checkout@c2d88d3ecc89a9ef08eebf45d9637801dcee7eb5
+        with:
+          persist-credentials: false
+
       - name: Setup Ansible
         uses: ./.github/actions/setup-ansible
         with:

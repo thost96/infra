@@ -15,10 +15,9 @@ permissions:
 
 on:
   workflow_dispatch:
-  #schedule:
-  #  - cron: "0 */6 * * *"
   push:
     paths:
+      - ".github/workflows/test.yml"
       - "inventory/home.yaml"
       - "inventory/cloud.yaml"
       - "inventory/basti.yaml"
@@ -32,6 +31,10 @@ jobs:
       cancel-in-progress: true
     timeout-minutes: 60
     steps:
+      - uses: actions/checkout@c2d88d3ecc89a9ef08eebf45d9637801dcee7eb5
+        with:
+          persist-credentials: false
+
       - name: Setup Ansible
         uses: ./.github/actions/setup-ansible
         with:

@@ -1,5 +1,5 @@
 name: "Setup Ansible (composite)"
-description: "Common setup for Ansible-based workflows: checkout, python setup, pip install, optional ansible-galaxy and tailscale login"
+description: "Common setup for Ansible-based workflows: python setup, pip install, optional ansible-galaxy and tailscale login (assumes checkout already done)"
 inputs:
   python-version:
     description: "Python version to setup"
@@ -32,11 +32,6 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Checkout repository
-      uses: actions/checkout@c2d88d3ecc89a9ef08eebf45d9637801dcee7eb5
-      with:
-        persist-credentials: false
-
     - name: Set up Python
       uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548
       with:
