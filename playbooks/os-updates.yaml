@@ -1,8 +1,8 @@
 ---
 - name: Perform Apt Updates on Debian/Ubuntu Systems
   hosts: all
-  become: yes
-  gather_facts: no
+  become: true
+  gather_facts: false
   tasks:
     # - name: Modify any HTTP apt repos to use HTTPS
     #   ansible.builtin.include_role:
@@ -10,7 +10,7 @@
 
     - name: Update apt cache
       ansible.builtin.apt:
-        update_cache: yes
+        update_cache: true
         cache_valid_time: 3600
 
     - name: Upgrade all packages to the latest version
@@ -19,5 +19,5 @@
 
     - name: Remove old packages
       ansible.builtin.apt:
-        autoremove: yes
-        autoclean: yes
+        autoremove: true
+        autoclean: true

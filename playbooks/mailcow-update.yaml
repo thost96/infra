@@ -1,9 +1,13 @@
 ---
-- name: Aktuelles mailcow Update ausführen
+- name: Perform mailcow Update
   hosts: mailcow
-  become: yes
+  become: true
+  vars:
+    mailcow_path: /opt/mailcow-dockerized
   tasks:
-    - name: mailcow Update Script
-      command: ./update.sh --gc --force
+    - name: Run mailcow update script
+      ansible.builtin.command: ./update.sh --gc --force
       args:
-        chdir: /opt/mailcow-dockerized
+        chdir: "{{ mailcow_path }}"
+      register: mailcow_update_result
+      changed_when: "'error' not in mailcow_update_result.stderr | lower"

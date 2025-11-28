@@ -1,5 +1,5 @@
 ---
-- name: Prune Docker Ressources
+- name: Prune Docker Resources
   hosts: compose
   become: false
   tasks:
@@ -10,3 +10,4 @@
         networks: true
         volumes: true
         builder_cache: true
+      ignore_errors: true

@@ -3,8 +3,11 @@
   hosts: nextcloud
   gather_facts: false
   become: true
+  vars:
+    nextcloud_path: /var/www/nextcloud
+    nextcloud_user: www-data
   tasks:
-    - name: Run Nextcloud Updater
-      ansible.builtin.command: sudo -u www-data php /var/www/nextcloud/updater/updater.phar --no-interaction
-      register: result
-      changed_when: not "'No update available.' in result.stdout | default('')"
+    - name: Run Nextcloud updater
+      ansible.builtin.command: sudo -u {{ nextcloud_user }} php {{ nextcloud_path }}/updater/updater.phar --no-interaction
+      register: nextcloud_update_result
+      changed_when: not "'No update available.' in nextcloud_update_result.stdout | default('')"

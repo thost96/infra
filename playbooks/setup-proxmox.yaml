@@ -3,7 +3,7 @@
   hosts: pve
   become: true
   tasks:
-    - name: Ensure sudo is installed for pct_ssh to work
+    - name: Ensure base packages are installed
       ansible.builtin.package:
         name: sudo
         state: present

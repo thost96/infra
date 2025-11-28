@@ -1,11 +1,11 @@
 ---
 - name: Test SSH Service Connection
   hosts: all
-  become: true
+  become: false
   gather_facts: false
   tasks:
     - name: Check if ssh is accessible
-      wait_for:
+      ansible.builtin.wait_for:
         host: "{{ inventory_hostname }}"
         port: 22
         state: started

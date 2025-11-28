@@ -5,6 +5,6 @@
   gather_facts: false
   tasks:
     - name: Update Pi-hole
-      command: pihole -up
+      ansible.builtin.command: pihole -up
       register: pihole_update_result
       changed_when: "'Everything is already up to date' not in pihole_update_result.stdout"
