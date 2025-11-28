@@ -1,0 +1,4 @@
+# Pinned dependencies for CI runner - adjust versions as needed
+ansible-core==2.15.10
+paramiko==3.4.0
+ansible-lint==6.13.0

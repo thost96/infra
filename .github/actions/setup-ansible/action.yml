@@ -1,0 +1,69 @@
+name: "Setup Ansible (composite)"
+description: "Common setup for Ansible-based workflows: checkout, python setup, pip install, optional ansible-galaxy and tailscale login"
+inputs:
+  python-version:
+    description: 'Python version to setup'
+    required: false
+    default: '3.x'
+  requirements-file:
+    description: 'Path to pip requirements file'
+    required: false
+    default: 'requirements.txt'
+  extra-packages:
+    description: 'Additional pip packages to install (space-separated)'
+    required: false
+    default: ''
+  galaxy-requirements:
+    description: 'Path to ansible-galaxy requirements file (optional)'
+    required: false
+    default: 'requirements.yaml'
+  ts-oauth-client-id:
+    description: 'Tailscale OAuth client id (pass as secret)'
+    required: false
+    default: ''
+  ts-oauth-secret:
+    description: 'Tailscale OAuth secret (pass as secret)'
+    required: false
+    default: ''
+  tailscale-tags:
+    description: 'Tags to pass to tailscale login action'
+    required: false
+    default: 'tag:ci'
+runs:
+  using: 'composite'
+  steps:
+    - name: Checkout repository
+      uses: actions/checkout@c2d88d3ecc89a9ef08eebf45d9637801dcee7eb5
+      with:
+        persist-credentials: false
+
+    - name: Set up Python
+      uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548
+      with:
+        python-version: ${{ inputs.python-version }}
+        cache: pip
+
+    - name: Install pip requirements
+      shell: bash
+      run: |
+        python3 -m pip install --upgrade pip
+        if [ -n "${{ inputs.requirements-file }}" ] && [ -f "${{ inputs.requirements-file }}" ]; then
+          python3 -m pip install -r "${{ inputs.requirements-file }}"
+        fi
+        if [ -n "${{ inputs.extra-packages }}" ]; then
+          python3 -m pip install ${{ inputs.extra-packages }}
+        fi
+
+    - name: Install Ansible-Galaxy requirements
+      if: ${{ inputs.galaxy-requirements != '' }}
+      shell: bash
+      run: |
+        ansible-galaxy install -r ${{ inputs.galaxy-requirements }} --ignore-errors
+
+    - name: Tailscale Login
+      if: ${{ inputs.ts-oauth-client-id != '' && inputs.ts-oauth-secret != '' }}
+      uses: tailscale/github-action@dea278bd44bcef18a8d421f079a1f1f50171ed63
+      with:
+        oauth-client-id: ${{ inputs.ts-oauth-client-id }}
+        oauth-secret: ${{ inputs.ts-oauth-secret }}
+        tags: ${{ inputs.tailscale-tags }}

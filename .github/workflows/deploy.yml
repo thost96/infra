@@ -26,6 +26,10 @@ on:
 jobs:
   validate:
     runs-on: ubuntu-latest
+    concurrency:
+      group: deploy-validate-${{ github.ref }}
+      cancel-in-progress: true
+    timeout-minutes: 60
     name: Validate Docker Compose Files
     steps:
       - uses: actions/checkout@c2d88d3ecc89a9ef08eebf45d9637801dcee7eb5
@@ -69,27 +73,22 @@ jobs:
 
   compose:
     runs-on: ubuntu-latest
+    concurrency:
+      group: deploy-compose-${{ github.ref }}
+      cancel-in-progress: true
+    timeout-minutes: 60
     name: Deploy Docker Compose Files
     needs: validate
     steps:
       - uses: actions/checkout@c2d88d3ecc89a9ef08eebf45d9637801dcee7eb5
         with:
           persist-credentials: false
-
-      - name: Set up Python
-        uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548
+      - name: Setup Ansible
+        uses: ./.github/actions/setup-ansible
         with:
           python-version: "3.x"
-          cache: pip
-
-      - name: Install Ansible
-        run: |
-          python3 -m pip install --upgrade pip
-          pip3 install ansible
-
-      - name: Install Ansible-Galaxy Requirements
-        run: |
-          ansible-galaxy install -r requirements.yaml --ignore-errors
+          requirements-file: "requirements.txt"
+          galaxy-requirements: "requirements.yaml"
 
       - name: Get changed files
         id: changed-files

@@ -31,28 +31,20 @@ on:
 jobs:
   os-updates:
     runs-on: ubuntu-latest
+    concurrency:
+      group: cloud-infra-${{ github.ref }}
+      cancel-in-progress: true
+    timeout-minutes: 60
     steps:
-      - uses: actions/checkout@c2d88d3ecc89a9ef08eebf45d9637801dcee7eb5
-        with:
-          persist-credentials: false
-
-      - name: Set up Python
-        uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548
+      - name: Setup Ansible
+        uses: ./.github/actions/setup-ansible
         with:
           python-version: "3.x"
-          cache: pip
-
-      - name: Install Ansible
-        run: |
-          python3 -m pip install --upgrade pip
-          pip3 install ansible paramiko
-
-      - name: Tailscale Login
-        uses: tailscale/github-action@dea278bd44bcef18a8d421f079a1f1f50171ed63
-        with:
-          oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
-          oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
-          tags: tag:ci
+          requirements-file: "requirements.txt"
+          extra-packages: "paramiko"
+          ts-oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+          ts-oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
+          tailscale-tags: tag:ci
 
       - name: Run Proxmox VE and Quorum Updates
         uses: nick-fields/retry@9417ab499314dfe692edb043ded2ff9b3f5f0a68
@@ -84,28 +76,17 @@ jobs:
 
   app-updates:
     runs-on: ubuntu-latest
+    concurrency:
+      group: cloud-app-${{ github.ref }}
+      cancel-in-progress: true
+    timeout-minutes: 60
     steps:
-      - uses: actions/checkout@c2d88d3ecc89a9ef08eebf45d9637801dcee7eb5
+      - name: Setup Ansible
+        uses: ./.github/actions/setup-ansible
         with:
-          persist-credentials: false
-
-      - name: Set up Python
-        uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548
-        with:
-          python-version: "3.x"
-          cache: pip
-
-      - name: Install Ansible
-        run: |
-          python3 -m pip install --upgrade pip
-          pip3 install ansible paramiko
-
-      - name: Tailscale Login
-        uses: tailscale/github-action@dea278bd44bcef18a8d421f079a1f1f50171ed63
-        with:
-          oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
-          oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
-          tags: tag:ci
+          extra-packages: "paramiko"
+          ts-oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+          ts-oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
 
       - name: Run Pihole Update
         uses: nick-fields/retry@9417ab499314dfe692edb043ded2ff9b3f5f0a68
@@ -130,28 +111,17 @@ jobs:
 
   cleanup:
     runs-on: ubuntu-latest
+    concurrency:
+      group: cloud-cleanup-${{ github.ref }}
+      cancel-in-progress: true
+    timeout-minutes: 60
     steps:
-      - uses: actions/checkout@c2d88d3ecc89a9ef08eebf45d9637801dcee7eb5
+      - name: Setup Ansible
+        uses: ./.github/actions/setup-ansible
         with:
-          persist-credentials: false
-
-      - name: Set up Python
-        uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548
-        with:
-          python-version: "3.x"
-          cache: pip
-
-      - name: Install Ansible
-        run: |
-          python3 -m pip install --upgrade pip
-          pip3 install ansible docker paramiko
-
-      - name: Tailscale Login
-        uses: tailscale/github-action@dea278bd44bcef18a8d421f079a1f1f50171ed63
-        with:
-          oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
-          oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
-          tags: tag:ci
+          extra-packages: "docker paramiko"
+          ts-oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+          ts-oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
 
       - name: Run Docker Prune
         uses: nick-fields/retry@9417ab499314dfe692edb043ded2ff9b3f5f0a68

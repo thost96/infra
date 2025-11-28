@@ -23,6 +23,10 @@ jobs:
   super-lint:
     name: Run Super Linter
     runs-on: ubuntu-latest
+    concurrency:
+      group: super-lint-${{ github.ref }}
+      cancel-in-progress: true
+    timeout-minutes: 60
     permissions:
       contents: write
     steps:
@@ -71,6 +75,10 @@ jobs:
   packer-validate:
     name: Validate Packer Templates
     runs-on: ubuntu-latest
+    concurrency:
+      group: packer-validate-${{ github.ref }}
+      cancel-in-progress: true
+    timeout-minutes: 60
     steps:
       - name: Checkout code
         uses: actions/checkout@c2d88d3ecc89a9ef08eebf45d9637801dcee7eb5
