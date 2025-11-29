@@ -42,18 +42,23 @@ runs:
       shell: bash
       run: |
         python3 -m pip install --upgrade pip
-        if [ -n "${{ inputs.requirements-file }}" ] && [ -f "${{ inputs.requirements-file }}" ]; then
-          python3 -m pip install -r "${{ inputs.requirements-file }}"
+        if [ -n "${INPUTS_REQUIREMENTS_FILE}" ] && [ -f "${INPUTS_REQUIREMENTS_FILE}" ]; then
+          python3 -m pip install -r "${INPUTS_REQUIREMENTS_FILE}"
         fi
-        if [ -n "${{ inputs.extra-packages }}" ]; then
-          python3 -m pip install ${{ inputs.extra-packages }}
+        if [ -n "${INPUTS_EXTRA_PACKAGES}" ]; then
+          python3 -m pip install ${INPUTS_EXTRA_PACKAGES}
         fi
+      env:
+        INPUTS_REQUIREMENTS_FILE: ${{ inputs.requirements-file }}
+        INPUTS_EXTRA_PACKAGES: ${{ inputs.extra-packages }}
 
     - name: Install Ansible-Galaxy requirements
       if: ${{ inputs.galaxy-requirements != '' }}
       shell: bash
       run: |
-        ansible-galaxy install -r ${{ inputs.galaxy-requirements }} --ignore-errors
+        ansible-galaxy install -r ${INPUTS_GALAXY_REQUIREMENTS} --ignore-errors
+      env:
+        INPUTS_GALAXY_REQUIREMENTS: ${{ inputs.galaxy-requirements }}
 
     - name: Tailscale Login
       if: ${{ inputs.ts-oauth-client-id != '' && inputs.ts-oauth-secret != '' }}
