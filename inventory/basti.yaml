@@ -3,23 +3,23 @@ all:
   vars:
     ansible_user: root
   children:
-    lxc:
-      hosts:
-        unifi:
-          ansible_host: basti-1
-          ansible_connection: community.proxmox.proxmox_pct_remote
-          proxmox_vmid: 1102
-          ansible_user: ansible
-        pihole:
-          ansible_host: basti-1
-          ansible_connection: community.proxmox.proxmox_pct_remote
-          proxmox_vmid: 1104
-          ansible_user: ansible
-        bookstack:
-          ansible_host: basti-1
-          ansible_connection: community.proxmox.proxmox_pct_remote
-          proxmox_vmid: 1105
-          ansible_user: ansible
+    # lxc:
+    #   hosts:
+    #     unifi:
+    #       ansible_host: basti-1
+    #       ansible_connection: community.proxmox.proxmox_pct_remote
+    #       proxmox_vmid: 1102
+    #       ansible_user: ansible
+    #     pihole:
+    #       ansible_host: basti-1
+    #       ansible_connection: community.proxmox.proxmox_pct_remote
+    #       proxmox_vmid: 1104
+    #       ansible_user: ansible
+    #     bookstack:
+    #       ansible_host: basti-1
+    #       ansible_connection: community.proxmox.proxmox_pct_remote
+    #       proxmox_vmid: 1105
+    #       ansible_user: ansible
     pve:
       hosts:
         basti-1:
