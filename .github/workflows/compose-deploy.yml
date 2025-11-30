@@ -34,8 +34,10 @@ jobs:
       - name: Set affected hosts/services
         id: matrix
         run: |
-          echo "hosts=$(echo '${{ steps.changed.outputs.all_changed_files }}' | grep -oE 'services/[^/]+/' | sort -u | sed 's|services/||;s|/||' | jq -R -s -c 'split("\n")[:-1]')" >> $GITHUB_OUTPUT
-          echo "services=$(echo '${{ steps.changed.outputs.all_changed_files }}' | grep -oE 'services/[^/]+/[^/]+/' | sort -u | sed 's|services/||;s|/$||' | jq -R -s -c 'split("\n")[:-1]')" >> $GITHUB_OUTPUT
+          echo "hosts=$(echo '${STEPS_CHANGED_OUTPUTS_ALL_CHANGED_FILES}' | grep -oE 'services/[^/]+/' | sort -u | sed 's|services/||;s|/||' | jq -R -s -c 'split("\n")[:-1]')" >> $GITHUB_OUTPUT
+          echo "services=$(echo '${STEPS_CHANGED_OUTPUTS_ALL_CHANGED_FILES}' | grep -oE 'services/[^/]+/[^/]+/' | sort -u | sed 's|services/||;s|/$||' | jq -R -s -c 'split("\n")[:-1]')" >> $GITHUB_OUTPUT
+        env:
+          STEPS_CHANGED_OUTPUTS_ALL_CHANGED_FILES: ${{ steps.changed.outputs.all_changed_files }}
 
       - name: Run Compose Deploy Playbook
         if: steps.matrix.outputs.hosts != '[]'
