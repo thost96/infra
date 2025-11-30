@@ -16,7 +16,7 @@ jobs:
       cancel-in-progress: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
     timeout-minutes: 60
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@c2d88d3ecc89a9ef08eebf45d9637801dcee7eb5
         with:
           persist-credentials: false
 
@@ -25,7 +25,7 @@ jobs:
 
       - name: Get changed and deleted service folders
         id: changed
-        uses: tj-actions/changed-files@v44
+        uses: tj-actions/changed-files@abdd2f68ea150cee8f236d4a9fb4e0f2491abf1b
         with:
           dir_names: true
           files: |
@@ -43,4 +43,4 @@ jobs:
           TARGET_HOSTS: ${{ steps.matrix.outputs.hosts }}
           TARGET_SERVICES: ${{ steps.matrix.outputs.services }}
         run: |
-          ansible-playbook -i inventory/hosts.yaml playbooks/compose-deploy.yaml -e target_hosts="$TARGET_HOSTS" -e target_services="$TARGET_SERVICES"
+          ansible-playbook -i inventory/home.yaml playbooks/compose-deploy.yaml -e target_hosts="$TARGET_HOSTS" -e target_services="$TARGET_SERVICES"
