@@ -52,7 +52,7 @@
         dest: "{{ docker_target }}/{{ item.path | basename }}"
         owner: root
         group: root
-        mode: '0755'
+        mode: "0755"
       loop: "{{ found_services.files | default([]) }}"
       when: found_services.matched > 0
 
