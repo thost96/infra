@@ -1,0 +1,65 @@
+---
+- name: Deploy Docker Compose Projects
+  hosts: all
+  become: true
+  gather_facts: true
+  vars:
+    services_root: "{{ playbook_dir }}/../services"
+    docker_target: "/docker"
+  tasks:
+    - name: Set target hosts/services from workflow (if provided)
+      set_fact:
+        target_hosts: "{{ target_hosts | default([]) | from_json if target_hosts is string else target_hosts | default([]) }}"
+        target_services: "{{ target_services | default([]) | from_json if target_services is string else target_services | default([]) }}"
+      when: target_hosts is defined or target_services is defined
+
+    - name: Skip hosts not in target_hosts (if set)
+      meta: end_host
+      when: target_hosts is defined and target_hosts|length > 0 and inventory_hostname not in target_hosts
+
+    - name: Find all service folders for this host
+      ansible.builtin.find:
+        paths: "{{ services_root }}/{{ inventory_hostname }}"
+        file_type: directory
+        recurse: false
+      register: found_services
+      failed_when: false
+
+    - name: Get existing deployed services on host
+      ansible.builtin.shell: |
+        ls -1 {{ docker_target }}
+      register: deployed_services
+      changed_when: false
+      failed_when: false
+
+    - name: Compose list of removed services
+      set_fact:
+        removed_services: >-
+          {{ (deployed_services.stdout_lines | default([])) | difference(found_services.files | default([]) | map(attribute='path') | map('basename') | list) }}
+
+    - name: Remove deleted services (docker compose down)
+      ansible.builtin.shell: |
+        cd {{ docker_target }}/{{ item }} && docker compose down || true
+        rm -rf {{ docker_target }}/{{ item }}
+      args:
+        executable: /bin/bash
+      loop: "{{ removed_services }}"
+      when: removed_services|length > 0
+
+    - name: Copy each service to the target host
+      ansible.builtin.copy:
+        src: "{{ item.path }}"
+        dest: "{{ docker_target }}/{{ item.path | basename }}"
+        owner: root
+        group: root
+        mode: '0755'
+      loop: "{{ found_services.files | default([]) }}"
+      when: found_services.matched > 0
+
+    - name: Deploy each service with docker compose
+      ansible.builtin.shell: |
+        cd {{ docker_target }}/{{ item.path | basename }} && docker compose up -d
+      args:
+        executable: /bin/bash
+      loop: "{{ found_services.files | default([]) }}"
+      when: found_services.matched > 0

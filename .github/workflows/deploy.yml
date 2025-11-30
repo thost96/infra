@@ -1,106 +1,106 @@
----
-name: Docker Service Deployment
+# ---
+# name: Docker Service Deployment
 
-permissions:
-  actions: none
-  checks: none # add custom pass/fail checks to the PR
-  contents: read # git permissions to repo pull/push
-  deployments: none
-  issues: none # read/write to repo Issues
-  packages: none # read/write to repo Packages (ghcr, gems, npm)
-  pull-requests: read # read/write to repo PRs
-  repository-projects: none
-  security-events: none # read/write to repo Security tab API
-  statuses: read # read/write to repo custom statuses and checks
+# permissions:
+#   actions: none
+#   checks: none # add custom pass/fail checks to the PR
+#   contents: read # git permissions to repo pull/push
+#   deployments: none
+#   issues: none # read/write to repo Issues
+#   packages: none # read/write to repo Packages (ghcr, gems, npm)
+#   pull-requests: read # read/write to repo PRs
+#   repository-projects: none
+#   security-events: none # read/write to repo Security tab API
+#   statuses: read # read/write to repo custom statuses and checks
 
-on:
-  workflow_dispatch: {}
-  push:
-    paths:
-      - "services/**"
-      - ".github/workflows/deploy.yml"
-      - "run.yaml"
-    branches:
-      - main
+# on:
+#   workflow_dispatch: {}
+#   push:
+#     paths:
+#       - "services/**"
+#       - ".github/workflows/deploy.yml"
+#       - "run.yaml"
+#     branches:
+#       - main
 
-jobs:
-  validate:
-    runs-on: ubuntu-latest
-    concurrency:
-      group: deploy-validate-${{ github.ref }}
-      cancel-in-progress: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
-    timeout-minutes: 60
-    name: Validate Docker Compose Files
-    steps:
-      - uses: actions/checkout@c2d88d3ecc89a9ef08eebf45d9637801dcee7eb5
-        with:
-          persist-credentials: false
+# jobs:
+#   validate:
+#     runs-on: ubuntu-latest
+#     concurrency:
+#       group: deploy-validate-${{ github.ref }}
+#       cancel-in-progress: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+#     timeout-minutes: 60
+#     name: Validate Docker Compose Files
+#     steps:
+#       - uses: actions/checkout@c2d88d3ecc89a9ef08eebf45d9637801dcee7eb5
+#         with:
+#           persist-credentials: false
 
-      - name: Set up Docker
-        uses: docker/setup-buildx-action@1583c0f09d26c58c59d25b0eef29792b7ce99d9a
+#       - name: Set up Docker
+#         uses: docker/setup-buildx-action@1583c0f09d26c58c59d25b0eef29792b7ce99d9a
 
-      - name: Get changed files
-        id: changed-files
-        uses: tj-actions/changed-files@abdd2f68ea150cee8f236d4a9fb4e0f2491abf1b
-        with:
-          dir_names: "true"
-          files: |
-            services/**
+#       - name: Get changed files
+#         id: changed-files
+#         uses: tj-actions/changed-files@abdd2f68ea150cee8f236d4a9fb4e0f2491abf1b
+#         with:
+#           dir_names: "true"
+#           files: |
+#             services/**
 
-      - name: List all changed files (Debug only)
-        if: steps.changed-files.outputs.any_changed == 'true'
-        env:
-          ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
-        run: |
-          # shellcheck disable=2086
-          for file in ${ALL_CHANGED_FILES}; do
-            echo "$file was changed"
-          done
+#       - name: List all changed files (Debug only)
+#         if: steps.changed-files.outputs.any_changed == 'true'
+#         env:
+#           ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
+#         run: |
+#           # shellcheck disable=2086
+#           for file in ${ALL_CHANGED_FILES}; do
+#             echo "$file was changed"
+#           done
 
-      - name: Validate docker-compose.yaml
-        if: steps.changed-files.outputs.any_changed == 'true'
-        env:
-          ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
-        run: |
-          # shellcheck disable=2086
-          for file in ${ALL_CHANGED_FILES}; do
-            echo "##### Validating $file #####" &&
-            cd $file &&
-            docker compose config --quiet &&
-            cd $GITHUB_WORKSPACE &&
-            echo "##### Finished validating $file #####"
-          done
+#       - name: Validate docker-compose.yaml
+#         if: steps.changed-files.outputs.any_changed == 'true'
+#         env:
+#           ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
+#         run: |
+#           # shellcheck disable=2086
+#           for file in ${ALL_CHANGED_FILES}; do
+#             echo "##### Validating $file #####" &&
+#             cd $file &&
+#             docker compose config --quiet &&
+#             cd $GITHUB_WORKSPACE &&
+#             echo "##### Finished validating $file #####"
+#           done
 
-  compose:
-    runs-on: ubuntu-latest
-    concurrency:
-      group: deploy-compose-${{ github.ref }}
-      cancel-in-progress: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
-    timeout-minutes: 60
-    name: Deploy Docker Compose Files
-    needs: validate
-    steps:
-      - uses: actions/checkout@c2d88d3ecc89a9ef08eebf45d9637801dcee7eb5
-        with:
-          persist-credentials: false
-      - name: Setup Ansible
-        uses: ./.github/actions/setup-ansible
-        with:
-          python-version: "3.x"
-          requirements-file: "requirements.txt"
-          galaxy-requirements: "requirements.yaml"
+#   compose:
+#     runs-on: ubuntu-latest
+#     concurrency:
+#       group: deploy-compose-${{ github.ref }}
+#       cancel-in-progress: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+#     timeout-minutes: 60
+#     name: Deploy Docker Compose Files
+#     needs: validate
+#     steps:
+#       - uses: actions/checkout@c2d88d3ecc89a9ef08eebf45d9637801dcee7eb5
+#         with:
+#           persist-credentials: false
+#       - name: Setup Ansible
+#         uses: ./.github/actions/setup-ansible
+#         with:
+#           python-version: "3.x"
+#           requirements-file: "requirements.txt"
+#           galaxy-requirements: "requirements.yaml"
 
-      - name: Get changed files
-        id: changed-files
-        uses: tj-actions/changed-files@abdd2f68ea150cee8f236d4a9fb4e0f2491abf1b
-        with:
-          dir_names: "true"
-          files: |
-            services/**
+#       - name: Get changed files
+#         id: changed-files
+#         uses: tj-actions/changed-files@abdd2f68ea150cee8f236d4a9fb4e0f2491abf1b
+#         with:
+#           dir_names: "true"
+#           files: |
+#             services/**
 
-      - name: Tailscale Login
-        uses: tailscale/github-action@dea278bd44bcef18a8d421f079a1f1f50171ed63
-        with:
-          oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
-          oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
-          tags: tag:ci
+#       - name: Tailscale Login
+#         uses: tailscale/github-action@dea278bd44bcef18a8d421f079a1f1f50171ed63
+#         with:
+#           oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+#           oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
+#           tags: tag:ci

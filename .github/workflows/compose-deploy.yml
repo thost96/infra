@@ -1,0 +1,46 @@
+---
+name: Docker Compose Deploy
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "services/**"
+      - ".github/workflows/compose-deploy.yml"
+
+jobs:
+  compose-deploy:
+    runs-on: ubuntu-latest
+    concurrency:
+      group: compose-deploy-${{ github.ref }}
+      cancel-in-progress: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Setup Ansible
+        uses: ./.github/actions/setup-ansible
+
+      - name: Get changed and deleted service folders
+        id: changed
+        uses: tj-actions/changed-files@v44
+        with:
+          dir_names: true
+          files: |
+            services/**
+
+      - name: Set affected hosts/services
+        id: matrix
+        run: |
+          echo "hosts=$(echo '${{ steps.changed.outputs.all_changed_files }}' | grep -oE 'services/[^/]+/' | sort -u | sed 's|services/||;s|/||' | jq -R -s -c 'split("\n")[:-1]')" >> $GITHUB_OUTPUT
+          echo "services=$(echo '${{ steps.changed.outputs.all_changed_files }}' | grep -oE 'services/[^/]+/[^/]+/' | sort -u | sed 's|services/||;s|/$||' | jq -R -s -c 'split("\n")[:-1]')" >> $GITHUB_OUTPUT
+
+      - name: Run Compose Deploy Playbook
+        if: steps.matrix.outputs.hosts != '[]'
+        env:
+          TARGET_HOSTS: ${{ steps.matrix.outputs.hosts }}
+          TARGET_SERVICES: ${{ steps.matrix.outputs.services }}
+        run: |
+          ansible-playbook -i inventory/hosts.yaml playbooks/compose-deploy.yaml -e target_hosts="$TARGET_HOSTS" -e target_services="$TARGET_SERVICES"
