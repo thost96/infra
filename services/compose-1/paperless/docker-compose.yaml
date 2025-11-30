@@ -14,6 +14,7 @@ services:
     volumes:
       - scans:/storage
     restart: always
+
   rclone:
     image: rclone/rclone:latest
     restart: always
