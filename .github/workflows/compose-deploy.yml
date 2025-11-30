@@ -16,7 +16,7 @@ jobs:
       cancel-in-progress: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
     timeout-minutes: 60
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           persist-credentials: false
 
