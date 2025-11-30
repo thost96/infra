@@ -25,7 +25,7 @@ services:
       mode: replicated
       replicas: 1
   pdf:
-    image: ghcr.io/stirling-tools/stirling-pdf:1.5.0
+    image: ghcr.io/stirling-tools/stirling-pdf:2.0.2
     environment:
       - DOCKER_ENABLE_SECURITY=false
       - SYSTEM_DEFAULTLOCALE=de-DE
