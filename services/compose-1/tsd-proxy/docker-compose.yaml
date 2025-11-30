@@ -21,4 +21,4 @@ services:
       - TS_STATE_DIR=/data
       - TS_HOSTNAME=idp
       - TSIDP_ENABLE_STS=1
-      - TS_AUTHKEY={{ vault_ts_authkey }}
+      - TS_AUTHKEY={{ tsidp_authkey }}

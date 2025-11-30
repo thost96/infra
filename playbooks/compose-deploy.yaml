@@ -7,6 +7,11 @@
     services_root: "{{ playbook_dir }}/../services"
     docker_target: "/docker"
   tasks:
+    - name: Load vault variables from group_vars/vault.yaml
+      ansible.builtin.include_vars:
+        file: "{{ playbook_dir }}/../group_vars/vault.yaml"
+      failed_when: false
+
     - name: Set target hosts/services from workflow (if provided)
       set_fact:
         target_hosts: "{{ target_hosts | default([]) | from_json if target_hosts is string else target_hosts | default([]) }}"
@@ -53,6 +58,16 @@
         owner: root
         group: root
         mode: "0755"
+      loop: "{{ found_services.files | default([]) }}"
+      when: found_services.matched > 0
+
+    - name: Template docker-compose.yaml with vault variables
+      ansible.builtin.template:
+        src: "{{ docker_target }}/{{ item.path | basename }}/docker-compose.yaml"
+        dest: "{{ docker_target }}/{{ item.path | basename }}/docker-compose.yaml"
+        owner: root
+        group: root
+        mode: "0644"
       loop: "{{ found_services.files | default([]) }}"
       when: found_services.matched > 0
 

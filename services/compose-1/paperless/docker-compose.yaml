@@ -14,7 +14,6 @@ services:
     volumes:
       - scans:/storage
     restart: always
-
   rclone:
     image: rclone/rclone:latest
     restart: always
@@ -22,9 +21,9 @@ services:
       - TZ=Europe/Berlin
       - RCLONE_CONFIG_NEXTCLOUD_TYPE=webdav
       - RCLONE_CONFIG_NEXTCLOUD_VENDOR=nextcloud
-      - RCLONE_CONFIG_NEXTCLOUD_URL=
-      - RCLONE_CONFIG_NEXTCLOUD_USER=
-      - RCLONE_CONFIG_NEXTCLOUD_PASS=
+      - RCLONE_CONFIG_NEXTCLOUD_URL={{ nextcloud_url }}
+      - RCLONE_CONFIG_NEXTCLOUD_USER={{ nextcloud_username }}
+      - RCLONE_CONFIG_NEXTCLOUD_PASS={{ nextcloud_password }}
     volumes:
       - scans:/data
     entrypoint: ["/bin/sh", "-c"]

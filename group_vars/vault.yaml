@@ -1,0 +1,10 @@
+---
+
+
+# Tailscale IDP
+tsidp_authkey: "test1234"
+
+# Paperless-NGX 
+nextcloud_url: ""
+nextcloud_username: ""
+nextcloud_password: ""
