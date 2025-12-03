@@ -46,8 +46,8 @@ jobs:
       - name: Set affected hosts/services
         id: matrix
         run: |
-          echo "hosts=$(echo '${{ steps.changed.outputs.all_changed_files }}' | grep -oE 'services/[^/]+/' | sort -u | sed 's|services/||;s|/||' | jq -R -s -c 'split("\n")[:-1]')" >> $GITHUB_OUTPUT
-          echo "services=$(echo '${{ steps.changed.outputs.all_changed_files }}' | grep -oE 'services/[^/]+/[^/]+/' | sort -u | sed 's|services/||;s|/$||' | jq -R -s -c 'split("\n")[:-1]')" >> $GITHUB_OUTPUT
+          echo "hosts=$(echo "${{ steps.changed.outputs.all_changed_files }}" | grep -oE 'services/[^/]+/' | sort -u | sed 's|services/||;s|/||' | jq -R -s -c 'split("\n")[:-1]')" >> "$GITHUB_OUTPUT"
+          echo "services=$(echo "${{ steps.changed.outputs.all_changed_files }}" | grep -oE 'services/[^/]+/[^/]+/' | sort -u | sed 's|services/||;s|/$||' | jq -R -s -c 'split("\n")[:-1]')" >> "$GITHUB_OUTPUT"
 
       - name: Run Compose Deploy Playbook
         if: steps.matrix.outputs.hosts != '[]'
@@ -56,4 +56,4 @@ jobs:
           TARGET_SERVICES: ${{ steps.matrix.outputs.services }}
           ANSIBLE_VAULT_PASSWORD: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
         run: |
-          ansible-playbook -i inventory/home.yaml playbooks/compose-deploy.yaml -e target_hosts="$TARGET_HOSTS" -e target_services="$TARGET_SERVICES"
+          ansible-playbook -i inventory/home.yaml playbooks/compose-deploy.yaml -e "target_hosts=\"$TARGET_HOSTS\"" -e "target_services=\"$TARGET_SERVICES\""
