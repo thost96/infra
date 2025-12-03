@@ -28,7 +28,7 @@ jobs:
       cancel-in-progress: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
     timeout-minutes: 60
     steps:
-      - uses: actions/checkout@c2d88d3ecc89a9ef08eebf45d9637801dcee7eb5
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8
         with:
           persist-credentials: false
 
@@ -46,8 +46,10 @@ jobs:
       - name: Set affected hosts/services
         id: matrix
         run: |
-          echo "hosts=$(echo "${{ steps.changed.outputs.all_changed_files }}" | grep -oE 'services/[^/]+/' | sort -u | sed 's|services/||;s|/||' | jq -R -s -c 'split("\n")[:-1]')" >> "$GITHUB_OUTPUT"
-          echo "services=$(echo "${{ steps.changed.outputs.all_changed_files }}" | grep -oE 'services/[^/]+/[^/]+/' | sort -u | sed 's|services/||;s|/$||' | jq -R -s -c 'split("\n")[:-1]')" >> "$GITHUB_OUTPUT"
+          echo "hosts=$(echo "${STEPS_CHANGED_OUTPUTS_ALL_CHANGED_FILES}" | grep -oE 'services/[^/]+/' | sort -u | sed 's|services/||;s|/||' | jq -R -s -c 'split("\n")[:-1]')" >> "$GITHUB_OUTPUT"
+          echo "services=$(echo "${STEPS_CHANGED_OUTPUTS_ALL_CHANGED_FILES}" | grep -oE 'services/[^/]+/[^/]+/' | sort -u | sed 's|services/||;s|/$||' | jq -R -s -c 'split("\n")[:-1]')" >> "$GITHUB_OUTPUT"
+        env:
+          STEPS_CHANGED_OUTPUTS_ALL_CHANGED_FILES: ${{ steps.changed.outputs.all_changed_files }}
 
       - name: Run Compose Deploy Playbook
         if: steps.matrix.outputs.hosts != '[]'
