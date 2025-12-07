@@ -2,6 +2,7 @@
 - name: Deploy Proxmox VE Pre-Requisites
   hosts: pve
   become: true
+  gather_facts: false
   tasks:
     - name: Ensure base packages are installed
       ansible.builtin.package:

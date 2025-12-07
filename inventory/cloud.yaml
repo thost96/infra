@@ -2,8 +2,6 @@
 all:
   vars:
     ansible_user: root
-  hosts:
-    old-prox-1:
   children:
     cluster1:
       hosts:
