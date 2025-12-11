@@ -62,7 +62,7 @@ runs:
 
     - name: Tailscale Login
       if: ${{ inputs.ts-oauth-client-id != '' && inputs.ts-oauth-secret != '' }}
-      uses: tailscale/github-action@bfc66725996b36d0098a750cc8b8a231680f0ce8
+      uses: tailscale/github-action@67f81e554b7d0cb2da81097082d73a91e07c62f4
       with:
         oauth-client-id: ${{ inputs.ts-oauth-client-id }}
         oauth-secret: ${{ inputs.ts-oauth-secret }}
