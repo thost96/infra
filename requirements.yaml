@@ -10,7 +10,7 @@ collections:
     version: 5.0.4
 roles:
   - src: ironicbadger.docker_compose_generator
-    version: v2.1.0
+    version: v2.1.1
   - name: artis3n.tailscale
     version: v5.0.1
   - name: apt_over_https
