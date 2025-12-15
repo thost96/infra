@@ -10,14 +10,13 @@
 
 [![Cloud Infrastructure Updates](https://github.com/thost96/infra/actions/workflows/cloud.yml/badge.svg)](https://github.com/thost96/infra/actions/workflows/cloud.yml)
 
-[![Docker Service Deployment](https://github.com/thost96/infra/actions/workflows/deploy.yml/badge.svg)](https://github.com/thost96/infra/actions/workflows/deploy.yml)
+[![Docker Compose Deploy](https://github.com/thost96/infra/actions/workflows/compose-deploy.yml/badge.svg)](https://github.com/thost96/infra/actions/workflows/compose-deploy.yml)
 
 ## TODO
 
 - [https://github.com/jtdowney/tsbridge](https://github.com/jtdowney/tsbridge)
 - [https://github.com/ironicbadger/infra/](https://github.com/ironicbadger/infra/)
 - [https://github.com/ironicbadger/tailscale-routes-fix/](https://github.com/ironicbadger/tailscale-routes-fix/)
-- [https://github.com/ironicbadger/ansible-role-docker-compose-generator/](https://github.com/ironicbadger/ansible-role-docker-compose-generator/)
 - Add Job Host Backup with PBS-Client for Proxmox
 - Add Monitoring using CheckMK Ansible for Services
 
