@@ -19,7 +19,6 @@
 | MARKDOWN_PRETTIER          | Pass ✅           |
 | NATURAL_LANGUAGE           | Pass ✅           |
 | PRE_COMMIT                 | Pass ✅           |
-| RENOVATE                   | Pass ✅           |
 | SHELL_SHFMT                | Pass ✅           |
 | TRIVY                      | Pass ✅           |
 | YAML                       | Pass ✅           |
