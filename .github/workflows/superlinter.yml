@@ -88,7 +88,7 @@ jobs:
           persist-credentials: true
 
       - name: Setup Packer
-        uses: hashicorp/setup-packer@338341a90b0ee9088fd1127fe79f53dc95bcd095
+        uses: hashicorp/setup-packer@16c34db85f81382d3065450700c15f29333e4805
         with:
           version: "latest"
 
