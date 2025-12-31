@@ -7,7 +7,7 @@ collections:
   - name: community.crypto
     version: 3.1.0
   - name: community.docker
-    version: 5.0.4
+    version: 5.0.5
 roles:
   - src: ironicbadger.docker_compose_generator
     version: v2.1.1
