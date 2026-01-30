@@ -28,6 +28,6 @@
 
 All files and directories linted successfully
 
-For more information, see the [GitHub Actions workflow run](https://github.com/thost96/infra/actions/runs/21526373312)
+For more information, see the [GitHub Actions workflow run](https://github.com/thost96/infra/actions/runs/21526443111)
 
 Powered by [Super-linter](https://github.com/super-linter/super-linter)
