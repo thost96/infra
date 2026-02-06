@@ -4,7 +4,7 @@ networks:
 
 services:
   cloudflared:
-    image: cloudflare/cloudflared:2026.1.2-arm64
+    image: cloudflare/cloudflared:2026.2.0-arm64
     command: tunnel run
     environment:
       - TUNNEL_TOKEN={{ cloudflare_tunnel_token_1}}
