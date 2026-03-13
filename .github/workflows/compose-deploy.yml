@@ -37,7 +37,7 @@ jobs:
 
       - name: Get changed and deleted service folders
         id: changed
-        uses: tj-actions/changed-files@4f892cd56345d721bac7139000c4b4a22c8f138f
+        uses: tj-actions/changed-files@445b0eb32849cdd5b22a390bf0568af00ed4ca34
         with:
           dir_names: true
           files: |
