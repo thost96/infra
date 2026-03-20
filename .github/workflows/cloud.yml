@@ -49,28 +49,28 @@ jobs:
           ts-oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
 
       - name: Run Proxmox VE and Quorum Updates
-        uses: nick-fields/retry@ad984534de44a9489a53aefd81eb77f87c70dc60
+        uses: nick-fields/retry@dd56f1ca8ca991e2385c18ab6dd36ea7f9fdb55f
         with:
           timeout_seconds: 600
           max_attempts: 3
           command: ansible-playbook -i inventory/cloud.yaml -l pve:quorum playbooks/os-updates.yaml
 
       - name: Run PVE Pre-Requisites Install with Retry
-        uses: nick-fields/retry@ad984534de44a9489a53aefd81eb77f87c70dc60
+        uses: nick-fields/retry@dd56f1ca8ca991e2385c18ab6dd36ea7f9fdb55f
         with:
           timeout_seconds: 600
           max_attempts: 3
           command: ansible-playbook -i inventory/cloud.yaml -l pve playbooks/setup-proxmox.yaml
 
       - name: Run LXC Pre-Requisites Install with Retry
-        uses: nick-fields/retry@ad984534de44a9489a53aefd81eb77f87c70dc60
+        uses: nick-fields/retry@dd56f1ca8ca991e2385c18ab6dd36ea7f9fdb55f
         with:
           timeout_seconds: 600
           max_attempts: 3
           command: ansible-playbook -i inventory/cloud.yaml -l compose playbooks/setup-compose.yaml
 
       - name: Run VM and LXC OS Updates
-        uses: nick-fields/retry@ad984534de44a9489a53aefd81eb77f87c70dc60
+        uses: nick-fields/retry@dd56f1ca8ca991e2385c18ab6dd36ea7f9fdb55f
         with:
           timeout_seconds: 600
           max_attempts: 3
@@ -95,21 +95,21 @@ jobs:
           ts-oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
 
       - name: Run Pihole Update
-        uses: nick-fields/retry@ad984534de44a9489a53aefd81eb77f87c70dc60
+        uses: nick-fields/retry@dd56f1ca8ca991e2385c18ab6dd36ea7f9fdb55f
         with:
           timeout_seconds: 600
           max_attempts: 1
           command: ansible-playbook -i inventory/cloud.yaml playbooks/pihole-update.yaml
 
       - name: Run Nextcloud Update
-        uses: nick-fields/retry@ad984534de44a9489a53aefd81eb77f87c70dc60
+        uses: nick-fields/retry@dd56f1ca8ca991e2385c18ab6dd36ea7f9fdb55f
         with:
           timeout_seconds: 600
           max_attempts: 1
           command: ansible-playbook -i inventory/cloud.yaml playbooks/nextcloud-update.yaml
 
       - name: Run Mailcow Update
-        uses: nick-fields/retry@ad984534de44a9489a53aefd81eb77f87c70dc60
+        uses: nick-fields/retry@dd56f1ca8ca991e2385c18ab6dd36ea7f9fdb55f
         with:
           timeout_seconds: 600
           max_attempts: 1
@@ -134,7 +134,7 @@ jobs:
           ts-oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
 
       - name: Run Docker Prune
-        uses: nick-fields/retry@ad984534de44a9489a53aefd81eb77f87c70dc60
+        uses: nick-fields/retry@dd56f1ca8ca991e2385c18ab6dd36ea7f9fdb55f
         with:
           timeout_seconds: 600
           max_attempts: 3
