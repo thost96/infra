@@ -44,14 +44,14 @@ jobs:
           ts-oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
 
       - name: Run PVE Pre-Requisites Install with Retry
-        uses: nick-fields/retry@9417ab499314dfe692edb043ded2ff9b3f5f0a68
+        uses: nick-fields/retry@ad984534de44a9489a53aefd81eb77f87c70dc60
         with:
           timeout_seconds: 600
           max_attempts: 3
           command: ansible-playbook -i inventory/basti.yaml playbooks/setup-proxmox.yaml
 
       - name: Run OS Updates with Retry
-        uses: nick-fields/retry@9417ab499314dfe692edb043ded2ff9b3f5f0a68
+        uses: nick-fields/retry@ad984534de44a9489a53aefd81eb77f87c70dc60
         with:
           timeout_seconds: 600
           max_attempts: 3
@@ -74,7 +74,7 @@ jobs:
           ts-oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
 
       - name: Run Pihole Update
-        uses: nick-fields/retry@9417ab499314dfe692edb043ded2ff9b3f5f0a68
+        uses: nick-fields/retry@ad984534de44a9489a53aefd81eb77f87c70dc60
         with:
           timeout_seconds: 600
           max_attempts: 3
