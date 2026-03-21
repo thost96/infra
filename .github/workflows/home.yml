@@ -45,7 +45,7 @@ jobs:
           ts-oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
 
       - name: Run OS Updates with Retry
-        uses: nick-fields/retry@ad984534de44a9489a53aefd81eb77f87c70dc60
+        uses: nick-fields/retry@dd56f1ca8ca991e2385c18ab6dd36ea7f9fdb55f
         with:
           timeout_seconds: 600
           max_attempts: 3
@@ -69,7 +69,7 @@ jobs:
           ts-oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
 
       - name: Run Filesystem Trim with Retry
-        uses: nick-fields/retry@ad984534de44a9489a53aefd81eb77f87c70dc60
+        uses: nick-fields/retry@dd56f1ca8ca991e2385c18ab6dd36ea7f9fdb55f
         with:
           timeout_seconds: 600
           max_attempts: 3
@@ -94,7 +94,7 @@ jobs:
           ts-oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
 
       - name: Run Compose Setup with Retry
-        uses: nick-fields/retry@ad984534de44a9489a53aefd81eb77f87c70dc60
+        uses: nick-fields/retry@dd56f1ca8ca991e2385c18ab6dd36ea7f9fdb55f
         with:
           timeout_seconds: 600
           max_attempts: 3
@@ -120,7 +120,7 @@ jobs:
           ts-oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
 
       - name: Run Docker Prune with Retry
-        uses: nick-fields/retry@ad984534de44a9489a53aefd81eb77f87c70dc60
+        uses: nick-fields/retry@dd56f1ca8ca991e2385c18ab6dd36ea7f9fdb55f
         with:
           timeout_seconds: 600
           max_attempts: 3
