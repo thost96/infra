@@ -12,6 +12,18 @@
       tags: patch
     - ansible.builtin.include_tasks: tasks/apt-cleanup.yaml
       tags: cleanup
+    - ansible.builtin.include_tasks: tasks/filesystem-trim.yaml
+      tags: cleanup
+
+
+- hosts: compose
+  name: Docker Compose Update on Compose Hosts
+  gather_facts: true
+  tasks:
+    - ansible.builtin.include_tasks: tasks/compose-update.yaml
+      tags: patch
+    - ansible.builtin.include_tasks: tasks/docker-prune.yaml
+      tags: cleanup
 
 
 #########
@@ -27,6 +39,8 @@
       tags: patch
     - ansible.builtin.include_tasks: tasks/apt-cleanup.yaml
       tags: cleanup
+    - ansible.builtin.include_tasks: tasks/filesystem-trim.yaml
+      tags: cleanup
 
 
 #########
@@ -41,6 +55,8 @@
     - ansible.builtin.include_tasks: tasks/apt-upgrade.yaml
       tags: patch
     - ansible.builtin.include_tasks: tasks/apt-cleanup.yaml
+      tags: cleanup
+    - ansible.builtin.include_tasks: tasks/filesystem-trim.yaml
       tags: cleanup
 
 

@@ -6,7 +6,7 @@ This Infra project represents a complete, reproducible configuration of my homel
 
 I run everything in the open because open source matters.
 
-## High Level Overview 
+## High Level Overview
 
 image comming soon ...
 
@@ -15,7 +15,7 @@ image comming soon ...
 
 - **Proxmox VE** - Virtualization Platform
 - **Ansible** - Automation and Configuration Management
-- **Packer** - VM Templates 
+- **Packer** - VM Templates
 - **Terraform** - Infrastructure Provisioning
 - **Docker Compose** - Container orchestration and service hosting
 - **Tailscale** - Mesh VPN and Remote Access
@@ -23,7 +23,7 @@ image comming soon ...
 
 ## Structure
 
-```
+```sh
 ├── .github/                        # Github CI
 
 ├── ansible/
@@ -47,4 +47,3 @@ image comming soon ...
 
 ├── terraform/                      # K8S Provisioning
 ```
-

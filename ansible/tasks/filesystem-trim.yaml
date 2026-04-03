@@ -1,0 +1,8 @@
+---
+- name: Run filesystem trim
+  ansible.builtin.command: fstrim -a
+  register: fstrim_result
+  changed_when: "'trimmed' in fstrim_result.stdout"
+  become: true
+  tags:
+    - cleanup
