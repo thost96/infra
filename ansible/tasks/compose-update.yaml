@@ -1,0 +1,8 @@
+---
+- name: Start Docker Compose services
+  community.docker.docker_compose_v2:
+    project_src: "{{ service_dir }}"
+    state: present
+    pull: always
+  tags:
+    - patch

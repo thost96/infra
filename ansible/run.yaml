@@ -1,0 +1,64 @@
+---
+########
+# Home #
+########
+- hosts: home
+  name: All Home Devices
+  gather_facts: false
+  tasks:
+    - ansible.builtin.include_tasks: tasks/apt-update.yaml
+      tags: patch
+    - ansible.builtin.include_tasks: tasks/apt-upgrade.yaml
+      tags: patch
+    - ansible.builtin.include_tasks: tasks/apt-cleanup.yaml
+      tags: cleanup
+
+
+#########
+# Basti #
+#########
+- hosts: basti
+  name: All Devices from Basti
+  gather_facts: false
+  tasks:
+    - ansible.builtin.include_tasks: tasks/apt-update.yaml
+      tags: patch
+    - ansible.builtin.include_tasks: tasks/apt-upgrade.yaml
+      tags: patch
+    - ansible.builtin.include_tasks: tasks/apt-cleanup.yaml
+      tags: cleanup
+
+
+#########
+# Cloud # 
+#########
+- hosts: cloud
+  name: All Cloud Hosts
+  gather_facts: false
+  tasks:
+    - ansible.builtin.include_tasks: tasks/apt-update.yaml
+      tags: patch
+    - ansible.builtin.include_tasks: tasks/apt-upgrade.yaml
+      tags: patch
+    - ansible.builtin.include_tasks: tasks/apt-cleanup.yaml
+      tags: cleanup
+
+
+- hosts: mx-1
+  name: MX-1 Mailcow Update
+  gather_facts: true
+  tasks:
+    - ansible.builtin.include_tasks: tasks/mailcow-update.yaml
+      tags: patch
+    - ansible.builtin.include_tasks: tasks/docker-prune.yaml
+      tags: cleanup
+
+
+- hosts: docker
+  name: Docker Compose Update on Docker Hosts
+  gather_facts: true
+  tasks:
+    - ansible.builtin.include_tasks: tasks/compose-update.yaml
+      tags: patch
+    - ansible.builtin.include_tasks: tasks/docker-prune.yaml
+      tags: cleanup

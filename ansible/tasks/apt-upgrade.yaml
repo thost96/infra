@@ -1,0 +1,7 @@
+---
+- name: Update APT packages (dist)
+  ansible.builtin.apt:
+    upgrade: dist
+  become: true
+  tags:
+    - patch

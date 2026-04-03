@@ -1,0 +1,11 @@
+---
+- name: Install packages
+  ansible.builtin.package:
+    name:
+      - "{{ item }}"
+    state: present
+  loop: "{{ packages }}"
+  when: packages | length > 0
+  become: true
+  tags:
+    - setup

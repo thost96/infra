@@ -1,0 +1,10 @@
+---
+- name: Run mailcow update script
+  ansible.builtin.command: ./update.sh --force
+  args:
+    chdir: "/opt/mailcow-dockerized"
+  register: mailcow_update_result
+  failed_when: "'error' in mailcow_update_result.stderr | lower"
+  changed_when: "'Updating' in mailcow_update_result.stderr | lower"
+  tags:
+    - patch
