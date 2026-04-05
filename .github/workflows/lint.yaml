@@ -50,7 +50,7 @@ jobs:
           ansible-galaxy install -r ansible/requirements.yaml --ignore-errors
 
       - name: Run Super Linter
-        uses: super-linter/super-linter/slim@502f4fe48a81a392756e173e39a861f8c8efe056
+        uses: super-linter/super-linter/slim@487d0d80e66b54831132fe7b2095f9388a624462
         continue-on-error: true
         env:
           VALIDATE_ALL_CODEBASE: true
