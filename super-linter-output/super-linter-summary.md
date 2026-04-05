@@ -28,7 +28,7 @@
 
 Super-linter detected linting errors
 
-For more information, see the [GitHub Actions workflow run](https://github.com/thost96/infra/actions/runs/24002953278)
+For more information, see the [GitHub Actions workflow run](https://github.com/thost96/infra/actions/runs/24002993729)
 
 Powered by [Super-linter](https://github.com/super-linter/super-linter)
 
@@ -134,7 +134,6 @@ WARNING  Listing 5 violation(s) that are fatal
    [1m[94m= [0m[1mhelp[0m: audit documentation → [32mhttps://docs.zizmor.sh/audits/#secrets-outside-env[39m
 
 [32m13[39m findings ([1m[93m9[39m suppressed[0m): [35m0[39m informational, [36m0[39m low, [33m4[39m medium, [31m0[39m high🌈 zizmor v1.23.1
-[33m WARN[0m [1maudit[0m[2m:[0m[1maudit[0m[1m{[0m[3minput[0m[2m=[0mWorkflow(file:///github/workspace/.github/workflows/lint.yaml)[1m}[0m[2m:[0m [2mzizmor::audit::impostor_commit[0m[2m:[0m fast path impostor check failed for actions/checkout@c2d88d3ecc89a9ef08eebf45d9637801dcee7eb5: request error while accessing GitHub API
 [32m INFO[0m [1maudit[0m[2m:[0m [2mzizmor[0m[2m:[0m 🌈 completed /github/workspace/.github/workflows/lint.yaml
 No fixes available to apply.
 ```
