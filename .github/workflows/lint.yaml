@@ -35,6 +35,7 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.GH_TOKEN }}
           persist-credentials: true
+          ref: ${{ github.event.pull_request.head.ref || github.head_ref || github.ref }}
 
       - name: Prettify code
         uses: creyD/prettier_action@8c18391fdc98ed0d884c6345f03975edac71b8f0
@@ -90,6 +91,7 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.GH_TOKEN }}
           persist-credentials: true
+          ref: ${{ github.event.pull_request.head.ref || github.head_ref || github.ref }}
 
       - name: Setup Packer
         uses: hashicorp/setup-packer@76e3039aa951aa4e6efe7e6ee06bc9ceb072142d
@@ -97,7 +99,7 @@ jobs:
           version: "latest"
 
       - name: Validate Packer Templates
-        continue-on-error: true #  Skip failure to allow other jobs to complete
+        continue-on-error: true  # Skip failure to allow other jobs to complete
         run: |
           # Find all packer template files and validate them
           find ./packer -name "*.pkr.hcl" | while read -r template; do

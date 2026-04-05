@@ -10,7 +10,6 @@ I run everything in the open because open source matters.
 
 image comming soon ...
 
-
 ## Technologies
 
 - **Proxmox VE** - Virtualization Platform
@@ -19,7 +18,6 @@ image comming soon ...
 - **Terraform** - Infrastructure Provisioning
 - **Docker Compose** - Container orchestration and service hosting
 - **Tailscale** - Mesh VPN and Remote Access
-
 
 ## Structure
 
@@ -35,14 +33,14 @@ image comming soon ...
 
 ├── docs/                           # markdown documentation
 
-├── packer/                         # VM Templates 
-    └── ubuntu2404                  # Ubuntu 24.04 LTS 
-    └── ubuntu2504                  # Ubuntu 25.04 
+├── packer/                         # VM Templates
+    └── ubuntu2404                  # Ubuntu 24.04 LTS
+    └── ubuntu2504                  # Ubuntu 25.04
 
 ├── services/                       # Docker Compose config
     └── <hostname>/
-        └── <prefix_service>/       
-            └── compose.yaml 
+        └── <prefix_service>/
+            └── compose.yaml
             └── app files
 
 ├── terraform/                      # K8S Provisioning
