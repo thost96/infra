@@ -28,7 +28,7 @@
 
 Super-linter detected linting errors
 
-For more information, see the [GitHub Actions workflow run](https://github.com/thost96/infra/actions/runs/24000282244)
+For more information, see the [GitHub Actions workflow run](https://github.com/thost96/infra/actions/runs/24000319216)
 
 Powered by [Super-linter](https://github.com/super-linter/super-linter)
 
