@@ -8,7 +8,7 @@ I run everything in the open because open source matters.
 
 ## High Level Overview
 
-image comming soon ...
+image coming soon ...
 
 ## Technologies
 
