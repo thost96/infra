@@ -30,7 +30,7 @@ jobs:
       contents: write
     steps:
       - name: Checkout code
-        uses: actions/checkout@c2d88d3ecc89a9ef08eebf45d9637801dcee7eb5
+        uses: actions/checkout@0c366fd6a839edf440554fa01a7085ccba70ac98
         with:
           fetch-depth: 0
           token: ${{ secrets.GH_TOKEN }}
@@ -51,7 +51,7 @@ jobs:
           ansible-galaxy install -r ansible/requirements.yaml --ignore-errors
 
       - name: Run Super Linter
-        uses: super-linter/super-linter/slim@502f4fe48a81a392756e173e39a861f8c8efe056
+        uses: super-linter/super-linter/slim@487d0d80e66b54831132fe7b2095f9388a624462
         continue-on-error: true
         env:
           VALIDATE_ALL_CODEBASE: true
@@ -71,7 +71,7 @@ jobs:
         if: >
           github.event_name == 'pull_request' &&
           github.ref_name != github.event.repository.default_branch
-        uses: stefanzweifel/git-auto-commit-action@547c1409cec143c754e148a6fbdfa359db836cf6
+        uses: stefanzweifel/git-auto-commit-action@f53a62c26ed5971dd2ed8768e4142f08c767ea37
         with:
           branch: ${{ github.event.pull_request.head.ref || github.head_ref || github.ref }}
           commit_message: "chore: fix linting issues"
@@ -87,7 +87,7 @@ jobs:
     timeout-minutes: 60
     steps:
       - name: Checkout code
-        uses: actions/checkout@c2d88d3ecc89a9ef08eebf45d9637801dcee7eb5
+        uses: actions/checkout@0c366fd6a839edf440554fa01a7085ccba70ac98
         with:
           fetch-depth: 0
           token: ${{ secrets.GH_TOKEN }}
@@ -95,7 +95,7 @@ jobs:
           ref: ${{ github.event.pull_request.head.ref || github.head_ref || github.ref }}
 
       - name: Setup Packer
-        uses: hashicorp/setup-packer@76e3039aa951aa4e6efe7e6ee06bc9ceb072142d
+        uses: hashicorp/setup-packer@c3d53c525d422944e50ee27b840746d6522b08de
         with:
           version: "latest"
 

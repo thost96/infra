@@ -1,3 +1,6 @@
 ---
 # .ansible-lint
 offline: false
+
+enable_list:
+  - yaml
