@@ -10,6 +10,8 @@
       tags: patch
     - ansible.builtin.include_tasks: tasks/apt-upgrade.yaml
       tags: patch
+    - ansible.builtin.include_tasks: tasks/check-reboot.yaml
+      tags: patch
     - ansible.builtin.include_tasks: tasks/apt-cleanup.yaml
       tags: cleanup
     - ansible.builtin.include_tasks: tasks/filesystem-trim.yaml
@@ -37,6 +39,8 @@
       tags: patch
     - ansible.builtin.include_tasks: tasks/apt-upgrade.yaml
       tags: patch
+    - ansible.builtin.include_tasks: tasks/check-reboot.yaml
+      tags: patch
     - ansible.builtin.include_tasks: tasks/apt-cleanup.yaml
       tags: cleanup
     - ansible.builtin.include_tasks: tasks/filesystem-trim.yaml
@@ -44,7 +48,7 @@
 
 
 #########
-# Cloud # 
+# Cloud #
 #########
 - hosts: cloud
   name: All Cloud Hosts
@@ -53,6 +57,8 @@
     - ansible.builtin.include_tasks: tasks/apt-update.yaml
       tags: patch
     - ansible.builtin.include_tasks: tasks/apt-upgrade.yaml
+      tags: patch
+    - ansible.builtin.include_tasks: tasks/check-reboot.yaml
       tags: patch
     - ansible.builtin.include_tasks: tasks/apt-cleanup.yaml
       tags: cleanup
@@ -70,7 +76,7 @@
       tags: cleanup
 
 
-- hosts: docker
+- hosts: docker,ticket,cloud-2
   name: Docker Compose Update on Docker Hosts
   gather_facts: true
   tasks:

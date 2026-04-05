@@ -1,0 +1,3 @@
+---
+# Compose Settings
+service_dir: /services/01_zammad/

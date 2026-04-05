@@ -1,0 +1,10 @@
+---
+- name: Reboot the system
+  become: true
+  reboot:
+    reboot_timeout: 300
+
+- name: Wait for SSH to come back
+  wait_for_connection:
+    delay: 10
+    timeout: 300

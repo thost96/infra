@@ -10,7 +10,6 @@
 # File should be .git/hooks/pre-commit and executable
 FILES_PATTERN='.*vault.*\.*$'
 REQUIRED='ANSIBLE_VAULT'
-
 EXIT_STATUS=0
 wipe="\033[1m\033[0m"
 yellow='\033[1;33m'

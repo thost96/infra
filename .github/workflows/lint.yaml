@@ -43,6 +43,11 @@ jobs:
           prettier_options: --write **/*.{json,md,yaml,yml}
           github_token: ${{ secrets.GH_TOKEN }}
           only_changed: true
+      
+      - name: Install Ansible-Galaxy requirements
+        shell: bash
+        run: |
+          ansible-galaxy install -r ansible/requirements.yaml --ignore-errors
 
       - name: Run Super Linter
         uses: super-linter/super-linter/slim@502f4fe48a81a392756e173e39a861f8c8efe056
@@ -92,7 +97,7 @@ jobs:
           version: "latest"
 
       - name: Validate Packer Templates
-        continue-on-error: true #  Skip failure to allow other jobs to complete
+        continue-on-error: true  #  Skip failure to allow other jobs to complete
         run: |
           # Find all packer template files and validate them
           find ./packer -name "*.pkr.hcl" | while read -r template; do
