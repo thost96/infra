@@ -1,9 +1,9 @@
 ---
 - name: Check for pending reboot on Debian-based systems
-  stat:
+  ansible.builtin.stat:
     path: /var/run/reboot-required
   register: reboot_required
 
 - name: Display reboot status
-  debug:
+  ansible.builtin.debug:
     msg: "Reboot required: {{ reboot_required.stat.exists }}"
