@@ -28,7 +28,7 @@
 
 Super-linter detected linting errors
 
-For more information, see the [GitHub Actions workflow run](https://github.com/thost96/infra/actions/runs/24002267606)
+For more information, see the [GitHub Actions workflow run](https://github.com/thost96/infra/actions/runs/24002312451)
 
 Powered by [Super-linter](https://github.com/super-linter/super-linter)
 
@@ -64,12 +64,12 @@ tasks/reboot.yaml:4:3 Use `ansible.builtin.reboot` or `ansible.legacy.reboot` in
 fqcn[action-core]: Use FQCN for builtin module actions (wait_for_connection).
 tasks/reboot.yaml:8:3 Use `ansible.builtin.wait_for_connection` or `ansible.legacy.wait_for_connection` instead./usr/local/lib/python3.14/tempfile.py:484: ResourceWarning: Implicitly cleaning up <HTTPError 304: 'Not Modified'>
   _warnings.warn(self.warn_message, ResourceWarning)
-[WARNING]: Error loading plugin 'community.docker.docker_prune': No module named 'ansible_collections.community'
-WARNING  Unable to load module community.docker.docker_prune at tasks/docker-prune.yaml:2 for options validation
-WARNING  Invalid value (None)for resolved_fqcn attribute of community.docker.docker_prune module.
 [WARNING]: Error loading plugin 'community.docker.docker_compose_v2': No module named 'ansible_collections.community'
 WARNING  Unable to load module community.docker.docker_compose_v2 at tasks/compose-update.yaml:2 for options validation
 WARNING  Invalid value (None)for resolved_fqcn attribute of community.docker.docker_compose_v2 module.
+[WARNING]: Error loading plugin 'community.docker.docker_prune': No module named 'ansible_collections.community'
+WARNING  Unable to load module community.docker.docker_prune at tasks/docker-prune.yaml:2 for options validation
+WARNING  Invalid value (None)for resolved_fqcn attribute of community.docker.docker_prune module.
 WARNING  Listing 5 violation(s) that are fatal
 ::warning file=run.yaml,line=1,severity=VERY_HIGH,title=internal-error::Unexpected error code 1 from execution of: ansible-playbook --syntax-check -vv run.yaml
 ::error file=tasks/check-reboot.yaml,line=3,col=3,severity=MEDIUM,title=fqcn[action-core]::Use FQCN for builtin module actions (stat).
