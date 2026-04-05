@@ -17,7 +17,6 @@
     - ansible.builtin.include_tasks: tasks/filesystem-trim.yaml
       tags: cleanup
 
-
 - hosts: compose
   name: Docker Compose Update on Compose Hosts
   gather_facts: true
@@ -26,7 +25,6 @@
       tags: patch
     - ansible.builtin.include_tasks: tasks/docker-prune.yaml
       tags: cleanup
-
 
 #########
 # Basti #
@@ -46,7 +44,6 @@
     - ansible.builtin.include_tasks: tasks/filesystem-trim.yaml
       tags: cleanup
 
-
 #########
 # Cloud #
 #########
@@ -65,7 +62,6 @@
     - ansible.builtin.include_tasks: tasks/filesystem-trim.yaml
       tags: cleanup
 
-
 - hosts: mx-1
   name: MX-1 Mailcow Update
   gather_facts: true
@@ -74,7 +70,6 @@
       tags: patch
     - ansible.builtin.include_tasks: tasks/docker-prune.yaml
       tags: cleanup
-
 
 - hosts: docker,ticket,cloud-2
   name: Docker Compose Update on Docker Hosts
