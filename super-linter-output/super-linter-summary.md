@@ -28,7 +28,7 @@
 
 Super-linter detected linting errors
 
-For more information, see the [GitHub Actions workflow run](https://github.com/thost96/infra/actions/runs/24001304391)
+For more information, see the [GitHub Actions workflow run](https://github.com/thost96/infra/actions/runs/24001343969)
 
 Powered by [Super-linter](https://github.com/super-linter/super-linter)
 
@@ -64,12 +64,12 @@ tasks/reboot.yaml:4:3 Use `ansible.builtin.reboot` or `ansible.legacy.reboot` in
 fqcn[action-core]: Use FQCN for builtin module actions (wait_for_connection).
 tasks/reboot.yaml:8:3 Use `ansible.builtin.wait_for_connection` or `ansible.legacy.wait_for_connection` instead./usr/local/lib/python3.14/tempfile.py:484: ResourceWarning: Implicitly cleaning up <HTTPError 304: 'Not Modified'>
   _warnings.warn(self.warn_message, ResourceWarning)
-[WARNING]: Error loading plugin 'community.docker.docker_compose_v2': No module named 'ansible_collections.community'
-WARNING  Unable to load module community.docker.docker_compose_v2 at tasks/compose-update.yaml:2 for options validation
-WARNING  Invalid value (None)for resolved_fqcn attribute of community.docker.docker_compose_v2 module.
 [WARNING]: Error loading plugin 'community.docker.docker_prune': No module named 'ansible_collections.community'
 WARNING  Unable to load module community.docker.docker_prune at tasks/docker-prune.yaml:2 for options validation
 WARNING  Invalid value (None)for resolved_fqcn attribute of community.docker.docker_prune module.
+[WARNING]: Error loading plugin 'community.docker.docker_compose_v2': No module named 'ansible_collections.community'
+WARNING  Unable to load module community.docker.docker_compose_v2 at tasks/compose-update.yaml:2 for options validation
+WARNING  Invalid value (None)for resolved_fqcn attribute of community.docker.docker_compose_v2 module.
 WARNING  Listing 5 violation(s) that are fatal
 ::warning file=run.yaml,line=1,severity=VERY_HIGH,title=internal-error::Unexpected error code 1 from execution of: ansible-playbook --syntax-check -vv run.yaml
 ::error file=tasks/check-reboot.yaml,line=3,col=3,severity=MEDIUM,title=fqcn[action-core]::Use FQCN for builtin module actions (stat).
@@ -134,8 +134,6 @@ WARNING  Listing 5 violation(s) that are fatal
    [1m[94m= [0m[1mhelp[0m: audit documentation → [32mhttps://docs.zizmor.sh/audits/#secrets-outside-env[39m
 
 [32m13[39m findings ([1m[93m9[39m suppressed[0m): [35m0[39m informational, [36m0[39m low, [33m4[39m medium, [31m0[39m high🌈 zizmor v1.23.1
-[33m WARN[0m [1maudit[0m[2m:[0m[1maudit[0m[1m{[0m[3minput[0m[2m=[0mWorkflow(file:///github/workspace/.github/workflows/lint.yaml)[1m}[0m[2m:[0m [2mzizmor::audit::impostor_commit[0m[2m:[0m fast path impostor check failed for actions/checkout@c2d88d3ecc89a9ef08eebf45d9637801dcee7eb5: request error while accessing GitHub API
-[33m WARN[0m [1maudit[0m[2m:[0m[1maudit[0m[1m{[0m[3minput[0m[2m=[0mWorkflow(file:///github/workspace/.github/workflows/lint.yaml)[1m}[0m[2m:[0m [2mzizmor::audit::impostor_commit[0m[2m:[0m fast path impostor check failed for actions/checkout@c2d88d3ecc89a9ef08eebf45d9637801dcee7eb5: request error while accessing GitHub API
 [32m INFO[0m [1maudit[0m[2m:[0m [2mzizmor[0m[2m:[0m 🌈 completed /github/workspace/.github/workflows/lint.yaml
 No fixes available to apply.
 ```
