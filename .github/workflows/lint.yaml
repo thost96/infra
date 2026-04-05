@@ -17,21 +17,22 @@ permissions:
   pull-requests: read
   repository-projects: none
   security-events: none
-  statuses: write
+  statuses: read
 
 jobs:
   super-lint:
     name: Run Super Linter
     environment:
       name: staging
+    permissions:
+      contents: write
+      statuses: write
     if: github.event_name != 'pull_request' || github.event.pull_request.user.login != 'renovate[bot]'
     runs-on: ubuntu-latest
     concurrency:
       group: super-lint-${{ github.ref }}
       cancel-in-progress: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
     timeout-minutes: 60
-    permissions:
-      contents: write
     steps:
       - name: Checkout code
         uses: actions/checkout@0c366fd6a839edf440554fa01a7085ccba70ac98
@@ -50,9 +51,8 @@ jobs:
           only_changed: true
 
       - name: Install Ansible-Galaxy requirements
-        shell: bash
         run: |
-          ansible-galaxy install -r ansible/requirements.yaml --ignore-errors
+          ansible-galaxy install -r ansible/requirements.yaml --ignore-errors --force
 
       - name: Run Super Linter
         uses: super-linter/super-linter/slim@487d0d80e66b54831132fe7b2095f9388a624462
