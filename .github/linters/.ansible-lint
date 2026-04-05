@@ -3,6 +3,8 @@
 profile: production
 offline: true
 skip_list:
-  - fqcn[action]
+  - fqcn
+enable_list:
+  - yaml
 exclude_paths:
   - ansible/ansible.cfg

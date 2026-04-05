@@ -2,8 +2,8 @@
 ########
 # Home #
 ########
-- hosts: home
-  name: All Home Devices
+- name: All Home Devices
+  hosts: home
   gather_facts: false
   tasks:
     - ansible.builtin.include_tasks: tasks/apt-update.yaml
@@ -17,8 +17,8 @@
     - ansible.builtin.include_tasks: tasks/filesystem-trim.yaml
       tags: cleanup
 
-- hosts: compose
-  name: Docker Compose Update on Compose Hosts
+- name: Docker Compose Update on Compose Hosts
+  hosts: compose
   gather_facts: true
   tasks:
     - ansible.builtin.include_tasks: tasks/compose-update.yaml
@@ -29,8 +29,8 @@
 #########
 # Basti #
 #########
-- hosts: basti
-  name: All Devices from Basti
+- name: All Devices from Basti
+  hosts: basti
   gather_facts: false
   tasks:
     - ansible.builtin.include_tasks: tasks/apt-update.yaml
@@ -47,8 +47,8 @@
 #########
 # Cloud #
 #########
-- hosts: cloud
-  name: All Cloud Hosts
+- name: All Cloud Hosts
+  hosts: cloud
   gather_facts: false
   tasks:
     - ansible.builtin.include_tasks: tasks/apt-update.yaml
@@ -62,8 +62,8 @@
     - ansible.builtin.include_tasks: tasks/filesystem-trim.yaml
       tags: cleanup
 
-- hosts: mx-1
-  name: MX-1 Mailcow Update
+- name: MX-1 Mailcow Update
+  hosts: mx-1
   gather_facts: true
   tasks:
     - ansible.builtin.include_tasks: tasks/mailcow-update.yaml
@@ -71,8 +71,8 @@
     - ansible.builtin.include_tasks: tasks/docker-prune.yaml
       tags: cleanup
 
-- hosts: docker,ticket,cloud-2
-  name: Docker Compose Update on Docker Hosts
+- name: Docker Compose Update on Docker Hosts
+  hosts: docker,ticket,cloud-2
   gather_facts: true
   tasks:
     - ansible.builtin.include_tasks: tasks/compose-update.yaml
