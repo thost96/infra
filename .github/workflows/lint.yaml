@@ -22,6 +22,8 @@ permissions:
 jobs:
   super-lint:
     name: Run Super Linter
+    environment:
+      name: staging
     if: github.event_name != 'pull_request' || github.event.pull_request.user.login != 'renovate[bot]'
     runs-on: ubuntu-latest
     concurrency:
@@ -85,6 +87,8 @@ jobs:
 
   packer-validate:
     name: Validate Packer Templates
+    environment:
+      name: staging
     runs-on: ubuntu-latest
     concurrency:
       group: packer-validate-${{ github.ref }}

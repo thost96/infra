@@ -1,6 +1,6 @@
 ---
-# .ansible-lint
-offline: false
-
-enable_list:
-  - yaml
+# .ansible-lin
+profile: production
+offline: true
+skip_list:
+  - fqcn[action]
