@@ -129,10 +129,7 @@ source "proxmox-iso" "ubuntu-server-noble-docker" {
     boot = "c"
     boot_wait = "5s"
 
-    http_directory = "./http" 
-    # (Optional) Bind IP Address and Port
-    # http_port_min = 8802
-    # http_port_max = 8802
+    http_directory = "./http"
 
     ssh_username = "${var.ssh_username}"
     ssh_password = "${var.ssh_password}"
@@ -150,7 +147,6 @@ build {
       "proxmox-iso.ubuntu-server-noble-docker"
     ]
 
-    # Provisioning the VM Template for Cloud-Init Integration in Proxmox #1
     provisioner "shell" {
         inline = [
             "while [ ! -f /var/lib/cloud/instance/boot-finished ]; do echo 'Waiting for cloud-init...'; sleep 1; done",
@@ -166,18 +162,15 @@ build {
         ]
     }
 
-    # Provisioning the VM Template for Cloud-Init Integration in Proxmox #2
     provisioner "file" {
         source = "files/99-pve.cfg"
         destination = "/tmp/99-pve.cfg"
     }
 
-    # Provisioning the VM Template for Cloud-Init Integration in Proxmox #3
     provisioner "shell" {
         inline = [ "sudo cp /tmp/99-pve.cfg /etc/cloud/cloud.cfg.d/99-pve.cfg" ]
     }
 
-    # Provisioning the VM Template with Docker Installation #4
     provisioner "shell" {
         inline = [
             "sudo apt-get install -y ca-certificates curl gnupg lsb-release",

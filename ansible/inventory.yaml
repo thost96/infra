@@ -36,32 +36,18 @@ all:
             ticket:
             cloud-2:
             mx-1:
-        cluster2:
-          hosts:
-            prox-3:
-            prox-4:
-            quorum-2:
-            pihole:
-            feuerwehr-1:
-            svbakede-1:
-            feuerwehr-2:
-            thorsten-1:
         mailcow:
           hosts:
             mx-1:
-        docker:
-          hosts:
-            feuerwehr-1:
-            svbakede-1:
-            feuerwehr-2:
-            thorsten-1:
         prox:
           hosts:
             prox-1:
             prox-2:
-            prox-3:
-            prox-4:
         quorum:
           hosts:
             quorum-1:
-            quorum-2:
+        k8s-cl2:
+          hosts:
+            k8s-cl2-n1:
+            k8s-cl2-n2:
+            k8s-cl2-n3:

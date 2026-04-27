@@ -25,6 +25,6 @@ autoinstall:
       - name: thors
         plain_text_passwd: Install123!
         groups: [adm, sudo, docker]
-        lock-passwd: false
+        lock_passwd: false
         sudo: ALL=(ALL) NOPASSWD:ALL
         shell: /bin/bash
