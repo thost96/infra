@@ -1,0 +1,174 @@
+# Ubuntu Server Plucky Puffin
+# ---
+# Packer Template to create an Ubuntu Server 25.04 LTS (Plucky Puffin) on Proxmox
+
+packer {
+  required_plugins {
+    name = {
+      version = "~> 1"
+      source  = "github.com/hashicorp/proxmox"
+    }
+  }
+}
+
+# Proxmox
+variable "proxmox_api_url" {
+  type = string
+  default = ""
+}
+variable "proxmox_api_token_id" {
+  type = string
+  default = ""
+}
+variable "proxmox_api_token_secret" {
+  type = string
+  default = ""
+  sensitive = true
+}
+variable "proxmox_nodename" {
+  type = string
+  default = ""
+}
+variable "proxmox_vm_store" {
+  type = string
+  default = "local-lvm"
+}
+variable "proxmox_vm_bridge" {
+  type = string
+  default = "vmbr0"
+}
+variable "proxmox_vm_vlan" {
+  type = string
+  default = ""
+}
+
+# General
+variable "cpu_nums" {
+    type = string
+    default = "1"
+}
+variable "mem_size" {
+    type = string
+    default = "1024"
+}
+variable "ssh_username" {
+  type = string
+  default = "ubuntu"
+}
+variable "ssh_password" {
+  type = string
+  default = "ubuntu"
+}
+
+source "proxmox-iso" "ubuntu-server-resolute" {
+ 
+    # Proxmox Connection Settings
+    proxmox_url = "${var.proxmox_api_url}"
+    username = "${var.proxmox_api_token_id}"
+    token = "${var.proxmox_api_token_secret}"
+    # (Optional) Skip TLS Verification
+    insecure_skip_tls_verify = true
+    
+    # VM General Settings
+    node = "${var.proxmox_nodename}"
+    vm_name = "ubuntu-server-resolute"
+    template_description = "Ubuntu 26.04 Resolute Raccoon"
+
+    boot_iso {
+         type             = "scsi"
+         iso_url          = "https://releases.ubuntu.com/resolute/ubuntu-26.04-live-server-amd64.iso"
+         unmount          = true
+         iso_storage_pool = "local"
+         iso_checksum     = "file:https://releases.ubuntu.com/resolute/SHA256SUMS"
+         iso_download_pve = true
+    }
+
+    template_name        = "2604"
+
+    # VM System Settings
+    qemu_agent = true
+
+    # VM Hard Disk Settings
+    scsi_controller = "virtio-scsi-pci"
+
+    disks {
+        disk_size = "10G"
+        format = "raw"
+        storage_pool = "${var.proxmox_vm_store}"
+        type = "virtio"
+        discard = true
+    }
+
+    # VM CPU Settings
+    cores = "${var.cpu_nums}"
+    
+    # VM Memory Settings
+    memory = "${var.mem_size}"
+
+    # VM Network Settings
+    network_adapters {
+        model = "virtio"
+        bridge = "${var.proxmox_vm_bridge}"
+        vlan_tag = "${var.proxmox_vm_vlan}"
+        firewall = "false"
+    } 
+
+    # VM Cloud-Init Settings
+    cloud_init = true
+    cloud_init_storage_pool = "${var.proxmox_vm_store}"
+
+    # PACKER Boot Commands
+    boot_command = [
+        "<esc><wait>",
+        "e<wait>",
+        "<down><down><down><end>",
+        "<bs><bs><bs><bs><wait>",
+        "autoinstall ds=nocloud-net\\;s=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ ---<wait>",
+        "<f10><wait>"
+    ]
+    boot = "c"
+    boot_wait = "5s"
+
+    http_directory = "./http" 
+
+    ssh_username = "${var.ssh_username}"
+    ssh_password = "${var.ssh_password}"
+    # ssh_private_key_file = "~/.ssh/id_rsa"
+
+    # Raise the timeout, when installation takes longer
+    ssh_timeout = "20m"
+}
+
+# Build Definition to create the VM Template
+build {
+
+    name = "ubuntu-server-resolute"
+    sources = [
+      "proxmox-iso.ubuntu-server-resolute"
+    ]
+
+    provisioner "shell" {
+        inline = [
+            "while [ ! -f /var/lib/cloud/instance/boot-finished ]; do echo 'Waiting for cloud-init...'; sleep 1; done",
+            "sudo rm /etc/ssh/ssh_host_*",
+            "sudo truncate -s 0 /etc/machine-id",
+            "sudo apt-get -y autoremove --purge",
+            "sudo apt-get -y clean",
+            "sudo apt-get -y autoclean",
+            "sudo cloud-init clean",
+            "sudo rm -f /etc/cloud/cloud.cfg.d/subiquity-disable-cloudinit-networking.cfg",
+            "sudo rm -f /etc/netplan/00-installer-config.yaml",
+            "sudo sync"
+        ]
+    }
+
+    provisioner "file" {
+        source = "files/99-pve.cfg"
+        destination = "/tmp/99-pve.cfg"
+    }
+
+    provisioner "shell" {
+        inline = [ "sudo cp /tmp/99-pve.cfg /etc/cloud/cloud.cfg.d/99-pve.cfg" ]
+    }
+
+}
