@@ -17,6 +17,8 @@ all:
             netbox:
             nut:
             cloud-1:
+            prox-arm:
+            zabbix:
         pve:
           hosts:
             pve-1:

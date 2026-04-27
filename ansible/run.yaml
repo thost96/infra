@@ -18,11 +18,11 @@
       tags: cleanup
 
 - name: Docker Compose Update on Compose Hosts
-  hosts: compose
+  hosts: compose,prox-arm
   gather_facts: true
   tasks:
     - ansible.builtin.include_tasks: tasks/compose-update.yaml
-      tags: patch
+      # tags: patch
     - ansible.builtin.include_tasks: tasks/docker-prune.yaml
       tags: cleanup
 
@@ -72,10 +72,10 @@
       tags: cleanup
 
 - name: Docker Compose Update on Docker Hosts
-  hosts: docker,ticket,cloud-2
+  hosts: ticket,cloud-2
   gather_facts: true
   tasks:
     - ansible.builtin.include_tasks: tasks/compose-update.yaml
-      tags: patch
+      # tags: patch
     - ansible.builtin.include_tasks: tasks/docker-prune.yaml
       tags: cleanup

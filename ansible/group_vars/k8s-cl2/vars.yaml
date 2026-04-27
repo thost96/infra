@@ -1,0 +1,7 @@
+---
+packages:
+- tree
+- nano
+- htop
+- iftop
+- ssg-base
