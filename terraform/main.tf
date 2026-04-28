@@ -7,7 +7,7 @@ data "proxmox_virtual_environment_vms" "k8s_template" {
   filter {
     name   = "name"
     regex  = true
-    values = ["^ubuntu-24.04-k8s$"]
+    values = ["^2604-k8s$"]
   }
 }
 
