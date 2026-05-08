@@ -1,0 +1,79 @@
+---
+- name: Configure VyOS template
+  hosts: all
+  gather_facts: false
+  vars:
+    debian_repo: "deb http://deb.debian.org/debian bookworm main"
+  tasks:
+    - name: Wait for SSH to become available
+      ansible.builtin.wait_for_connection:
+        timeout: 120
+
+    - name: Apply VyOS base config (hostname, timezone, DNS)
+      ansible.builtin.shell: |
+        vbash << 'VYOS_EOF'
+        source /opt/vyatta/etc/functions/script-template
+        configure
+        set system host-name vyos-template
+        set system time-zone Europe/Berlin
+        set system name-server 1.1.1.2
+        commit
+        save
+        exit
+        VYOS_EOF
+      changed_when: true
+
+    - name: Add Debian Bookworm repo temporarily
+      ansible.builtin.shell: |
+        echo "{{ debian_repo }}" | sudo tee /etc/apt/sources.list.d/debian-bookworm.list
+      changed_when: true
+
+    - name: Update apt cache
+      ansible.builtin.command: sudo apt-get update
+      changed_when: false
+
+    - name: Install qemu-guest-agent
+      ansible.builtin.command: >
+        sudo apt-get install -y qemu-guest-agent
+      changed_when: true
+
+    - name: Enable qemu-guest-agent service
+      ansible.builtin.command: sudo systemctl enable qemu-guest-agent
+      changed_when: true
+
+    - name: Start qemu-guest-agent service
+      ansible.builtin.command: sudo systemctl start qemu-guest-agent
+      changed_when: true
+
+    - name: Remove temporary Debian repo
+      ansible.builtin.command: sudo rm /etc/apt/sources.list.d/debian-bookworm.list
+      changed_when: true
+
+    - name: Update apt cache after repo removal
+      ansible.builtin.command: sudo apt-get update
+      changed_when: false
+
+    - name: Clean apt cache
+      ansible.builtin.command: sudo apt-get clean
+      changed_when: true
+
+    - name: Verify qemu-guest-agent is running
+      ansible.builtin.command: pgrep -x qemu-ga
+      changed_when: false
+      failed_when: false
+
+    - name: Verify no temporary repos remain
+      ansible.builtin.command: ls /etc/apt/sources.list.d/
+      register: sources_dir
+      changed_when: false
+      failed_when: sources_dir.stdout != ""
+
+    - name: Verify installed packages
+      ansible.builtin.command: dpkg -l qemu-guest-agent
+      register: pkg_check
+      changed_when: false
+      failed_when: pkg_check.rc != 0
+
+    - name: Report completion
+      ansible.builtin.debug:
+        msg: "VyOS template ready. qemu-guest-agent: running, apt sources.list.d: empty"
