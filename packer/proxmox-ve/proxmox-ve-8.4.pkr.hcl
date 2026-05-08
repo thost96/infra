@@ -29,7 +29,7 @@ variable "proxmox_nodename" {
 }
 variable "proxmox_vm_store" {
   type = string
-  default = "nvme"
+  default = "local-lvm"
 }
 variable "proxmox_vm_bridge" {
   type = string
