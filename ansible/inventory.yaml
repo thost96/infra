@@ -4,10 +4,9 @@ all:
     home:
       hosts:
         carport:
-        pdm:
         owfs:
         packer:
-        pbs-1:
+        pbs:
       children:
         compose:
           hosts:
