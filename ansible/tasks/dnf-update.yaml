@@ -1,0 +1,7 @@
+---
+- name: Update DNF cache
+  ansible.builtin.dnf:
+    update_cache: true
+  become: true
+  tags:
+    - patch

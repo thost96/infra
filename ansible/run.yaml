@@ -3,7 +3,7 @@
 # Home #
 ########
 - name: All Home Devices
-  hosts: home
+  hosts: home,!zabbix
   gather_facts: false
   tasks:
     - ansible.builtin.include_tasks: tasks/apt-update.yaml
@@ -18,12 +18,27 @@
       tags: cleanup
 
 - name: Docker Compose Update on Compose Hosts
-  hosts: compose,prox-arm
+  hosts: compose,prox-arm,coolify
   gather_facts: true
   tasks:
     - ansible.builtin.include_tasks: tasks/compose-update.yaml
       # tags: patch
     - ansible.builtin.include_tasks: tasks/docker-prune.yaml
+      tags: cleanup
+
+- name: Zabbix Host Update
+  hosts: zabbix
+  gather_facts: false
+  tasks:
+    - ansible.builtin.include_tasks: tasks/dnf-update.yaml
+      tags: patch
+    - ansible.builtin.include_tasks: tasks/dnf-upgrade.yaml
+      tags: patch
+    - ansible.builtin.include_tasks: tasks/check-reboot.yaml
+      tags: patch
+    - ansible.builtin.include_tasks: tasks/dnf-cleanup.yaml
+      tags: cleanup
+    - ansible.builtin.include_tasks: tasks/filesystem-trim.yaml
       tags: cleanup
 
 #########

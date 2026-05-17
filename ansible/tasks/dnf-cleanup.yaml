@@ -1,0 +1,7 @@
+---
+- name: Cleanup DNF Packages
+  ansible.builtin.dnf:
+    autoremove: true
+  become: true
+  tags:
+    - cleanup

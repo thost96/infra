@@ -24,7 +24,7 @@ ansible/galaxy_roles
 
 # Terraform
 tf-old
-credentials.tfvars
+credentials.auto.tfvars
 .terraform
 .terraform*
 credentials.*

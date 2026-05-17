@@ -7,6 +7,7 @@ all:
         owfs:
         packer:
         pbs:
+        zabbix:
       children:
         compose:
           hosts:
@@ -17,8 +18,7 @@ all:
             nut:
             cloud-1:
             prox-arm:
-            zabbix:
-        pve:
+        pve-home-1:
           hosts:
             pve-1:
             pve-2:
