@@ -1,7 +1,7 @@
 ---
 - name: Update DNF packages
   ansible.builtin.dnf:
-    name: '*'
+    name: "*"
     state: latest
   become: true
   tags:
