@@ -18,7 +18,7 @@
       tags: cleanup
 
 - name: Docker Compose Update on Compose Hosts
-  hosts: compose,prox-arm,coolify
+  hosts: compose,prox-arm
   gather_facts: true
   tasks:
     - ansible.builtin.include_tasks: tasks/compose-update.yaml

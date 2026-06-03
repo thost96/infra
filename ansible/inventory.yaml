@@ -32,7 +32,6 @@ all:
             prox-1:
             prox-2:
             quorum-1:
-            cloud-2-old:
             ticket:
             cloud-2:
             mx-1:
