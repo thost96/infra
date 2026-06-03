@@ -3,6 +3,6 @@
 service_dir: /services/11_nextcloud/
 
 packages:
-- tree
-- htop
-- iftop
+  - tree
+  - htop
+  - iftop
