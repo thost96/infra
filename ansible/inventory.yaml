@@ -7,17 +7,16 @@ all:
         owfs:
         packer:
         pbs:
-        zabbix:
       children:
         compose:
           hosts:
             compose-1:
             compose-2:
             immich:
-            netbox:
             nut:
             cloud-1:
             prox-arm:
+            pegaprox:
         pve-home-1:
           hosts:
             pve-1:
