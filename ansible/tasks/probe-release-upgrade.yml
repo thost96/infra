@@ -1,0 +1,19 @@
+---
+- name: Probe if Ubuntu release upgrade is possible
+  ansible.builtin.command:
+    cmd: /usr/bin/do-release-upgrade -c
+  register: release_upgrade_check
+  changed_when: false
+  failed_when: false
+  tags:
+    - patch
+
+- name: Debug if Ubuntu release upgrade is available
+  ansible.builtin.debug:
+    msg: >-
+      {{ release_upgrade_check.stdout is defined and
+         ("New release" in release_upgrade_check.stdout or
+          "release upgrade" in release_upgrade_check.stdout or
+          "upgradable" in release_upgrade_check.stdout) }}
+  tags:
+    - patch

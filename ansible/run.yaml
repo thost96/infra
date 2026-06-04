@@ -4,18 +4,22 @@
 ########
 - name: All Home Devices
   hosts: home,!zabbix
-  gather_facts: false
+  gather_facts: true
   tasks:
     - ansible.builtin.include_tasks: tasks/apt-update.yaml
       tags: patch
     - ansible.builtin.include_tasks: tasks/apt-upgrade.yaml
-      tags: patch
+      tags: patch,upgrade
     - ansible.builtin.include_tasks: tasks/check-reboot.yaml
       tags: patch
     - ansible.builtin.include_tasks: tasks/apt-cleanup.yaml
       tags: cleanup
     - ansible.builtin.include_tasks: tasks/filesystem-trim.yaml
       tags: cleanup
+    - ansible.builtin.include_tasks: tasks/probe-release-upgrade.yml
+      tags: patch
+    - ansible.builtin.include_tasks: tasks/release-upgrade.yml
+      tags: upgrade
 
 - name: Docker Compose Update on Compose Hosts
   hosts: compose,prox-arm
@@ -33,7 +37,7 @@
     - ansible.builtin.include_tasks: tasks/dnf-update.yaml
       tags: patch
     - ansible.builtin.include_tasks: tasks/dnf-upgrade.yaml
-      tags: patch
+      tags: patch,upgrade
     - ansible.builtin.include_tasks: tasks/check-reboot.yaml
       tags: patch
     - ansible.builtin.include_tasks: tasks/dnf-cleanup.yaml
@@ -51,7 +55,7 @@
     - ansible.builtin.include_tasks: tasks/apt-update.yaml
       tags: patch
     - ansible.builtin.include_tasks: tasks/apt-upgrade.yaml
-      tags: patch
+      tags: patch,upgrade
     - ansible.builtin.include_tasks: tasks/check-reboot.yaml
       tags: patch
     - ansible.builtin.include_tasks: tasks/apt-cleanup.yaml
@@ -69,7 +73,7 @@
     - ansible.builtin.include_tasks: tasks/apt-update.yaml
       tags: patch
     - ansible.builtin.include_tasks: tasks/apt-upgrade.yaml
-      tags: patch
+      tags: patch,upgrade
     - ansible.builtin.include_tasks: tasks/check-reboot.yaml
       tags: patch
     - ansible.builtin.include_tasks: tasks/apt-cleanup.yaml

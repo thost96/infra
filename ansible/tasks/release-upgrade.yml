@@ -1,0 +1,21 @@
+---
+- name: Run Ubuntu release upgrade
+  ansible.builtin.command:
+    cmd: /usr/bin/do-release-upgrade -f DistUpgradeViewNonInteractive
+  become: true
+  when:
+    - ansible_facts.os_family == 'Debian'
+    - ansible_facts.distribution == 'Ubuntu'
+  register: release_upgrade_result
+  changed_when: release_upgrade_result.rc == 0
+  tags:
+    - upgrade
+
+- name: Reboot if upgrade completed successfully
+  ansible.builtin.reboot:
+    msg: "Reboot initiated by Ansible after release upgrade"
+    reboot_timeout: 3600
+  become: true
+  when: release_upgrade_result.rc == 0
+  tags:
+    - upgrade

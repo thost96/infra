@@ -6,3 +6,4 @@
   become: true
   tags:
     - patch
+    - upgrade
