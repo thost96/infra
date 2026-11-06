@@ -1,0 +1,134 @@
+---
+- name: Gather installed package facts
+  ansible.builtin.package_facts:
+    manager: apt
+  tags:
+    - patch
+    - install
+
+- name: Install Wazuh agent (skipped on hosts running wazuh-manager)
+  when: "'wazuh-manager' not in ansible_facts.packages"
+  tags:
+    - patch
+    - install
+  block:
+    - name: Check whether the desired Wazuh agent version is installed
+      ansible.builtin.set_fact:
+        wazuh_agent_needs_install: >-
+          {{ 'wazuh-agent' not in ansible_facts.packages
+             or ansible_facts.packages['wazuh-agent'][0].version != wazuh_agent_version }}
+      tags:
+        - patch
+        - install
+
+    - name: Determine Wazuh agent package for this architecture
+      ansible.builtin.set_fact:
+        wazuh_agent_deb: >-
+          wazuh-agent_{{ wazuh_agent_version }}_{{
+          {'x86_64': 'amd64', 'amd64': 'amd64', 'aarch64': 'arm64', 'arm64': 'arm64', 'armv7l': 'armhf', 'armhf': 'armhf'}[ansible_facts['architecture']]
+          }}.deb
+      when: ansible_facts['architecture'] in ['x86_64', 'amd64', 'aarch64', 'arm64', 'armv7l', 'armhf']
+      tags:
+        - patch
+        - install
+
+    - name: Fail on unsupported architecture
+      ansible.builtin.fail:
+        msg: "Unsupported architecture for Wazuh agent: {{ ansible_facts['architecture'] }}"
+      when: wazuh_agent_deb is not defined
+      tags:
+        - patch
+        - install
+
+    - name: Download Wazuh agent package
+      ansible.builtin.get_url:
+        url: "https://packages.wazuh.com/4.x/apt/pool/main/w/wazuh-agent/{{ wazuh_agent_deb }}"
+        dest: "/tmp/{{ wazuh_agent_deb }}"
+        mode: "0644"
+      become: true
+      when: wazuh_agent_needs_install | bool
+      tags:
+        - patch
+        - install
+
+    - name: Install Wazuh agent package
+      ansible.builtin.apt:
+        deb: "/tmp/{{ wazuh_agent_deb }}"
+      environment:
+        WAZUH_MANAGER: "{{ wazuh_manager }}"
+        WAZUH_AGENT_GROUP: "{{ wazuh_agent_group }}"
+      become: true
+      when: wazuh_agent_needs_install | bool
+      tags:
+        - patch
+        - install
+
+    - name: Remove downloaded Wazuh agent package
+      ansible.builtin.file:
+        path: "/tmp/{{ wazuh_agent_deb }}"
+        state: absent
+      become: true
+      when: wazuh_agent_needs_install | bool
+      tags:
+        - patch
+        - install
+
+    - name: Set Wazuh manager address in ossec.conf
+      ansible.builtin.replace:
+        path: /var/ossec/etc/ossec.conf
+        regexp: '<address>[^<]*</address>'
+        replace: '<address>{{ wazuh_manager }}</address>'
+      become: true
+      register: wazuh_conf_address
+      tags:
+        - patch
+        - install
+
+    - name: Add enrollment block to ossec.conf if missing
+      ansible.builtin.replace:
+        path: /var/ossec/etc/ossec.conf
+        regexp: '(</server>\n)(?![\s\S]*<enrollment>)'
+        replace: '\g<1>    <enrollment>\n      <enabled>yes</enabled>\n      <groups>{{ wazuh_agent_group }}</groups>\n    </enrollment>\n'
+      become: true
+      register: wazuh_conf_enrollment
+      tags:
+        - patch
+        - install
+
+    - name: Set Wazuh agent group in ossec.conf enrollment block
+      ansible.builtin.replace:
+        path: /var/ossec/etc/ossec.conf
+        regexp: '(<enrollment>(?:(?!</enrollment>)[\s\S])*?<groups>)[^<]*(</groups>)'
+        replace: '\g<1>{{ wazuh_agent_group }}\g<2>'
+      become: true
+      register: wazuh_conf_group
+      tags:
+        - patch
+        - install
+
+    - name: Repair syscollector groups option overwritten by an earlier run
+      ansible.builtin.replace:
+        path: /var/ossec/etc/ossec.conf
+        regexp: '(<wodle name="syscollector">(?:(?!</wodle>)[\s\S])*?<groups>){{ wazuh_agent_group | regex_escape }}(</groups>)'
+        replace: '\g<1>yes\g<2>'
+      become: true
+      register: wazuh_conf_syscollector
+      tags:
+        - patch
+        - install
+
+    - name: Reload systemd, enable and (re)start wazuh-agent
+      ansible.builtin.systemd_service:
+        name: wazuh-agent
+        daemon_reload: "{{ wazuh_agent_needs_install | bool }}"
+        enabled: true
+        state: >-
+          {{ 'restarted' if (wazuh_conf_address is changed
+                             or wazuh_conf_enrollment is changed
+                             or wazuh_conf_group is changed
+                             or wazuh_conf_syscollector is changed)
+             else 'started' }}
+      become: true
+      tags:
+        - patch
+        - install

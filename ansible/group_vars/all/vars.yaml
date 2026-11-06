@@ -2,3 +2,7 @@
 # Ansible Settings
 ansible_user: root
 ansible_python_interpreter: /usr/bin/python3
+
+wazuh_agent_version: "4.14.10-1"
+wazuh_manager: "wazuh.hale-gray.ts.net"
+wazuh_agent_group: "default"

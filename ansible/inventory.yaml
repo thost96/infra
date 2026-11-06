@@ -45,8 +45,8 @@ all:
         quorum:
           hosts:
             quorum-1:
-        k8s-cl2:
+        pve-kube:
           hosts:
-            k8s-cl2-n1:
-            k8s-cl2-n2:
-            k8s-cl2-n3:
+            pve-kube-01:
+            pve-kube-02:
+            pve-kube-03:

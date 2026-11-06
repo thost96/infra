@@ -1,7 +1,7 @@
 ---
 packages:
-- tree
-- nano
+- lsb-release
 - htop
 - iftop
-- ssg-base
+- tree
+

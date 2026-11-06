@@ -3,7 +3,7 @@
 # Home #
 ########
 - name: All Home Devices
-  hosts: home,!zabbix
+  hosts: home
   gather_facts: true
   tasks:
     - ansible.builtin.include_tasks: tasks/apt-update.yaml
@@ -20,6 +20,8 @@
       tags: patch
     - ansible.builtin.include_tasks: tasks/release-upgrade.yml
       tags: upgrade
+    - ansible.builtin.include_tasks: tasks/wazuh-install.yaml
+      tags: patch,install
 
 - name: Docker Compose Update on Compose Hosts
   hosts: compose,prox-arm
@@ -30,27 +32,12 @@
     - ansible.builtin.include_tasks: tasks/docker-prune.yaml
       tags: cleanup
 
-- name: Zabbix Host Update
-  hosts: zabbix
-  gather_facts: false
-  tasks:
-    - ansible.builtin.include_tasks: tasks/dnf-update.yaml
-      tags: patch
-    - ansible.builtin.include_tasks: tasks/dnf-upgrade.yaml
-      tags: patch,upgrade
-    - ansible.builtin.include_tasks: tasks/check-reboot.yaml
-      tags: patch
-    - ansible.builtin.include_tasks: tasks/dnf-cleanup.yaml
-      tags: cleanup
-    - ansible.builtin.include_tasks: tasks/filesystem-trim.yaml
-      tags: cleanup
-
 #########
 # Basti #
 #########
 - name: All Devices from Basti
   hosts: basti
-  gather_facts: false
+  gather_facts: true
   tasks:
     - ansible.builtin.include_tasks: tasks/apt-update.yaml
       tags: patch
@@ -62,13 +49,15 @@
       tags: cleanup
     - ansible.builtin.include_tasks: tasks/filesystem-trim.yaml
       tags: cleanup
+    - ansible.builtin.include_tasks: tasks/wazuh-install.yaml
+      tags: patch,install
 
 #########
 # Cloud #
 #########
 - name: All Cloud Hosts
   hosts: cloud
-  gather_facts: false
+  gather_facts: true
   tasks:
     - ansible.builtin.include_tasks: tasks/apt-update.yaml
       tags: patch
@@ -80,6 +69,8 @@
       tags: cleanup
     - ansible.builtin.include_tasks: tasks/filesystem-trim.yaml
       tags: cleanup
+    - ansible.builtin.include_tasks: tasks/wazuh-install.yaml
+      tags: patch,install
 
 - name: MX-1 Mailcow Update
   hosts: mx-1

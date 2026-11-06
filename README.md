@@ -22,13 +22,19 @@ image coming soon ...
 ## Structure
 
 ```sh
-├── .github/                        # Github CI
+├── .git_hooks/                     # Git Hooks
+
+├── .github/                        # Github
+    └── linters/                    # Linter Configs
+    └── workflows/                  # Workflows
 
 ├── ansible/
     └── group_vars/                 # Variables
+    └── host_vars/                  # Variables
+    └── playbooks/                  # Playbook Files
     └── roles/                      # Ansible roles
     └── tasks/                      # Single Tasks
-    └── playbooks/                  # Playbook Files
+    └── templates/                  # Template Files
     └── run.yaml                    # Main playbook
 
 ├── docs/                           # markdown documentation
@@ -36,12 +42,16 @@ image coming soon ...
 ├── packer/                         # VM Templates
     └── ubuntu2404                  # Ubuntu 24.04 LTS
     └── ubuntu2504                  # Ubuntu 25.04
+    └── ubuntu2604                  # Ubuntu 26.04 LTS
+    └── vyos                        # VyOS Routing
 
-├── services/                       # Docker Compose config
+├── services/                       # Docker Compose
     └── <hostname>/
         └── <prefix_service>/
             └── compose.yaml
             └── app files
 
-├── terraform/                      # K8S Provisioning
+├── terraform/                      # Terraform Provisioning
+    └── k8s/                        # K8S Cluster
+
 ```
