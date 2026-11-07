@@ -1,0 +1,73 @@
+---
+- name: Query VMs on all {{ pve_cluster }} nodes
+  ansible.builtin.shell: qm list --output json
+  delegate_to: "{{ item }}"
+  loop: "{{ groups[pve_cluster] }}"
+  loop_control:
+    label: "{{ item }}"
+  register: pve_vm_lists
+  changed_when: false
+  failed_when: false
+
+- name: Query LXC containers on all {{ pve_cluster }} nodes
+  ansible.builtin.shell: pct list --output json
+  delegate_to: "{{ item }}"
+  loop: "{{ groups[pve_cluster] }}"
+  loop_control:
+    label: "{{ item }}"
+  register: pve_ct_lists
+  changed_when: false
+  failed_when: false
+
+- name: Find matching VM
+  ansible.builtin.set_fact:
+    pve_vm_match: >-
+      {{ (pve_vm_lists.results
+          | selectattr('rc', 'defined')
+          | selectattr('rc', '==', 0)
+          | map(attribute='stdout')
+          | map('from_json')
+          | flatten
+          | selectattr('name', 'eq', pve_vm_name | default(inventory_hostname))
+          | list) }}
+
+- name: Find matching LXC container
+  ansible.builtin.set_fact:
+    pve_ct_match: >-
+      {{ (pve_ct_lists.results
+          | selectattr('rc', 'defined')
+          | selectattr('rc', '==', 0)
+          | map(attribute='stdout')
+          | map('from_json')
+          | flatten
+          | selectattr('name', 'eq', pve_vm_name | default(inventory_hostname))
+          | list) }}
+
+- name: Fail if host is not found on {{ pve_cluster }}
+  ansible.builtin.fail:
+    msg: "{{ pve_vm_name | default(inventory_hostname) }} not found as VM or LXC container on {{ pve_cluster }}"
+  when: (pve_vm_match | length == 0) and (pve_ct_match | length == 0)
+
+- name: Set PVE entity fact
+  ansible.builtin.set_fact:
+    pve_entity: "{{ pve_vm_match[0] | combine({'type': 'vm'}) if pve_vm_match | length > 0 else pve_ct_match[0] | combine({'type': 'ct'}) }}"
+
+- name: Start {{ pve_entity.name }} ({{ pve_entity.vmid }}) on {{ pve_entity.node }}
+  ansible.builtin.shell: "{{ 'qm' if pve_entity.type == 'vm' else 'pct' }} start {{ pve_entity.vmid }}"
+  delegate_to: "{{ pve_entity.node }}"
+  when: pve_entity.status == 'stopped'
+  register: pve_start
+  changed_when: pve_start.rc is defined and pve_start.rc == 0
+
+- name: Wait until {{ inventory_hostname }} is reachable
+  ansible.builtin.wait_for:
+    host: "{{ ansible_host | default(inventory_hostname) }}"
+    port: 22
+    delay: 15
+    timeout: 600
+  when: pve_entity.status == 'stopped'
+
+- name: Mark host as powered on by this play
+  ansible.builtin.set_fact:
+    pve_started_by_playbook: true
+  when: pve_entity.status == 'stopped'

@@ -4,24 +4,53 @@
 ########
 - name: All Home Devices
   hosts: home
-  gather_facts: true
+  gather_facts: false
+  ignore_unreachable: true
   tasks:
-    - ansible.builtin.include_tasks: tasks/apt-update.yaml
-      tags: patch
-    - ansible.builtin.include_tasks: tasks/apt-upgrade.yaml
-      tags: patch,upgrade
-    - ansible.builtin.include_tasks: tasks/check-reboot.yaml
-      tags: patch
-    - ansible.builtin.include_tasks: tasks/apt-cleanup.yaml
-      tags: cleanup
-    - ansible.builtin.include_tasks: tasks/filesystem-trim.yaml
-      tags: cleanup
-    - ansible.builtin.include_tasks: tasks/probe-release-upgrade.yml
-      tags: patch
-    - ansible.builtin.include_tasks: tasks/release-upgrade.yml
-      tags: upgrade
-    - ansible.builtin.include_tasks: tasks/wazuh-install.yaml
-      tags: patch,install
+    - name: Check if host is reachable
+      ansible.builtin.ping:
+      register: host_ping
+      failed_when: false
+      tags: always
+
+    - name: Power on stopped VM or LXC container
+      ansible.builtin.include_tasks: tasks/pve-power-on.yaml
+      when: (host_ping is failed or host_ping is unreachable) and pve_cluster is defined
+      tags: always
+
+    - name: Fail on unreachable host without PVE power management
+      ansible.builtin.fail:
+        msg: "{{ inventory_hostname }} is unreachable and no pve_cluster is configured for it"
+      when: (host_ping is failed or host_ping is unreachable) and pve_cluster is not defined
+      tags: always
+
+    - name: Gather facts
+      ansible.builtin.setup:
+      tags: always
+
+    - name: Apply maintenance tasks
+      block:
+        - ansible.builtin.include_tasks: tasks/apt-update.yaml
+          tags: patch
+        - ansible.builtin.include_tasks: tasks/apt-upgrade.yaml
+          tags: patch,upgrade
+        - ansible.builtin.include_tasks: tasks/check-reboot.yaml
+          tags: patch
+        - ansible.builtin.include_tasks: tasks/apt-cleanup.yaml
+          tags: cleanup
+        - ansible.builtin.include_tasks: tasks/filesystem-trim.yaml
+          tags: cleanup
+        - ansible.builtin.include_tasks: tasks/probe-release-upgrade.yml
+          tags: patch
+        - ansible.builtin.include_tasks: tasks/release-upgrade.yml
+          tags: upgrade
+        - ansible.builtin.include_tasks: tasks/wazuh-install.yaml
+          tags: patch,install
+      always:
+        - name: Restore original power state
+          ansible.builtin.include_tasks: tasks/pve-power-off.yaml
+          when: pve_started_by_playbook | default(false)
+          tags: always
 
 - name: Docker Compose Update on Compose Hosts
   hosts: compose,prox-arm

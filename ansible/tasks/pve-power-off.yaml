@@ -1,0 +1,15 @@
+---
+- name: Stop {{ pve_entity.name }} ({{ pve_entity.vmid }}) on {{ pve_entity.node }}
+  ansible.builtin.shell: "{{ 'qm' if pve_entity.type == 'vm' else 'pct' }} {{ pve_stop_method | default('stop') }} {{ pve_entity.vmid }}"
+  delegate_to: "{{ pve_entity.node }}"
+  register: pve_stop
+  changed_when: pve_stop.rc is defined and pve_stop.rc == 0
+
+- name: Wait until {{ pve_entity.name }} is stopped
+  ansible.builtin.shell: "{{ 'qm' if pve_entity.type == 'vm' else 'pct' }} status {{ pve_entity.vmid }}"
+  delegate_to: "{{ pve_entity.node }}"
+  register: pve_status
+  until: pve_status.stdout is search('stopped')
+  retries: 30
+  delay: 10
+  changed_when: false
