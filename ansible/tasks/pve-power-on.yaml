@@ -8,6 +8,7 @@
   register: pve_vm_lists
   changed_when: false
   failed_when: false
+  ignore_unreachable: true
 
 - name: Query LXC containers on all {{ pve_cluster }} nodes
   ansible.builtin.shell: pct list --output json
@@ -18,6 +19,7 @@
   register: pve_ct_lists
   changed_when: false
   failed_when: false
+  ignore_unreachable: true
 
 - name: Find matching VM
   ansible.builtin.set_fact:
@@ -43,9 +45,17 @@
           | selectattr('name', 'eq', pve_vm_name | default(inventory_hostname))
           | list) }}
 
+- name: Set PVE node availability facts
+  ansible.builtin.set_fact:
+    pve_nodes_queried: "{{ pve_vm_lists.results | selectattr('rc', 'defined') | map(attribute='item') | list }}"
+    pve_nodes_unreachable: "{{ pve_vm_lists.results | rejectattr('rc', 'defined') | map(attribute='item') | list }}"
+
 - name: Fail if host is not found on {{ pve_cluster }}
   ansible.builtin.fail:
-    msg: "{{ pve_vm_name | default(inventory_hostname) }} not found as VM or LXC container on {{ pve_cluster }}"
+    msg: >-
+      {{ pve_vm_name | default(inventory_hostname) }} not found as VM or LXC container on
+      {{ pve_cluster }}. Queried nodes: {{ pve_nodes_queried | join(', ') }}.
+      Unreachable nodes (not queried): {{ pve_nodes_unreachable | join(', ') or 'none' }}
   when: (pve_vm_match | length == 0) and (pve_ct_match | length == 0)
 
 - name: Set PVE entity fact

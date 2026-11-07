@@ -52,6 +52,13 @@
           when: pve_started_by_playbook | default(false)
           tags: always
 
+- name: WebUI Certificate Renewal on PVE and PBS
+  hosts: pve-home-1,pbs
+  gather_facts: false
+  tasks:
+    - ansible.builtin.include_tasks: tasks/webui-update.yaml
+      tags: patch,install
+
 - name: Docker Compose Update on Compose Hosts
   hosts: compose,prox-arm
   gather_facts: true
@@ -80,6 +87,8 @@
       tags: cleanup
     - ansible.builtin.include_tasks: tasks/wazuh-install.yaml
       tags: patch,install
+    - ansible.builtin.include_tasks: tasks/webui-update.yaml
+      tags: patch,install
 
 #########
 # Cloud #
@@ -99,6 +108,13 @@
     - ansible.builtin.include_tasks: tasks/filesystem-trim.yaml
       tags: cleanup
     - ansible.builtin.include_tasks: tasks/wazuh-install.yaml
+      tags: patch,install
+
+- name: WebUI Certificate Renewal on PROX
+  hosts: prox
+  gather_facts: false
+  tasks:
+    - ansible.builtin.include_tasks: tasks/webui-update.yaml
       tags: patch,install
 
 - name: MX-1 Mailcow Update

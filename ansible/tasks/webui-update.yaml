@@ -1,0 +1,24 @@
+---
+- name: Deploy webui.sh certificate renewal script
+  ansible.builtin.template:
+    src: "{{ 'pve/webui.sh' if inventory_hostname in groups['pve-home-1'] | default([]) else 'pbs/webui.sh' }}"
+    dest: /usr/local/sbin/webui.sh
+    mode: "0755"
+  become: true
+  tags:
+    - patch
+    - install
+
+- name: Schedule webui.sh to renew webui certificates every 30 days
+  ansible.builtin.cron:
+    name: webui certificate renewal
+    user: root
+    minute: "0"
+    hour: "3"
+    day: "1"
+    month: "*"
+    job: /usr/local/sbin/webui.sh
+  become: true
+  tags:
+    - patch
+    - install
