@@ -1,0 +1,51 @@
+---
+- name: Read current PBS proxy certificate fingerprint
+  ansible.builtin.command:
+    argv:
+      - openssl
+      - x509
+      - -noout
+      - -fingerprint
+      - -sha256
+      - -in
+      - /etc/proxmox-backup/proxy.pem
+  delegate_to: pbs
+  register: pbs_fp
+  changed_when: false
+
+- name: Set normalized PBS fingerprint
+  ansible.builtin.set_fact:
+    pbs_fingerprint: "{{ pbs_fp.stdout | regex_replace('^.*Fingerprint=', '') | trim }}"
+
+- name: Check for PVE backup.cfg
+  ansible.builtin.stat:
+    path: /etc/pve/backup.cfg
+  register: backup_cfg
+
+- name: Read current server-fingerprints of datastore pbs-backup
+  ansible.builtin.command:
+    argv:
+      - awk
+      - '/^pbs-backup:/{f=1;next} f&&/^[[:space:]]+server-fingerprints/{print $2;exit} f&&!/^[[:space:]]/{exit}'
+      - /etc/pve/backup.cfg
+  register: pbs_backup_fp
+  changed_when: false
+  failed_when: false
+
+- name: Update server-fingerprints of datastore pbs-backup
+  ansible.builtin.shell: |
+    set -euo pipefail
+    cfg=/etc/pve/backup.cfg
+    awk -v fp="{{ pbs_fingerprint }}" '
+      /^[^[:space:]]/ { in_stanza = ($0 ~ /^pbs-backup:/) }
+      in_stanza && /^[[:space:]]+server-fingerprints/ { sub(/server-fingerprints.*/, "server-fingerprints " fp) }
+      { print }
+    ' "$cfg" > "$cfg.new"
+    cat "$cfg.new" > "$cfg"
+    rm -f "$cfg.new"
+  become: true
+  changed_when: true
+  when:
+    - backup_cfg.stat.exists
+    - pbs_fingerprint | default('') | length > 0
+    - (pbs_fingerprint | default('')) != (pbs_backup_fp.stdout | default('') | trim)

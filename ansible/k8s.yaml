@@ -1,0 +1,274 @@
+---
+# Kubernetes bootstrap playbook
+#
+# Hosts are built dynamically from the Terraform outputs (terraform/k8s):
+#   control-1..3 -> k8s_control, worker-1..2 -> k8s_worker
+#
+# Prerequisites:
+#   - terraform applied (or 'terraform apply -refresh-only' run so that the
+#     control_ips/worker_ips outputs contain the DHCP addresses)
+#   - the Tailscale Service 'svc:control' (tcp:6443) is defined in the admin
+#     console and device tags are auto-approved (see tailscale_advertise_tags)
+#
+# Usage:
+#   ansible-playbook k8s.yaml
+#   ansible-playbook k8s.yaml -e tailscale_auth_key=tskey-...
+#   ansible-playbook k8s.yaml -e tailscale_advertise_tags=tag:k8s
+- name: Load Kubernetes hosts from Terraform output
+  hosts: localhost
+  gather_facts: false
+  tags:
+    - always
+  tasks:
+    - name: Read Terraform outputs
+      ansible.builtin.command:
+        cmd: terraform output -json
+        chdir: "{{ playbook_dir }}/../terraform/k8s"
+      register: k8s_tf_output
+      changed_when: false
+
+    - name: Parse Terraform outputs
+      ansible.builtin.set_fact:
+        k8s_control_ips: "{{ (k8s_tf_output.stdout | from_json).control_ips.value | default({}, true) }}"
+        k8s_worker_ips: "{{ (k8s_tf_output.stdout | from_json).worker_ips.value | default({}, true) }}"
+
+    - name: Ensure all node IPs are known
+      ansible.builtin.assert:
+        that:
+          - k8s_control_ips | length == 3
+          - k8s_worker_ips | length == 2
+          - item.value is string
+          - item.value | length > 0
+        fail_msg: >-
+          No IP address for {{ item.key | default('a node') }} in 'terraform output'.
+          Run 'terraform -chdir=../terraform/k8s apply -refresh-only' first.
+      loop: "{{ (k8s_control_ips | dict2items) + (k8s_worker_ips | dict2items) }}"
+
+    - name: Add control-plane nodes
+      ansible.builtin.add_host:
+        name: "{{ item.key }}"
+        groups:
+          - k8s
+          - k8s_control
+        ansible_host: "{{ item.value }}"
+      loop: "{{ k8s_control_ips | dict2items }}"
+
+    - name: Mark control-1 as the initialisation node
+      ansible.builtin.add_host:
+        name: control-1
+        groups:
+          - k8s_control_first
+
+    - name: Add worker nodes
+      ansible.builtin.add_host:
+        name: "{{ item.key }}"
+        groups:
+          - k8s
+          - k8s_worker
+        ansible_host: "{{ item.value }}"
+      loop: "{{ k8s_worker_ips | dict2items }}"
+
+- name: Prepare Kubernetes nodes
+  hosts: k8s
+  gather_facts: true
+  tasks:
+    - name: Install Kubernetes packages and prepare the host
+      ansible.builtin.include_tasks: tasks/k8s-packages.yaml
+      tags:
+        - k8s
+        - setup
+
+    - name: Install and configure Tailscale
+      ansible.builtin.include_tasks: tasks/tailscale.yaml
+      tags:
+        - k8s
+        - tailscale
+
+- name: Stop stale API Service advertisements on future control-plane nodes
+  hosts: k8s_control:!k8s_control_first
+  gather_facts: false
+  tasks:
+    - name: Check whether the node is already a control-plane member
+      ansible.builtin.stat:
+        path: /etc/kubernetes/controller-manager.conf
+      register: k8s_controller_manager_conf
+      become: true
+      tags:
+        - k8s
+        - join
+
+    - name: Stop advertising the API Service before initialisation
+      ansible.builtin.command: tailscale serve drain {{ k8s_tailscale_service }}
+      when: not k8s_controller_manager_conf.stat.exists
+      changed_when: false
+      failed_when: false
+      become: true
+      tags:
+        - k8s
+        - join
+
+- name: Initialize the cluster on the first control-plane node
+  hosts: k8s_control_first
+  gather_facts: true
+  tasks:
+    - name: Initialize control-1
+      ansible.builtin.include_tasks: tasks/k8s-init.yaml
+      tags:
+        - k8s
+        - init
+
+- name: Add the cluster to the admin workstation kubeconfig
+  hosts: k8s_control_first
+  gather_facts: false
+  vars:
+    k8s_kubeconfig_dir: "{{ lookup('env', 'HOME') }}/.kube"
+    k8s_fetched_kubeconfig: /tmp/k8s-admin.conf
+  tasks:
+    - name: Ensure the local kubeconfig directory exists
+      ansible.builtin.file:
+        path: "{{ k8s_kubeconfig_dir }}"
+        state: directory
+        mode: "0700"
+      delegate_to: localhost
+      become: false
+      tags:
+        - k8s
+        - init
+
+    - name: Fetch the admin kubeconfig
+      ansible.builtin.fetch:
+        src: /etc/kubernetes/admin.conf
+        dest: "{{ k8s_fetched_kubeconfig }}"
+        flat: true
+        mode: "0600"
+        remote_src: true
+      become: true
+      tags:
+        - k8s
+        - init
+
+    - name: Read the fetched kubeconfig
+      ansible.builtin.slurp:
+        src: "{{ k8s_fetched_kubeconfig }}"
+      register: k8s_fetched
+      delegate_to: localhost
+      become: false
+      tags:
+        - k8s
+        - init
+
+    - name: Check for an existing local kubeconfig
+      ansible.builtin.stat:
+        path: "{{ k8s_kubeconfig_dir }}/config"
+      delegate_to: localhost
+      register: k8s_local_kubeconfig
+      tags:
+        - k8s
+        - init
+
+    - name: Read the existing local kubeconfig
+      ansible.builtin.slurp:
+        src: "{{ k8s_kubeconfig_dir }}/config"
+      register: k8s_existing
+      delegate_to: localhost
+      become: false
+      when: k8s_local_kubeconfig.stat.exists
+      tags:
+        - k8s
+        - init
+
+    - name: Parse both kubeconfigs
+      ansible.builtin.set_fact:
+        k8s_fetched_config: "{{ k8s_fetched.content | b64decode | from_yaml }}"
+        k8s_local_config: "{{ (k8s_existing.content | b64decode | from_yaml) if k8s_local_kubeconfig.stat.exists else {'apiVersion': 'v1', 'kind': 'Config', 'preferences': {}, 'clusters': [], 'contexts': [], 'users': []} }}"
+      tags:
+        - k8s
+        - init
+
+    - name: Build the cluster entries for the local kubeconfig
+      ansible.builtin.set_fact:
+        k8s_cluster_entry: "{{ k8s_fetched_config.clusters[0] | combine({'name': k8s_kubeconfig_name}) }}"
+        k8s_user_entry: "{{ k8s_fetched_config.users[0] | combine({'name': k8s_kubeconfig_name}) }}"
+        k8s_context_entry: "{{ {'name': k8s_kubeconfig_name, 'context': {'cluster': k8s_kubeconfig_name, 'user': k8s_kubeconfig_name}} }}"
+      tags:
+        - k8s
+        - init
+
+    - name: Merge the missing entries into the local kubeconfig
+      ansible.builtin.set_fact:
+        k8s_merged_config: >-
+          {{
+            k8s_local_config
+            | combine({
+                'clusters': k8s_local_config.get('clusters', []) + ([k8s_cluster_entry] if k8s_kubeconfig_name not in (k8s_local_config.get('clusters', []) | map(attribute='name') | list) else []),
+                'users': k8s_local_config.get('users', []) + ([k8s_user_entry] if k8s_kubeconfig_name not in (k8s_local_config.get('users', []) | map(attribute='name') | list) else []),
+                'contexts': k8s_local_config.get('contexts', []) + ([k8s_context_entry] if k8s_kubeconfig_name not in (k8s_local_config.get('contexts', []) | map(attribute='name') | list) else []),
+                'current-context': (k8s_local_config.get('current-context') or k8s_kubeconfig_name)
+              })
+          }}
+      tags:
+        - k8s
+        - init
+
+    - name: Write the merged kubeconfig
+      ansible.builtin.copy:
+        content: "{{ k8s_merged_config | to_nice_yaml(indent=2) }}"
+        dest: "{{ k8s_kubeconfig_dir }}/config"
+        mode: "0600"
+      delegate_to: localhost
+      become: false
+      when: k8s_merged_config != k8s_local_config
+      tags:
+        - k8s
+        - init
+
+    - name: Store the kubeconfig in the repository
+      ansible.builtin.copy:
+        content: "{{ k8s_fetched.content | b64decode }}"
+        dest: "{{ playbook_dir }}/../kubernetes/kubeconfig.yaml"
+        mode: "0600"
+      delegate_to: localhost
+      become: false
+      tags:
+        - k8s
+        - init
+
+    - name: Remove the temporary kubeconfig
+      ansible.builtin.file:
+        path: "{{ k8s_fetched_kubeconfig }}"
+        state: absent
+      delegate_to: localhost
+      become: false
+      tags:
+        - k8s
+        - init
+
+- name: Join the remaining control-plane nodes
+  hosts: k8s_control:!k8s_control_first
+  gather_facts: true
+  tasks:
+    - name: Join control-2 and control-3
+      ansible.builtin.include_tasks: tasks/k8s-control-join.yaml
+      tags:
+        - k8s
+        - join
+
+- name: Join the worker nodes
+  hosts: k8s_worker
+  gather_facts: true
+  tasks:
+    - name: Join worker-1 and worker-2
+      ansible.builtin.include_tasks: tasks/k8s-worker-join.yaml
+      tags:
+        - k8s
+        - join
+
+- name: Install the Flannel CNI
+  hosts: k8s_control_first
+  gather_facts: false
+  tasks:
+    - name: Apply the Flannel manifest
+      ansible.builtin.include_tasks: tasks/k8s-flannel.yaml
+      tags:
+        - k8s
+        - cni

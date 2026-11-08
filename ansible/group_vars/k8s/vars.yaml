@@ -1,0 +1,22 @@
+---
+# SSH access for the k8s nodes (default login of the 2604-k8s template)
+ansible_user: thors
+ansible_become_method: sudo
+ansible_password: "{{ k8s_node_password }}"
+ansible_become_password: "{{ k8s_node_password }}"
+
+# Kubernetes cluster settings
+# MagicDNS name of the Tailscale Service svc:control (tcp:6443)
+k8s_cluster_endpoint: control.hale-gray.ts.net
+# TailVIP of svc:control (pinned in /etc/hosts, because pods get the LAN DNS)
+k8s_service_vip: 100.106.205.54
+# Name of this cluster inside the local kubeconfig
+k8s_kubeconfig_name: control.hale-gray.ts.net
+k8s_tailscale_service: "svc:control"
+k8s_pod_network_cidr: 10.244.0.0/16
+
+# Tailscale
+tailscale_advertise_tags: "tag:control-plane"
+
+# CNI
+k8s_flannel_version: v0.28.10

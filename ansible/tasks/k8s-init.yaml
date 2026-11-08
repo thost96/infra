@@ -1,0 +1,80 @@
+---
+- name: Check whether the control plane is already initialized
+  ansible.builtin.stat:
+    path: /etc/kubernetes/admin.conf
+  register: k8s_admin_conf
+  become: true
+  tags:
+    - k8s
+    - init
+
+- name: Initialize the control plane
+  ansible.builtin.command: >-
+    kubeadm init
+    --control-plane-endpoint {{ k8s_cluster_endpoint }}
+    --pod-network-cidr {{ k8s_pod_network_cidr }}
+    --upload-certs
+  when: not k8s_admin_conf.stat.exists
+  become: true
+  tags:
+    - k8s
+    - init
+
+- name: Create the kubeconfig directory for root
+  ansible.builtin.file:
+    path: /root/.kube
+    state: directory
+    mode: "0700"
+  become: true
+  tags:
+    - k8s
+    - init
+
+- name: Install the admin kubeconfig for root
+  ansible.builtin.copy:
+    src: /etc/kubernetes/admin.conf
+    dest: /root/.kube/config
+    remote_src: true
+    mode: "0600"
+  become: true
+  tags:
+    - k8s
+    - init
+
+- name: Activate the Tailscale Service for the Cluster API
+  ansible.builtin.include_tasks: "{{ playbook_dir }}/tasks/k8s-tailscale-service.yaml"
+  tags:
+    - k8s
+    - init
+
+- name: Create a bootstrap token and join command
+  ansible.builtin.command: kubeadm token create --ttl 2h --print-join-command
+  register: k8s_join
+  changed_when: false
+  retries: 10
+  delay: 6
+  until: k8s_join.rc == 0
+  become: true
+  tags:
+    - k8s
+    - init
+
+- name: Upload the control-plane certificates
+  ansible.builtin.command: kubeadm init phase upload-certs --upload-certs
+  register: k8s_upload_certs
+  changed_when: false
+  retries: 10
+  delay: 6
+  until: k8s_upload_certs.rc == 0
+  become: true
+  tags:
+    - k8s
+    - init
+
+- name: Provide the join information for the remaining nodes
+  ansible.builtin.set_fact:
+    k8s_join_command: "{{ k8s_join.stdout }}"
+    k8s_certificate_key: "{{ k8s_upload_certs.stdout_lines | last | trim }}"
+  tags:
+    - k8s
+    - init

@@ -1,0 +1,17 @@
+---
+- name: Check whether this node is already a cluster member
+  ansible.builtin.stat:
+    path: /etc/kubernetes/kubelet.conf
+  register: k8s_kubelet_conf
+  become: true
+  tags:
+    - k8s
+    - join
+
+- name: Join the node as a worker
+  ansible.builtin.command: "{{ hostvars[groups['k8s_control_first'][0]].k8s_join_command }}"
+  when: not k8s_kubelet_conf.stat.exists
+  become: true
+  tags:
+    - k8s
+    - join

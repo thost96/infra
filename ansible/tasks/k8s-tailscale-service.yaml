@@ -1,0 +1,30 @@
+---
+# Advertises this control-plane node as a host for the Tailscale Service
+# 'svc:control' and forwards tcp:6443 to the local kube-apiserver.
+#
+# IMPORTANT: only run this after the local kube-apiserver is up (kubeadm
+# init/join), otherwise the Service VIP routes to a dead backend and joins
+# fail with EOF / context deadline exceeded.
+#
+# The Service must be defined in the Tailscale admin console with the endpoint
+# 'tcp:6443'. The service MagicDNS name (control.hale-gray.ts.net) is used as
+# the kubeadm control-plane endpoint.
+- name: Configure the node as a host for the Cluster API Service
+  ansible.builtin.command: >-
+    tailscale serve
+    --service={{ k8s_tailscale_service }}
+    --tcp=6443
+    tcp://127.0.0.1:6443
+  changed_when: false
+  become: true
+  tags:
+    - k8s
+    - tailscale
+
+- name: Advertise the node for the Cluster API Service
+  ansible.builtin.command: tailscale serve advertise {{ k8s_tailscale_service }}
+  changed_when: false
+  become: true
+  tags:
+    - k8s
+    - tailscale

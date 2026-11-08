@@ -1,0 +1,38 @@
+---
+# Installs the Flannel CNI into the cluster (default network 10.244.0.0/16,
+# matching the pod CIDR used by kubeadm init).
+- name: Download the Flannel manifest
+  ansible.builtin.get_url:
+    url: "https://github.com/flannel-io/flannel/releases/download/{{ k8s_flannel_version }}/kube-flannel.yml"
+    dest: /tmp/kube-flannel.yml
+    mode: "0644"
+  become: true
+  tags:
+    - k8s
+    - cni
+
+- name: Apply the Flannel manifest
+  ansible.builtin.command: kubectl apply -f /tmp/kube-flannel.yml
+  register: k8s_flannel_apply
+  changed_when: "'created' in k8s_flannel_apply.stdout"
+  become: true
+  tags:
+    - k8s
+    - cni
+
+- name: Wait for the Flannel daemonset rollout
+  ansible.builtin.command: kubectl -n kube-flannel rollout status daemonset/kube-flannel-ds --timeout=120s
+  changed_when: false
+  become: true
+  tags:
+    - k8s
+    - cni
+
+- name: Remove the temporary Flannel manifest
+  ansible.builtin.file:
+    path: /tmp/kube-flannel.yml
+    state: absent
+  become: true
+  tags:
+    - k8s
+    - cni

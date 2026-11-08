@@ -1,0 +1,137 @@
+---
+# The kubelet replaces the loopback resolver (systemd-resolved) with the LAN
+# uplink DNS inside pods, so MagicDNS names are unresolvable there. The kubelet
+# copies the node's /etc/hosts into every pod - pin the service VIP here.
+- name: Pin the cluster endpoint in /etc/hosts
+  ansible.builtin.lineinfile:
+    path: /etc/hosts
+    regexp: '^\S+\s+{{ k8s_cluster_endpoint }}\s*$'
+    line: "{{ k8s_service_vip }} {{ k8s_cluster_endpoint }}"
+    state: present
+  register: k8s_hosts_entry
+  become: true
+  tags:
+    - k8s
+    - setup
+
+- name: Restart kubelet to propagate the hosts entry into the static pods
+  ansible.builtin.systemd:
+    name: kubelet
+    state: restarted
+  when: k8s_hosts_entry is changed
+  become: true
+  tags:
+    - k8s
+    - setup
+
+- name: Disable swap immediately
+  ansible.builtin.command: swapoff --all
+  when: ansible_facts["swaptotal_mb"] | default(0) | int > 0
+  changed_when: true
+  become: true
+  tags:
+    - k8s
+    - setup
+
+- name: Disable swap permanently
+  ansible.builtin.replace:
+    path: /etc/fstab
+    regexp: '^([^#\n]+\s+swap\s+.*)$'
+    replace: '# \1'
+  become: true
+  tags:
+    - k8s
+    - setup
+
+- name: Load required kernel modules at boot
+  ansible.builtin.copy:
+    dest: /etc/modules-load.d/k8s.conf
+    mode: "0644"
+    content: |
+      overlay
+      br_netfilter
+  become: true
+  tags:
+    - k8s
+    - setup
+
+- name: Load required kernel modules now
+  ansible.builtin.command: "modprobe {{ item }}"
+  loop:
+    - overlay
+    - br_netfilter
+  changed_when: false
+  become: true
+  tags:
+    - k8s
+    - setup
+
+- name: Configure Kubernetes sysctl parameters
+  ansible.builtin.copy:
+    dest: /etc/sysctl.d/99-kubernetes.conf
+    mode: "0644"
+    content: |
+      net.bridge.bridge-nf-call-iptables  = 1
+      net.bridge.bridge-nf-call-ip6tables = 1
+      net.ipv4.ip_forward                 = 1
+  register: k8s_sysctl
+  become: true
+  tags:
+    - k8s
+    - setup
+
+- name: Apply sysctl parameters
+  ansible.builtin.command: sysctl --system
+  when: k8s_sysctl is changed
+  changed_when: true
+  become: true
+  tags:
+    - k8s
+    - setup
+
+- name: Enable and start containerd
+  ansible.builtin.systemd:
+    name: containerd
+    enabled: true
+    state: started
+  become: true
+  tags:
+    - k8s
+    - setup
+
+- name: Install Kubernetes packages
+  ansible.builtin.apt:
+    name:
+      - kubelet
+      - kubeadm
+      - kubectl
+    state: present
+    update_cache: true
+    cache_valid_time: 600
+  become: true
+  tags:
+    - k8s
+    - setup
+
+- name: Hold Kubernetes packages
+  ansible.builtin.dpkg_selections:
+    name: "{{ item }}"
+    selection: hold
+  loop:
+    - kubelet
+    - kubeadm
+    - kubectl
+  become: true
+  tags:
+    - k8s
+    - setup
+
+- name: Enable and start kubelet
+  ansible.builtin.systemd:
+    name: kubelet
+    enabled: true
+    state: started
+  become: true
+  tags:
+    - k8s
+    - setup

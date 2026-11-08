@@ -1,0 +1,41 @@
+---
+- name: Download the Tailscale install script
+  ansible.builtin.get_url:
+    url: https://tailscale.com/install.sh
+    dest: /usr/local/src/tailscale-install.sh
+    mode: "0755"
+  become: true
+  tags:
+    - k8s
+    - tailscale
+
+- name: Install Tailscale
+  ansible.builtin.command: /usr/local/src/tailscale-install.sh
+  args:
+    creates: /usr/bin/tailscale
+  become: true
+  tags:
+    - k8s
+    - tailscale
+
+- name: Enable and start tailscaled
+  ansible.builtin.systemd:
+    name: tailscaled
+    enabled: true
+    state: started
+  become: true
+  tags:
+    - k8s
+    - tailscale
+
+- name: Bring up Tailscale with SSH enabled
+  ansible.builtin.command: >-
+    tailscale up --ssh
+    {{ '--auth-key=' + tailscale_auth_key if tailscale_auth_key | default('') | length > 0 else '' }}
+    {{ '--advertise-tags=' + tailscale_advertise_tags if tailscale_advertise_tags | default('') | length > 0 else '' }}
+  register: k8s_tailscale_up
+  changed_when: false
+  become: true
+  tags:
+    - k8s
+    - tailscale

@@ -50,3 +50,5 @@ all:
             pve-kube-01:
             pve-kube-02:
             pve-kube-03:
+    # Populated at runtime by k8s.yaml from the Terraform outputs
+    k8s:

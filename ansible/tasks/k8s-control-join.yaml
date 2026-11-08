@@ -1,0 +1,26 @@
+---
+- name: Check whether this node is already a control-plane member
+  ansible.builtin.stat:
+    path: /etc/kubernetes/controller-manager.conf
+  register: k8s_controller_manager_conf
+  become: true
+  tags:
+    - k8s
+    - join
+
+- name: Join the node as an additional control-plane node
+  ansible.builtin.command: >-
+    {{ hostvars[groups['k8s_control_first'][0]].k8s_join_command }}
+    --control-plane
+    --certificate-key {{ hostvars[groups['k8s_control_first'][0]].k8s_certificate_key }}
+  when: not k8s_controller_manager_conf.stat.exists
+  become: true
+  tags:
+    - k8s
+    - join
+
+- name: Activate the Tailscale Service for the Cluster API
+  ansible.builtin.include_tasks: "{{ playbook_dir }}/tasks/k8s-tailscale-service.yaml"
+  tags:
+    - k8s
+    - join
