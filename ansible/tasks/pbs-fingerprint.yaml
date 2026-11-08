@@ -26,7 +26,7 @@
   ansible.builtin.command:
     argv:
       - awk
-      - '/^pbs-backup:/{f=1;next} f&&/^[[:space:]]+server-fingerprints/{print $2;exit} f&&!/^[[:space:]]/{exit}'
+      - "/^pbs-backup:/{f=1;next} f&&/^[[:space:]]+server-fingerprints/{print $2;exit} f&&!/^[[:space:]]/{exit}"
       - /etc/pve/backup.cfg
   register: pbs_backup_fp
   changed_when: false
